@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm --filter @argus/shared build:*)",
+      "Bash(npx tsx:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

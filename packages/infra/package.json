@@ -1,0 +1,15 @@
+{
+  "name": "@argus/infra",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "preview": "pulumi preview",
+    "up": "pulumi up",
+    "destroy": "pulumi destroy"
+  }
+}

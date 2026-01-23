@@ -1,0 +1,22 @@
+{
+  "name": "argusiq-lite",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

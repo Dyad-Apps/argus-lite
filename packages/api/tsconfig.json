@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true,
+    "noEmit": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@argus/shared": ["../shared/src"],
+      "@argus/shared/*": ["../shared/src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../shared" }
+  ]
+}
