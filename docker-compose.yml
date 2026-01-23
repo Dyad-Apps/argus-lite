@@ -1,0 +1,44 @@
+# Docker Compose for Argus IQ local development
+# Usage: docker compose up -d
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: argus-db
+    environment:
+      POSTGRES_USER: argus
+      POSTGRES_PASSWORD: argus_dev
+      POSTGRES_DB: argus
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U argus -d argus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  valkey:
+    image: valkey/valkey:8-alpine
+    container_name: argus-valkey
+    ports:
+      - "6378:6379"
+    volumes:
+      - valkey_data:/data
+    command: valkey-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  valkey_data:
+    driver: local

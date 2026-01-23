@@ -7,7 +7,17 @@
       "Bash(npx tsx:*)",
       "Bash(pnpm typecheck:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(pnpm --filter @argus/shared typecheck:*)",
+      "Bash(pnpm --filter @argus/api typecheck:*)",
+      "Bash(start /B npx tsx packages/api/src/server.ts)",
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(curl:*)",
+      "Bash(echo:*)",
+      "Bash(pnpm --filter @argus/api test:*)",
+      "Bash(npx vite build:*)",
+      "Bash(pnpm --filter @argus/web typecheck:*)",
+      "Bash(pnpm remove:*)"
     ]
   }
 }

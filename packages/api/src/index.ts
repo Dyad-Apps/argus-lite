@@ -1,10 +1,8 @@
 /**
  * @argus/api - Fastify backend for Argus IQ
+ *
+ * Public exports for the API package.
  */
 
-import { SHARED_VERSION } from '@argus/shared';
-
-console.log(`Argus IQ API starting... (shared version: ${SHARED_VERSION})`);
-
-// Placeholder - will be replaced with Fastify server setup
+export { buildApp, type App } from './app.js';
 export const API_VERSION = '0.0.1';

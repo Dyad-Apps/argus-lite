@@ -20,5 +20,10 @@
     "dev": "tsc -b --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "ioredis": "^5.9.2",
+    "pino": "^10.3.0",
+    "zod": "^4.3.6"
   }
 }

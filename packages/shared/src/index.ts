@@ -10,7 +10,20 @@
 
 export const SHARED_VERSION = '0.0.1';
 
-// Re-export modules as they are implemented
-// export * from './types/index.js';
-// export * from './schemas/index.js';
-// export * from './utils/index.js';
+// Types (branded IDs, enums, base types)
+export * from './types/index.js';
+
+// Zod schemas
+export * from './schemas/index.js';
+
+// Cache utilities
+export * from './cache/index.js';
+
+// Logger
+export * from './logger/index.js';
+
+// Configuration
+export * from './config/index.js';
+
+// Errors
+export * from './errors/index.js';
