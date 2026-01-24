@@ -2,88 +2,92 @@
 
 /*
  * Theme configuration based on Viaanix design system
- * Colors are derived from theme-defaults.ts
+ * Colors copied from reference-ui/shared/lib/theme-defaults.ts
  * ThemeProvider toggles .dark class for dark mode
  */
 @theme {
-  /* Light mode - Viaanix Light Theme */
-  --color-background: hsl(0 0% 96%);
-  --color-foreground: hsl(0 0% 20%);
+  /* Light mode - from MockDataContext.tsx DEFAULT_PLATFORM_BRANDING */
+  /* Primary: #004cff, Background: #f1f5f9, Card: #ffffff, Text: #0f172a */
+  --color-background: hsl(210 40% 96%);
+  --color-foreground: hsl(222 47% 11%);
   --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(0 0% 20%);
+  --color-card-foreground: hsl(222 47% 11%);
   --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(0 0% 20%);
-  --color-primary: hsl(209 100% 55%);
+  --color-popover-foreground: hsl(222 47% 11%);
+  --color-primary: hsl(222 100% 50%);
   --color-primary-foreground: hsl(0 0% 100%);
-  --color-secondary: hsl(0 0% 96%);
-  --color-secondary-foreground: hsl(0 0% 20%);
-  --color-muted: hsl(0 0% 96%);
-  --color-muted-foreground: hsl(0 0% 40%);
-  --color-accent: hsl(0 0% 96%);
-  --color-accent-foreground: hsl(0 0% 20%);
-  --color-destructive: hsl(4 90% 58%);
+  --color-secondary: hsl(210 40% 96%);
+  --color-secondary-foreground: hsl(222 47% 11%);
+  --color-muted: hsl(210 40% 96%);
+  --color-muted-foreground: hsl(215 25% 27%);
+  --color-accent: hsl(210 40% 96%);
+  --color-accent-foreground: hsl(222 100% 50%);
+  --color-destructive: hsl(0 84% 60%);
   --color-destructive-foreground: hsl(0 0% 100%);
-  --color-border: hsl(0 0% 88%);
-  --color-input: hsl(0 0% 88%);
-  --color-ring: hsl(209 100% 55%);
+  --color-border: hsl(214 32% 91%);
+  --color-input: hsl(214 32% 91%);
+  --color-ring: hsl(222 100% 50%);
   --radius: 0.5rem;
 
-  /* Sidebar - Light */
+  /* Sidebar - Light (from MockDataContext.tsx) */
+  /* sidebarBackground: #ffffff, sidebarText: #334155, sidebarActive: #004cff, sidebarHover: #f1f5f9 */
   --color-sidebar: hsl(0 0% 100%);
-  --color-sidebar-foreground: hsl(0 0% 20%);
-  --color-sidebar-primary: hsl(209 100% 55%);
+  --color-sidebar-foreground: hsl(215 25% 27%);
+  --color-sidebar-primary: hsl(222 100% 50%);
   --color-sidebar-primary-foreground: hsl(0 0% 100%);
-  --color-sidebar-accent: hsl(200 100% 95%);
-  --color-sidebar-accent-foreground: hsl(209 100% 55%);
-  --color-sidebar-border: hsl(0 0% 88%);
-  --color-sidebar-ring: hsl(209 100% 55%);
+  --color-sidebar-accent: hsl(210 40% 96%);
+  --color-sidebar-accent-foreground: hsl(222 100% 50%);
+  --color-sidebar-border: hsl(214 32% 91%);
+  --color-sidebar-ring: hsl(222 100% 50%);
 
   /* Semantic colors */
-  --color-success: hsl(102 53% 43%);
-  --color-warning: hsl(37 91% 55%);
-  --color-info: hsl(209 100% 55%);
+  --color-success: hsl(142 71% 45%);
+  --color-warning: hsl(38 92% 50%);
+  --color-info: hsl(222 100% 50%);
 
   /* Sidebar dimensions */
   --sidebar-width: 16rem;
   --sidebar-width-icon: 3rem;
 }
 
-/* Dark mode - Viaanix Dark Theme */
+/* Dark mode - from MockDataContext.tsx DEFAULT_PLATFORM_BRANDING */
+/* Primary: #004cff, Background: #020617, Card: #0f172a, Text: #e2e8f0 */
 .dark {
-  --color-background: hsl(0 0% 12%);
-  --color-foreground: hsl(0 0% 91%);
-  --color-card: hsl(0 0% 16%);
-  --color-card-foreground: hsl(0 0% 91%);
-  --color-popover: hsl(0 0% 16%);
-  --color-popover-foreground: hsl(0 0% 91%);
-  --color-primary: hsl(209 100% 63%);
+  --color-background: hsl(222 84% 5%);
+  --color-foreground: hsl(210 40% 92%);
+  --color-card: hsl(222 47% 11%);
+  --color-card-foreground: hsl(210 40% 92%);
+  --color-popover: hsl(222 47% 11%);
+  --color-popover-foreground: hsl(210 40% 92%);
+  --color-primary: hsl(222 100% 50%);
   --color-primary-foreground: hsl(0 0% 100%);
-  --color-secondary: hsl(0 0% 16%);
-  --color-secondary-foreground: hsl(0 0% 91%);
-  --color-muted: hsl(0 0% 16%);
-  --color-muted-foreground: hsl(0 0% 69%);
-  --color-accent: hsl(0 0% 16%);
-  --color-accent-foreground: hsl(0 0% 91%);
-  --color-destructive: hsl(0 72% 51%);
+  --color-secondary: hsl(222 47% 11%);
+  --color-secondary-foreground: hsl(210 40% 92%);
+  --color-muted: hsl(217 33% 17%);
+  --color-muted-foreground: hsl(215 16% 65%);
+  --color-accent: hsl(217 33% 17%);
+  --color-accent-foreground: hsl(210 40% 92%);
+  --color-destructive: hsl(0 63% 31%);
   --color-destructive-foreground: hsl(0 0% 100%);
-  --color-border: hsl(0 0% 23%);
-  --color-input: hsl(0 0% 23%);
-  --color-ring: hsl(209 100% 63%);
+  --color-border: hsl(217 33% 17%);
+  --color-input: hsl(217 33% 17%);
+  --color-ring: hsl(222 100% 50%);
 
-  /* Sidebar - Dark */
-  --color-sidebar: hsl(213 56% 10%);
-  --color-sidebar-foreground: hsl(0 0% 69%);
-  --color-sidebar-primary: hsl(209 100% 55%);
+  /* Sidebar - Dark (from MockDataContext.tsx) */
+  /* sidebarBackground: #0f172a, sidebarText: #94a3b8, sidebarActive: #004cff, sidebarHover: #1e293b */
+  --color-sidebar: hsl(222 47% 11%);
+  --color-sidebar-foreground: hsl(215 16% 65%);
+  --color-sidebar-primary: hsl(222 100% 50%);
   --color-sidebar-primary-foreground: hsl(0 0% 100%);
-  --color-sidebar-accent: hsl(213 33% 16%);
-  --color-sidebar-accent-foreground: hsl(0 0% 88%);
-  --color-sidebar-border: hsl(213 33% 20%);
-  --color-sidebar-ring: hsl(209 100% 55%);
+  --color-sidebar-accent: hsl(217 33% 17%);
+  --color-sidebar-accent-foreground: hsl(210 40% 92%);
+  --color-sidebar-border: hsl(217 33% 17%);
+  --color-sidebar-ring: hsl(222 100% 50%);
 
   /* Semantic colors - Dark */
-  --color-success: hsl(102 56% 50%);
-  --color-warning: hsl(42 89% 62%);
-  --color-info: hsl(209 100% 63%);
+  --color-success: hsl(142 71% 45%);
+  --color-warning: hsl(38 92% 50%);
+  --color-info: hsl(222 100% 50%);
 }
 
 /* Base styles */

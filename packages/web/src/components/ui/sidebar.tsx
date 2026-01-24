@@ -487,35 +487,34 @@ const SidebarMenuButton = React.forwardRef<
     },
     ref
   ) => {
-    const Comp = asChild ? React.Fragment : 'button';
     const { isMobile, state } = useSidebar();
 
-    const button = (
-      <Comp
-        ref={asChild ? undefined : ref}
+    const button = asChild ? (
+      <>
+        {React.isValidElement(props.children)
+          ? React.cloneElement(props.children as React.ReactElement<{ className?: string }>, {
+              'data-sidebar': 'menu-button',
+              'data-size': size,
+              'data-active': isActive,
+              className: cn(
+                sidebarMenuButtonVariants({ variant, size }),
+                className,
+                (props.children as React.ReactElement<{ className?: string }>).props.className
+              ),
+            } as React.HTMLAttributes<HTMLElement>)
+          : props.children}
+      </>
+    ) : (
+      <button
+        ref={ref}
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...(asChild ? {} : props)}
+        {...props}
       >
-        {asChild ? (
-          React.isValidElement(props.children)
-            ? React.cloneElement(props.children as React.ReactElement<{ className?: string }>, {
-                'data-sidebar': 'menu-button',
-                'data-size': size,
-                'data-active': isActive,
-                className: cn(
-                  sidebarMenuButtonVariants({ variant, size }),
-                  className,
-                  (props.children as React.ReactElement<{ className?: string }>).props.className
-                ),
-              } as React.HTMLAttributes<HTMLElement>)
-            : props.children
-        ) : (
-          props.children
-        )}
-      </Comp>
+        {props.children}
+      </button>
     );
 
     if (!tooltip) {

@@ -10,7 +10,7 @@ function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-primary">Settings</h1>
         <p className="text-muted-foreground">
           Configure system settings and preferences
         </p>

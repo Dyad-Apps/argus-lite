@@ -3,7 +3,7 @@
  * Displays historical CPU, Memory, and Request Rate data from Prometheus
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   LineChart,
   Line,
@@ -83,6 +83,30 @@ export function SystemLoadChart({
   className,
 }: SystemLoadChartProps) {
   const [selectedRange, setSelectedRange] = useState(60);
+  const [hasValidSize, setHasValidSize] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const checkSize = () => {
+      const { width, height } = container.getBoundingClientRect();
+      setHasValidSize(width > 0 && height > 0);
+    };
+
+    // Check size after a frame to ensure layout is complete
+    const frameId = requestAnimationFrame(checkSize);
+
+    // Also observe for size changes
+    const resizeObserver = new ResizeObserver(checkSize);
+    resizeObserver.observe(container);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   const handleRangeChange = (range: number) => {
     setSelectedRange(range);
@@ -183,55 +207,57 @@ export function SystemLoadChart({
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="h-[180px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data.data}
-              margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis
-                dataKey="timestamp"
-                tickFormatter={formatTimestamp}
-                tick={{ fontSize: 10 }}
-                className="text-muted-foreground"
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                domain={[0, 100]}
-                tick={{ fontSize: 10 }}
-                className="text-muted-foreground"
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend
-                wrapperStyle={{ fontSize: '10px' }}
-                iconType="circle"
-                iconSize={8}
-              />
-              <Line
-                type="monotone"
-                dataKey="cpu"
-                name="CPU"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="memory"
-                name="Memory"
-                stroke="#22c55e"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <div ref={containerRef} className="h-[180px] w-full">
+          {hasValidSize && (
+            <ResponsiveContainer width="100%" height="100%" debounce={50}>
+              <LineChart
+                data={data.data}
+                margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis
+                  dataKey="timestamp"
+                  tickFormatter={formatTimestamp}
+                  tick={{ fontSize: 10 }}
+                  className="text-muted-foreground"
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  domain={[0, 100]}
+                  tick={{ fontSize: 10 }}
+                  className="text-muted-foreground"
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${value}%`}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend
+                  wrapperStyle={{ fontSize: '10px' }}
+                  iconType="circle"
+                  iconSize={8}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="cpu"
+                  name="CPU"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 4 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="memory"
+                  name="Memory"
+                  stroke="#22c55e"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </CardContent>
     </Card>

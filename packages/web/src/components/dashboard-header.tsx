@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { Breadcrumbs } from '@/components/breadcrumbs';
 
 export function DashboardHeader() {
   const navigate = useNavigate();
@@ -40,8 +41,7 @@ export function DashboardHeader() {
       <div className="flex items-center gap-4">
         <SidebarTrigger />
         <Separator orientation="vertical" className="h-6" />
-        {/* Breadcrumb placeholder - can be expanded later */}
-        <span className="text-sm font-medium text-muted-foreground">Home</span>
+        <Breadcrumbs />
       </div>
 
       <div className="flex items-center gap-2">

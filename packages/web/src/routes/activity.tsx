@@ -10,7 +10,7 @@ function ActivityPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Activity Log</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-primary">Activity Log</h1>
         <p className="text-muted-foreground">
           View system activity and audit logs
         </p>
