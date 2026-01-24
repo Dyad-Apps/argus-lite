@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { userRoutes } from './users.js';
 import { authRoutes } from './auth.js';
 import { ssoRoutes } from './sso.js';
+import { socialAuthRoutes } from './social-auth.js';
 import { organizationRoutes } from './organizations.js';
 import { invitationRoutes } from './invitations.js';
 
@@ -32,10 +33,11 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
     })
   );
 
-  // Auth routes
+  // Auth routes (email/password + social login)
   await app.register(authRoutes, { prefix: '/auth' });
+  await app.register(socialAuthRoutes, { prefix: '/auth' });
 
-  // SSO routes
+  // SSO routes (enterprise identity providers)
   await app.register(ssoRoutes, { prefix: '/sso' });
 
   // User routes

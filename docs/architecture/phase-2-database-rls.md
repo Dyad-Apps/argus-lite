@@ -8,6 +8,21 @@
 
 This phase implements the database layer with PostgreSQL, including schema design, multi-tenant data isolation using Row-Level Security (RLS), and migration management with Drizzle ORM.
 
+## ADR Alignment
+
+This implementation follows the architectural decisions documented in:
+- **ADR-001**: Multi-Tenant Model with Unlimited Recursive Organization Trees (LTREE)
+- **ADR-002**: Subdomain-Based Root Organization Identification
+
+### Key Database Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Root Organization Isolation** | All data filtered by `root_organization_id` for complete enterprise isolation |
+| **LTREE Hierarchy** | PostgreSQL LTREE extension enables O(1) ancestor/descendant queries |
+| **Email per Root Org** | `users.email` unique per `root_organization_id`, not globally |
+| **Time-Limited Access** | `user_organizations.expires_at` supports contractor access patterns |
+
 ## Table of Contents
 
 - [Components](#components)
@@ -71,30 +86,38 @@ graph TB
 
 ## Schema Design
 
-### Entity Relationship Diagram
+### Entity Relationship Diagram (ADR-Aligned)
 
 ```mermaid
 erDiagram
-    users ||--o{ org_members : "joins"
+    organizations ||--o{ organizations : "parent_of"
+    organizations ||--o{ user_organizations : "has_members"
+    users ||--o{ user_organizations : "member_of"
+    users }o--|| organizations : "root_organization"
+    users }o--|| organizations : "primary_organization"
     users ||--o{ user_identities : "has"
     users ||--o{ refresh_tokens : "has"
     users ||--o{ audit_logs : "creates"
 
-    organizations ||--o{ org_members : "has"
     organizations ||--o{ identity_providers : "configures"
     organizations ||--o{ entities : "owns"
     organizations ||--o{ audit_logs : "records"
-    organizations ||--o{ invitations : "sends"
+    organizations ||--o{ organization_invitations : "sends"
 
     identity_providers ||--o{ user_identities : "authenticates"
 
     users {
         uuid id PK
-        varchar email UK
-        varchar password_hash
+        varchar email "Unique per root org"
+        varchar password_hash "Nullable for SSO"
         varchar first_name
         varchar last_name
-        boolean email_verified
+        uuid root_organization_id FK "Data isolation key"
+        uuid primary_organization_id FK "Default after login"
+        boolean mfa_enabled
+        varchar mfa_secret
+        enum status
+        timestamp email_verified_at
         timestamp last_login_at
         timestamp created_at
         timestamp updated_at
@@ -104,24 +127,33 @@ erDiagram
         uuid id PK
         varchar name
         varchar slug UK
-        text description
-        jsonb settings
+        varchar org_code "Human-readable code"
+        uuid parent_organization_id FK "Self-reference"
+        uuid root_organization_id FK "Data isolation key"
+        boolean is_root "True for top-level"
+        ltree path "LTREE for tree queries"
+        integer depth "Level in hierarchy"
+        varchar subdomain UK "Only for root orgs"
+        boolean can_have_children
         enum plan
+        jsonb settings
         timestamp created_at
         timestamp updated_at
     }
 
-    org_members {
-        uuid id PK
-        uuid user_id FK
-        uuid organization_id FK
-        enum role
+    user_organizations {
+        uuid user_id PK_FK
+        uuid organization_id PK_FK
+        enum role "owner|admin|member|viewer"
+        boolean is_primary "Default org for user"
+        timestamp expires_at "Time-limited access"
         timestamp joined_at
+        uuid invited_by FK
     }
 
     entities {
         uuid id PK
-        uuid tenant_id FK "RLS key"
+        uuid tenant_id FK "RLS key (organization)"
         varchar name
         text description
         jsonb metadata
@@ -131,7 +163,7 @@ erDiagram
 
     audit_logs {
         uuid id PK
-        uuid tenant_id FK "RLS key"
+        uuid organization_id FK "RLS key"
         uuid user_id FK
         varchar action
         varchar resource_type
@@ -201,7 +233,7 @@ graph TB
     RLS_CHECK --> RESULT
 ```
 
-### RLS Helper Functions
+### RLS Helper Functions (ADR-Aligned)
 
 ```sql
 -- Get current user ID from session
@@ -214,22 +246,66 @@ CREATE OR REPLACE FUNCTION current_org_id() RETURNS uuid AS $$
   SELECT NULLIF(current_setting('app.current_org_id', true), '')::uuid;
 $$ LANGUAGE SQL STABLE;
 
--- Check if current user is a member of an organization
+-- Get current root organization ID from session (ADR-002)
+CREATE OR REPLACE FUNCTION current_root_org_id() RETURNS uuid AS $$
+  SELECT NULLIF(current_setting('app.current_root_org_id', true), '')::uuid;
+$$ LANGUAGE SQL STABLE;
+
+-- Check if organization matches current root org (ADR-002)
+CREATE OR REPLACE FUNCTION is_same_root_org(check_root_org_id uuid) RETURNS boolean AS $$
+  SELECT check_root_org_id = current_root_org_id();
+$$ LANGUAGE SQL STABLE;
+
+-- Check if current user is a member of an organization (with hierarchy support)
+-- ADR-001: Supports LTREE path queries for inherited access
 CREATE OR REPLACE FUNCTION is_org_member(org_id uuid) RETURNS boolean AS $$
   SELECT EXISTS (
-    SELECT 1 FROM org_members
-    WHERE organization_id = org_id
-      AND user_id = current_user_id()
+    SELECT 1 FROM user_organizations uo
+    JOIN organizations o ON o.id = uo.organization_id
+    WHERE uo.user_id = current_user_id()
+    AND o.root_organization_id = (SELECT root_organization_id FROM organizations WHERE id = org_id)
+    AND (
+      uo.organization_id = org_id
+      OR (SELECT path FROM organizations WHERE id = org_id) <@ o.path
+    )
+    AND (uo.expires_at IS NULL OR uo.expires_at > NOW())
   );
 $$ LANGUAGE SQL STABLE SECURITY DEFINER;
 
 -- Check if current user is an admin of an organization
 CREATE OR REPLACE FUNCTION is_org_admin(org_id uuid) RETURNS boolean AS $$
   SELECT EXISTS (
-    SELECT 1 FROM org_members
+    SELECT 1 FROM user_organizations
     WHERE organization_id = org_id
       AND user_id = current_user_id()
       AND role IN ('owner', 'admin')
+      AND (expires_at IS NULL OR expires_at > NOW())
+  );
+$$ LANGUAGE SQL STABLE SECURITY DEFINER;
+
+-- Get all descendant organization IDs (ADR-001: LTREE queries)
+CREATE OR REPLACE FUNCTION get_descendant_org_ids(org_id uuid) RETURNS SETOF uuid AS $$
+  SELECT id FROM organizations
+  WHERE path <@ (SELECT path FROM organizations WHERE id = org_id);
+$$ LANGUAGE SQL STABLE;
+
+-- Get all ancestor organization IDs (ADR-001: LTREE queries)
+CREATE OR REPLACE FUNCTION get_ancestor_org_ids(org_id uuid) RETURNS SETOF uuid AS $$
+  SELECT id FROM organizations
+  WHERE (SELECT path FROM organizations WHERE id = org_id) <@ path;
+$$ LANGUAGE SQL STABLE;
+
+-- Check if user can access organization (direct or via hierarchy)
+CREATE OR REPLACE FUNCTION user_can_access_org(check_org_id uuid) RETURNS boolean AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM user_organizations uo
+    JOIN organizations o ON o.id = uo.organization_id
+    WHERE uo.user_id = current_user_id()
+    AND (
+      uo.organization_id = check_org_id
+      OR (SELECT path FROM organizations WHERE id = check_org_id) <@ o.path
+    )
+    AND (uo.expires_at IS NULL OR uo.expires_at > NOW())
   );
 $$ LANGUAGE SQL STABLE SECURITY DEFINER;
 ```
@@ -461,12 +537,24 @@ graph LR
 
 ```
 packages/api/src/db/migrations/
-├── 0000_init.sql           # Initial schema
-├── 0001_rls_policies.sql   # RLS policies (custom SQL)
-├── 0002_add_entities.sql   # Generated by Drizzle
+├── 0001_rls_policies.sql          # RLS policies and helper functions
+├── 0002_multi_org_hierarchy.sql   # ADR-001/002: LTREE, hierarchy, root org isolation
 └── meta/
-    └── _journal.json       # Migration history
+    └── _journal.json              # Drizzle migration history
 ```
+
+### Custom SQL Migration: 0002_multi_org_hierarchy.sql
+
+This migration implements ADR-001 and ADR-002:
+
+| Component | Purpose |
+|-----------|---------|
+| LTREE extension | Efficient tree queries for unlimited hierarchy depth |
+| Hierarchy columns | `org_code`, `parent_organization_id`, `root_organization_id`, `path`, `depth` |
+| User org context | `root_organization_id`, `primary_organization_id` on users |
+| Check constraints | `chk_root_subdomain`, `chk_root_self_reference`, `chk_non_root_parent` |
+| Triggers | `trg_organization_path` (auto-calculate path), `trg_single_primary_org` |
+| Helper functions | Root org isolation, LTREE queries, hierarchy access checks |
 
 ### Safe Migration Patterns
 

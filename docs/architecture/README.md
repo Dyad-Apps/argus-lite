@@ -85,26 +85,255 @@ graph TB
 
 ## Architecture Principles
 
-### 1. Multi-Tenancy by Design
-Every data access is scoped to an organization (tenant) using PostgreSQL Row-Level Security (RLS). This provides:
-- Data isolation at the database level
-- Protection against cross-tenant data leakage
-- Simplified application code (no manual tenant filtering)
+### 1. Multi-Organization Model
 
-### 2. Security-First Approach
+> **Terminology Note:** In Argus IQ, we use "Organization" rather than "Tenant". The terms are equivalent in multi-tenancy literature, but "Organization" better reflects the business model.
+
+#### Core Concepts
+
+```mermaid
+graph TB
+    subgraph "User Access Model"
+        USER[User: jane@acme.com]
+
+        ORG1[Acme Corp<br/>PRIMARY ORG]
+        ORG2[Acme Subsidiary]
+        ORG3[Partner Inc]
+
+        USER -->|"Primary (login default)"| ORG1
+        USER -->|"Can switch to"| ORG2
+        USER -->|"Can switch to"| ORG3
+    end
+
+    subgraph "Shared Assets"
+        ASSET1[Shared Equipment]
+        ORG1 -.->|"View/Edit"| ASSET1
+        ORG3 -.->|"View Only"| ASSET1
+    end
+```
+
+#### Key Behaviors
+
+| Behavior | Description |
+|----------|-------------|
+| **Primary Organization** | Every user has a primary org (the one they first signed up with). Login always lands here. |
+| **Multi-Org Access** | Users may have access to additional organizations with different roles in each. |
+| **Organization Switcher** | If a user has multi-org access, a dropdown allows switching context without re-login. |
+| **Cross-Org Data Sharing** | Organizations can share assets. The data model supports cross-org visibility with configurable permissions. |
+| **White-Label Access** | Organizations can have custom subdomains (e.g., `acme.argusiq.com`) with branded login pages. |
+
+#### Authentication Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant API
+    participant DB
+
+    User->>Browser: Navigate to acme.argusiq.com
+    Browser->>API: GET / (with subdomain: acme)
+    API->>DB: Lookup org by subdomain
+    DB-->>API: Org config (branding, SSO settings)
+    API-->>Browser: White-labeled login page
+
+    User->>Browser: Login (email/password or SSO)
+    Browser->>API: POST /auth/login
+    API->>DB: Validate credentials
+    API->>DB: Get user's primary_organization_id
+    API->>DB: Get user's accessible organizations
+    API-->>Browser: JWT with primary org context + org list
+
+    Note over Browser: User sees primary org dashboard
+    Note over Browser: Org switcher shows accessible orgs
+
+    User->>Browser: Switch to "Partner Inc"
+    Browser->>API: POST /auth/switch-organization
+    API-->>Browser: New JWT with Partner Inc context
+```
+
+#### Data Model Implications (ADR-001/002 Aligned)
+
+```sql
+-- Organizations support unlimited hierarchy via LTREE (ADR-001)
+organizations (
+    id,
+    org_code,              -- Human-readable code for switching (e.g., 'WALMART')
+    parent_organization_id,-- Self-reference for tree structure
+    root_organization_id,  -- Data isolation key
+    is_root,               -- TRUE for top-level orgs
+    path,                  -- LTREE path (e.g., 'radio.walmart.northeast')
+    depth,                 -- Level in hierarchy (0 = root)
+    subdomain,             -- For root orgs only (acme.argusiq.com)
+    can_have_children      -- Whether this org can create child orgs
+)
+
+-- Users belong to a root organization for data isolation (ADR-002)
+users (
+    email,                     -- Unique per root_organization_id
+    root_organization_id,      -- Data isolation boundary
+    primary_organization_id    -- Default org on login
+)
+
+-- User-Organization access with time-limited support
+user_organizations (
+    user_id,
+    organization_id,
+    role,              -- Role within that org
+    is_primary,        -- TRUE for default org
+    expires_at         -- Optional expiration for contractor access
+)
+
+-- Cross-org asset sharing (within same root org)
+asset_shares (
+    asset_id,
+    owner_organization_id,
+    shared_with_organization_id,
+    permission_level   -- 'view', 'edit', 'admin'
+)
+```
+
+#### White-Label Subdomain Routing
+
+| URL | Behavior |
+|-----|----------|
+| `app.argusiq.com` | Default Argus IQ branding, standard login |
+| `acme.argusiq.com` | Acme Corp branding, may enforce Acme SSO |
+| `partner.argusiq.com` | Partner Inc branding with custom theme |
+
+#### Administrative Hierarchy
+
+```mermaid
+graph TB
+    subgraph "Platform Level"
+        SYSADMIN[System Admin<br/>Platform Owner]
+    end
+
+    subgraph "Organization Level"
+        ORG_ADMIN1[Org Admin<br/>Acme Corp]
+        ORG_ADMIN2[Org Admin<br/>Partner Inc]
+    end
+
+    subgraph "User Level"
+        USER1[Members/Viewers]
+    end
+
+    SYSADMIN -->|"Creates & manages"| ORG_ADMIN1
+    SYSADMIN -->|"Creates & manages"| ORG_ADMIN2
+    ORG_ADMIN1 -->|"Manages"| USER1
+```
+
+| Role | Scope | Capabilities |
+|------|-------|--------------|
+| **System Admin** | Platform-wide | Create/delete organizations, configure platform defaults, manage all SSO providers, impersonate users, view all audit logs, set white-label defaults |
+| **Organization Admin** | Single org | Configure org white-labeling (within platform limits), set up org-specific SSO, manage org members, view org audit logs |
+| **Organization Member** | Single org | Standard access based on assigned role |
+
+#### System Admin Capabilities
+
+**Organization Management:**
+- Create new organizations with subdomain allocation
+- Enable/disable organizations
+- Set organization plan/tier (affects feature availability)
+- Configure billing and usage limits
+
+**White-Label Configuration (Platform Defaults):**
+- Default logo, favicon, colors
+- Default login background
+- Email templates and branding
+- Terms of service, privacy policy URLs
+
+**SSO Provider Management:**
+- Configure platform-wide SSO providers (available to all orgs)
+- Enable/disable SSO providers per organization
+- Manage SAML certificates and OIDC credentials
+- Set SSO enforcement policies
+
+**Security & Compliance:**
+- View cross-organization audit logs
+- Configure password policies
+- Set session timeout defaults
+- Manage API rate limits
+
+#### Organization Admin Capabilities
+
+**White-Label Customization:**
+- Upload organization logo
+- Set organization colors (primary, accent)
+- Configure login page background image
+- Customize email templates (if allowed by plan)
+
+**SSO Configuration:**
+- Enable/configure SSO from platform-available providers
+- Set SSO as required or optional for org members
+- Configure SCIM provisioning (if available)
+- Manage SSO group mappings to roles
+
+**Member Management:**
+- Invite users to organization
+- Assign roles within organization
+- Remove members
+- View organization audit logs
+
+#### Configuration Data Model
+
+```sql
+-- Platform-level settings (managed by System Admin)
+platform_settings (
+    key,                    -- e.g., 'default_logo_url', 'password_min_length'
+    value,
+    updated_by,
+    updated_at
+)
+
+-- Organization white-label settings
+organization_branding (
+    organization_id,
+    logo_url,
+    favicon_url,
+    primary_color,          -- e.g., '#1890FF'
+    accent_color,
+    login_background_url,
+    login_background_type,  -- 'image', 'particles', 'solid'
+    custom_css,             -- Advanced customization (enterprise only)
+    updated_at
+)
+
+-- Organization SSO configuration
+organization_sso_config (
+    organization_id,
+    provider_type,          -- 'oidc', 'saml', 'google', 'github'
+    provider_name,          -- Display name
+    config,                 -- JSONB with provider-specific settings
+    is_enabled,
+    is_required,            -- If true, password login disabled
+    created_at,
+    updated_at
+)
+```
+
+### 2. Row-Level Security (RLS)
+
+Every data access is scoped to an organization using PostgreSQL Row-Level Security (RLS). This provides:
+- Data isolation at the database level
+- Protection against cross-organization data leakage
+- Simplified application code (no manual org filtering)
+- Support for cross-org sharing via explicit share records
+
+### 4. Security-First Approach
 - All endpoints require authentication by default
 - JWT tokens with short expiration (15 minutes)
 - Refresh token rotation
 - Rate limiting on all endpoints
 - Input validation with Zod schemas
 
-### 3. Horizontal Scalability
+### 5. Horizontal Scalability
 - Stateless API servers
 - Session data in Valkey (Redis-compatible)
 - Database connection pooling
 - Health checks for load balancer integration
 
-### 4. Developer Experience
+### 6. Developer Experience
 - Full TypeScript across all packages
 - Shared types between frontend and backend
 - Comprehensive API documentation
@@ -228,6 +457,12 @@ This section documents significant changes made during implementation that devia
 
 | Change | Category | Description | Rationale |
 |--------|----------|-------------|-----------|
+| **ADR-001 Alignment** | Database | Unlimited recursive org trees with PostgreSQL LTREE | Support complex enterprise hierarchies |
+| **ADR-002 Alignment** | Database | Root organization isolation via `root_organization_id` | Complete data isolation per enterprise |
+| **LTREE Extension** | Database | Added LTREE for efficient tree queries (O(1) ancestor/descendant) | Performance at scale |
+| **Hierarchy Triggers** | Database | Auto-calculate `path`, `depth` on organization changes | Maintain data integrity |
+| **Time-Limited Access** | Database | `user_organizations.expires_at` for contractor access | Support temporary access patterns |
+| **Email per Root Org** | Database | Composite unique index `(email, root_organization_id)` | Same email in different tenants |
 | **SSO Support Added** | Authentication | Added Passport.js strategies for Google, GitHub, OIDC, and SAML 2.0 | Enterprise requirement for single sign-on |
 | **Identity Providers Table** | Database | New `identity_providers` table for storing SSO configurations per organization | Support multiple IdPs per tenant |
 | **User Identities Table** | Database | New `user_identities` table linking users to external accounts | Enable account linking across providers |
@@ -305,16 +540,34 @@ docker compose up -d
 # Copy environment file
 cp .env.example .env
 
-# Run database migrations
+# Build the API package (required for migrations)
 cd packages/api
-pnpm db:push
+pnpm build
 
-# Apply RLS policies
-docker exec argus-db psql -U argus -d argus \
-  -f /path/to/0001_rls_policies.sql
+# Run database migrations (applies schema + RLS + LTREE)
+# Windows:
+set DATABASE_URL=postgresql://argus:argus_dev@localhost:5433/argus
+node dist/db/migrate.js
 
-# Start development server
+# Linux/Mac:
+DATABASE_URL="postgresql://argus:argus_dev@localhost:5433/argus" node dist/db/migrate.js
+
+# Start development server (from project root)
+cd ../..
 pnpm dev
+```
+
+### Database Migration
+
+The migration runner applies:
+1. **Drizzle schema migrations** - Table structure from TypeScript schema
+2. **Custom SQL migrations** - RLS policies, LTREE extension, triggers, and helper functions
+
+```bash
+# View migration status
+docker exec argus-db psql -U argus -d argus -c "SELECT * FROM pg_extension;"
+docker exec argus-db psql -U argus -d argus -c "SELECT COUNT(*) FROM pg_policies;"
+docker exec argus-db psql -U argus -d argus -c "SELECT tgname FROM pg_trigger WHERE tgname LIKE 'trg_%';"
 ```
 
 ### Environment Variables

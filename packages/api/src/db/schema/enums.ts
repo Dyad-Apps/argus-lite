@@ -94,3 +94,32 @@ export const identityProviderTypeEnum = pgEnum('identity_provider_type', [
   'github',    // GitHub OAuth2
   'okta',      // Okta OIDC
 ]);
+
+/**
+ * Organization plan/tier levels.
+ */
+export const organizationPlanEnum = pgEnum('organization_plan', [
+  'free',
+  'starter',
+  'professional',
+  'enterprise',
+]);
+
+/**
+ * Login background type for white-labeling.
+ */
+export const loginBackgroundTypeEnum = pgEnum('login_background_type', [
+  'default',    // Platform default (particles)
+  'solid',      // Solid color
+  'image',      // Custom image
+  'particles',  // Particles animation
+]);
+
+/**
+ * System admin roles (platform-level).
+ */
+export const systemRoleEnum = pgEnum('system_role', [
+  'super_admin',  // Full platform access
+  'support',      // Read-only + impersonation
+  'billing',      // Billing management only
+]);

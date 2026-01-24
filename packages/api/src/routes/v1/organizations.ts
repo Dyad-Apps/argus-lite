@@ -137,9 +137,17 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
         throw Errors.conflict('Organization with this slug already exists');
       }
 
+      // ADR-001: Create as root organization with org_code derived from slug
+      const normalizedSlug = slug.toLowerCase();
+      const orgCode = normalizedSlug.toUpperCase().replace(/-/g, '_');
+
       const org = await orgRepo.create({
         name,
-        slug: slug.toLowerCase(),
+        slug: normalizedSlug,
+        orgCode,
+        isRoot: true,
+        canHaveChildren: true,
+        subdomain: normalizedSlug,
       });
 
       return reply.status(201).send({

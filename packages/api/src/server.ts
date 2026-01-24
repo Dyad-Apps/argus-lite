@@ -1,3 +1,11 @@
+// Load environment variables from root .env file
+import { config } from 'dotenv';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+config({ path: resolve(__dirname, '../../../.env') });
+
 import { buildApp } from './app.js';
 import { closeCacheClient } from '@argus/shared';
 import { closeDatabaseConnection } from './db/index.js';

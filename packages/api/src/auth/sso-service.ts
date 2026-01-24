@@ -134,7 +134,12 @@ class SsoService {
       throw new Error('User not found and auto-creation is disabled');
     }
 
-    const newUser = await this.createUserFromProfile(profile);
+    // ADR-002: SSO users need organization context from the provider
+    if (!provider.organizationId) {
+      throw new Error('Organization context required for user creation');
+    }
+
+    const newUser = await this.createUserFromProfile(profile, provider.organizationId);
 
     await auditService.logAuth('sso_register', {
       userId: newUser.id as UserId,
@@ -155,19 +160,25 @@ class SsoService {
 
   /**
    * Creates a new user from SSO profile
+   * ADR-002: Users must have organization context
    */
   private async createUserFromProfile(
-    profile: SsoProfile
+    profile: SsoProfile,
+    organizationId: string
   ): Promise<SsoAuthResult['user']> {
     const [user] = await db
       .insert(users)
       .values({
         email: profile.email.toLowerCase(),
-        passwordHash: '', // SSO users don't have passwords
+        // SSO users don't have passwords (null instead of empty string)
+        passwordHash: null,
         firstName: profile.firstName ?? null,
         lastName: profile.lastName ?? null,
         emailVerifiedAt: profile.emailVerified ? new Date() : null,
         lastLoginAt: new Date(),
+        // ADR-002: Organization context required
+        rootOrganizationId: organizationId,
+        primaryOrganizationId: organizationId,
       })
       .returning();
 

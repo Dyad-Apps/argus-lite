@@ -19,7 +19,9 @@
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",
     "db:migrate:run": "tsx src/db/migrate.ts",
-    "db:migrate:prod": "node dist/db/migrate.js"
+    "db:migrate:prod": "node dist/db/migrate.js",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:seed:prod": "node dist/db/seed.js"
   },
   "dependencies": {
     "@argus/shared": "workspace:*",
@@ -30,6 +32,7 @@
     "@fastify/secure-session": "^8.3.0",
     "@sentry/node": "^10.36.0",
     "argon2": "^0.44.0",
+    "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "fastify": "^5.7.1",
     "fastify-plugin": "^5.1.0",

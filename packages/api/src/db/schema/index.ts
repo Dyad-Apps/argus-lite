@@ -23,6 +23,7 @@ export * from './system-events.js';
 export * from './audit-logs.js';
 export * from './identity-providers.js';
 export * from './user-identities.js';
+export * from './platform-settings.js';
 
 // Relations (must be last to avoid circular deps)
 export * from './relations.js';

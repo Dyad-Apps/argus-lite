@@ -8,8 +8,25 @@
 
 This phase implements the authentication system and multi-organization support for Argus IQ. The system supports both traditional email/password authentication and enterprise SSO through various identity providers.
 
+## ADR Alignment
+
+This implementation follows the architectural decisions documented in:
+- **ADR-001**: Multi-Tenant Model with Unlimited Recursive Organization Trees
+- **ADR-002**: Subdomain-Based Root Organization Identification
+
+### Key Design Principles
+
+| Principle | Description |
+|-----------|-------------|
+| **Root Organization Isolation** | All data is scoped by `root_organization_id` for complete isolation between enterprises |
+| **LTREE Hierarchy** | PostgreSQL LTREE extension enables efficient tree queries for unlimited depth |
+| **Subdomain = Root Org** | URL subdomain identifies the root organization (e.g., `acme.argusiq.com`) |
+| **Email per Root** | Same email can exist in different root organizations |
+| **org_code for Switching** | Human-readable code for UI dropdowns, NOT used for login |
+
 ## Table of Contents
 
+- [ADR Alignment](#adr-alignment)
 - [Components](#components)
 - [Authentication Flow](#authentication-flow)
 - [SSO Integration](#sso-integration-implementation-change)
@@ -289,77 +306,170 @@ const samlConfig: SamlConfig = {
 
 ## Multi-Organization Model
 
-### Organization Hierarchy
+> **ADR Reference:** ADR-001 (Unlimited Recursive Trees) + ADR-002 (Subdomain Routing)
+
+### Root Organization Concept
+
+Root organizations are the top-level tenants that provide complete data isolation:
 
 ```mermaid
 graph TB
-    subgraph "Organization: Acme Corp"
-        ORG1[Organization<br/>id: org-1]
+    subgraph "Platform"
+        subgraph "Root: Radio OEM (radio.argusiq.com)"
+            R1[Radio OEM<br/>is_root: true<br/>subdomain: radio]
+            R1_C1[Walmart<br/>org_code: WALMART]
+            R1_C2[Kroger<br/>org_code: KROGER]
+            R1_C1_1[Northeast Region<br/>org_code: REGION-NE]
+            R1_C1_2[Southeast Region<br/>org_code: REGION-SE]
 
-        subgraph "Members"
-            U1[Alice<br/>Owner]
-            U2[Bob<br/>Admin]
-            U3[Charlie<br/>Member]
+            R1 --> R1_C1
+            R1 --> R1_C2
+            R1_C1 --> R1_C1_1
+            R1_C1 --> R1_C1_2
         end
 
-        subgraph "Resources"
-            E1[Entity 1]
-            E2[Entity 2]
-            E3[Entity 3]
+        subgraph "Root: MegaCorp (mega.argusiq.com)"
+            R2[MegaCorp<br/>is_root: true<br/>subdomain: mega]
+            R2_C1[Division A<br/>org_code: DIV-A]
+            R2_C2[Division B<br/>org_code: DIV-B]
+
+            R2 --> R2_C1
+            R2 --> R2_C2
         end
     end
 
-    ORG1 --> U1
-    ORG1 --> U2
-    ORG1 --> U3
-
-    ORG1 --> E1
-    ORG1 --> E2
-    ORG1 --> E3
-
-    U1 -.->|manages| U2
-    U1 -.->|manages| U3
-    U2 -.->|can edit| E1
-    U2 -.->|can edit| E2
+    style R1 fill:#4CAF50,color:white
+    style R2 fill:#2196F3,color:white
 ```
 
-### Data Model
+### LTREE Path Structure
+
+Organizations use PostgreSQL LTREE for efficient hierarchy queries:
+
+| Organization | path | depth | root_organization_id |
+|-------------|------|-------|---------------------|
+| Radio OEM | `radio` | 0 | `radio-uuid` |
+| Walmart | `radio.walmart` | 1 | `radio-uuid` |
+| Northeast Region | `radio.walmart.northeast` | 2 | `radio-uuid` |
+| Store #123 | `radio.walmart.northeast.store123` | 3 | `radio-uuid` |
+
+### Data Model (ADR-Aligned)
 
 ```mermaid
 erDiagram
-    users ||--o{ org_members : "belongs to"
-    organizations ||--o{ org_members : "has"
-    organizations ||--o{ entities : "owns"
-
-    users {
-        uuid id PK
-        varchar email UK
-        varchar password_hash
-        varchar first_name
-        varchar last_name
-        boolean email_verified
-        timestamp created_at
-    }
+    organizations ||--o{ organizations : "parent_of"
+    organizations ||--o{ user_organizations : "has_members"
+    organizations ||--o{ organization_branding : "has_branding"
+    users ||--o{ user_organizations : "member_of"
+    users }o--|| organizations : "root_organization"
+    users }o--|| organizations : "primary_organization"
 
     organizations {
         uuid id PK
         varchar name
         varchar slug UK
+        varchar org_code "Human-readable code for switching"
+        uuid parent_organization_id FK "Self-reference"
+        uuid root_organization_id FK "Data isolation key"
+        boolean is_root "True for top-level orgs"
+        ltree path "LTREE for tree queries"
+        integer depth "Level in hierarchy"
+        varchar subdomain UK "Only for root orgs"
+        boolean can_have_children
+        enum plan "free|starter|professional|enterprise"
         jsonb settings
-        enum plan "free|pro|enterprise"
-        timestamp created_at
     }
 
-    org_members {
+    users {
         uuid id PK
-        uuid user_id FK
-        uuid organization_id FK
+        varchar email "Unique per root org"
+        varchar password_hash "Nullable for SSO users"
+        uuid root_organization_id FK "Data isolation"
+        uuid primary_organization_id FK "Default after login"
+        boolean mfa_enabled
+        enum status "active|inactive|suspended"
+    }
+
+    user_organizations {
+        uuid user_id PK_FK
+        uuid organization_id PK_FK
         enum role "owner|admin|member|viewer"
+        boolean is_primary "Default org for user"
+        timestamp expires_at "Time-limited access"
         timestamp joined_at
+    }
+
+    organization_branding {
+        uuid id PK
+        uuid organization_id FK UK
+        text logo_url
+        varchar primary_color
+        enum login_background_type
+        varchar login_welcome_text
     }
 ```
 
-### Organization Context Flow
+### Subdomain-Based Authentication (ADR-002)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant API
+    participant DB
+
+    User->>Browser: Navigate to radio.argusiq.com
+    Browser->>API: GET /api/v1/organizations/branding?subdomain=radio
+    API->>DB: SELECT * FROM organizations WHERE subdomain = 'radio'
+    DB-->>API: { id: 'radio-uuid', branding: {...} }
+    API-->>Browser: { organizationId, branding, ssoProviders }
+    Browser->>Browser: Render branded login page
+
+    User->>Browser: Enter email + password
+    Browser->>API: POST /api/v1/auth/login
+    Note right of Browser: { email, password, organizationId: 'radio-uuid' }
+
+    API->>DB: Find user WHERE email = ? AND root_organization_id = ?
+    Note right of API: Email unique per root org!
+    DB-->>API: User record
+
+    API->>API: Verify password, generate JWT
+    Note right of API: JWT contains:<br/>root_organization_id<br/>current_organization_id<br/>accessible_organization_ids
+
+    API-->>Browser: { accessToken, refreshToken }
+    Browser->>Browser: Store tokens, redirect to dashboard
+```
+
+### Organization Switching
+
+Users can switch between organizations they have access to within the same root:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI
+    participant API
+    participant DB
+
+    User->>UI: Click org switcher dropdown
+    UI->>API: GET /api/v1/auth/organizations
+    API->>DB: SELECT orgs WHERE user has access
+    DB-->>API: [Walmart, Kroger, Northeast Region]
+    API-->>UI: { organizations, currentOrganizationId }
+    UI->>UI: Display dropdown with org_codes
+
+    User->>UI: Select "KROGER"
+    UI->>API: POST /api/v1/auth/switch-organization
+    Note right of UI: { organizationId: 'kroger-uuid' }
+
+    API->>DB: Verify user access to org
+    API->>API: Generate new JWT with current_organization_id = kroger
+    API-->>UI: { accessToken, refreshToken }
+
+    UI->>UI: Reload page with new org context
+```
+
+### Organization Context Flow (ADR-002 Aligned)
 
 ```mermaid
 sequenceDiagram
@@ -369,26 +479,51 @@ sequenceDiagram
     participant Database
 
     Client->>API: GET /api/v1/entities
-    Note right of Client: Header: Authorization: Bearer xxx
-    Note right of Client: Header: X-Organization-Id: org-123
+    Note right of Client: Authorization: Bearer xxx
+    Note right of Client: JWT contains org context
 
-    API->>Middleware: Extract JWT + Org Header
-    Middleware->>Database: Verify membership
-    Database-->>Middleware: User is member (role: admin)
+    API->>Middleware: Extract JWT
+    Note right of Middleware: Decode:<br/>root_organization_id<br/>current_organization_id<br/>accessible_organization_ids
 
     Middleware->>Middleware: Set request context
-    Note right of Middleware: req.user = { id, email }
+    Note right of Middleware: req.user = { id, email, rootOrgId }
     Note right of Middleware: req.organization = { id, role }
 
     Middleware->>Database: SET app.current_user_id
     Middleware->>Database: SET app.current_org_id
+    Middleware->>Database: SET app.current_root_org_id
     Note right of Middleware: For RLS policies
 
     API->>Database: SELECT * FROM entities
-    Note right of Database: RLS filter: tenant_id = current_org_id
+    Note right of Database: RLS filter:<br/>1. root_organization_id check<br/>2. user_can_access_org(tenant_id)
 
     Database-->>API: Filtered results
     API-->>Client: 200 OK { entities: [...] }
+```
+
+### JWT Token Structure (Updated for ADR-002)
+
+```typescript
+// Access Token Payload (ADR-002 compliant)
+interface AccessTokenPayload {
+  sub: string;                    // User ID
+  email: string;
+  rootOrgId: string;              // Root organization (data isolation)
+  currentOrgId: string;           // Current organization context
+  accessibleOrgIds: string[];     // All orgs user can switch to
+  role: OrgRole;                  // Role in current organization
+  iat: number;                    // Issued at
+  exp: number;                    // Expires (15 minutes)
+}
+
+// Refresh Token Payload
+interface RefreshTokenPayload {
+  sub: string;                    // User ID
+  rootOrgId: string;              // Root organization
+  jti: string;                    // Unique token ID
+  iat: number;
+  exp: number;                    // Expires (7 days)
+}
 ```
 
 ---
@@ -466,12 +601,14 @@ function requireRole(allowedRoles: OrgRole[]) {
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/api/v1/auth/register` | Create new account |
-| `POST` | `/api/v1/auth/login` | Email/password login |
+| `POST` | `/api/v1/auth/login` | Email/password login (includes organizationId for root context) |
 | `POST` | `/api/v1/auth/refresh` | Refresh access token |
 | `POST` | `/api/v1/auth/logout` | Invalidate refresh token |
 | `POST` | `/api/v1/auth/forgot-password` | Request password reset |
 | `POST` | `/api/v1/auth/reset-password` | Set new password |
 | `GET` | `/api/v1/auth/me` | Get current user |
+| `GET` | `/api/v1/auth/organizations` | **NEW:** List user's accessible organizations |
+| `POST` | `/api/v1/auth/switch-organization` | **NEW:** Switch organization context |
 
 ### SSO Endpoints
 
@@ -480,6 +617,7 @@ function requireRole(allowedRoles: OrgRole[]) {
 | `GET` | `/api/v1/sso/providers` | List available SSO providers |
 | `GET` | `/api/v1/sso/:providerId/authorize` | Initiate SSO flow |
 | `GET` | `/api/v1/sso/:providerId/callback` | Handle IdP callback |
+| `GET` | `/api/v1/sso/discover` | Enterprise SSO discovery |
 | `GET` | `/api/v1/sso/identities` | List linked identities |
 | `DELETE` | `/api/v1/sso/identities/:id` | Unlink identity |
 
@@ -496,6 +634,16 @@ function requireRole(allowedRoles: OrgRole[]) {
 | `POST` | `/api/v1/organizations/:id/members` | Add member |
 | `PATCH` | `/api/v1/organizations/:id/members/:userId` | Update member role |
 | `DELETE` | `/api/v1/organizations/:id/members/:userId` | Remove member |
+| `GET` | `/api/v1/organizations/:id/children` | **NEW:** List child organizations |
+| `POST` | `/api/v1/organizations/:id/children` | **NEW:** Create child organization |
+
+### Branding Endpoints (White-Label)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/organizations/branding` | Get branding by subdomain (public) |
+| `GET` | `/api/v1/organizations/:id/branding` | Get organization branding |
+| `PUT` | `/api/v1/organizations/:id/branding` | Update organization branding |
 
 ---
 

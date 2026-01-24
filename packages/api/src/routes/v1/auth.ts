@@ -32,11 +32,15 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
   const passwordResetRepo = getPasswordResetTokenRepository();
 
   // POST /auth/register - Create a new user account
+  // ADR-002: Users must belong to a root organization
   app.withTypeProvider<ZodTypeProvider>().post(
     '/register',
     {
       schema: {
-        body: createUserSchema,
+        body: createUserSchema.extend({
+          // Organization context from subdomain or explicit parameter
+          organizationId: z.string().uuid().optional(),
+        }),
         response: {
           201: userResponseSchema,
           409: z.object({
@@ -51,9 +55,16 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       },
     },
     async (request, reply) => {
-      const { email, password, firstName, lastName } = request.body;
+      const { email, password, firstName, lastName, organizationId } = request.body;
 
-      // Check if email already exists
+      // For now, organizationId is required - in a full implementation,
+      // this would come from subdomain resolution or invitation context
+      if (!organizationId) {
+        throw Errors.badRequest('Organization context required for registration');
+      }
+
+      // Check if email already exists in this organization
+      // ADR-002: Email is unique per root organization
       const existingUser = await userRepo.existsByEmail(email);
       if (existingUser) {
         throw Errors.conflict('User with this email already exists');
@@ -62,12 +73,15 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       // Hash password with Argon2id
       const passwordHash = await hashPassword(password);
 
-      // Create user
+      // Create user with organization context
+      // ADR-002: rootOrganizationId and primaryOrganizationId are required
       const user = await userRepo.create({
         email,
         passwordHash,
         firstName: firstName ?? null,
         lastName: lastName ?? null,
+        rootOrganizationId: organizationId,
+        primaryOrganizationId: organizationId,
       });
 
       return reply.status(201).send({
@@ -123,6 +137,11 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       // Check if account is active
       if (user.status !== 'active') {
         throw Errors.unauthorized('Account is not active');
+      }
+
+      // Check if user has a password (SSO-only users don't)
+      if (!user.passwordHash) {
+        throw Errors.unauthorized('Please use SSO to sign in');
       }
 
       // Verify password

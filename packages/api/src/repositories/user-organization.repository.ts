@@ -105,6 +105,8 @@ export class UserOrganizationRepository {
         userId: userOrganizations.userId,
         organizationId: userOrganizations.organizationId,
         role: userOrganizations.role,
+        isPrimary: userOrganizations.isPrimary,
+        expiresAt: userOrganizations.expiresAt,
         joinedAt: userOrganizations.joinedAt,
         invitedBy: userOrganizations.invitedBy,
         user: {
@@ -138,6 +140,8 @@ export class UserOrganizationRepository {
         userId: userOrganizations.userId,
         organizationId: userOrganizations.organizationId,
         role: userOrganizations.role,
+        isPrimary: userOrganizations.isPrimary,
+        expiresAt: userOrganizations.expiresAt,
         joinedAt: userOrganizations.joinedAt,
         invitedBy: userOrganizations.invitedBy,
         organization: {
