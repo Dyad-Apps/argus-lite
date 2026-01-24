@@ -1,0 +1,63 @@
+# Prometheus Configuration for Argus IQ
+# This configuration works for local development
+# For AWS, use Amazon Managed Prometheus with remote_write
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: development
+    service: argus-iq
+
+# Alerting configuration
+alerting:
+  alertmanagers: []
+
+# Rule files
+rule_files:
+  - alerts.yml
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          instance: 'prometheus'
+
+  # Node Exporter (system metrics)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          instance: 'local'
+
+  # Argus API metrics
+  - job_name: 'argus-api'
+    metrics_path: '/metrics'
+    static_configs:
+      # Use host.docker.internal for local development on Mac/Windows
+      # Use 172.17.0.1 for Linux
+      - targets: ['host.docker.internal:3040']
+        labels:
+          service: 'api'
+          environment: 'development'
+    # Retry configuration for when API is not yet started
+    scrape_timeout: 10s
+
+  # PostgreSQL metrics (if postgres_exporter is added later)
+  # - job_name: 'postgres'
+  #   static_configs:
+  #     - targets: ['postgres-exporter:9187']
+
+# Remote write configuration for AWS Managed Prometheus
+# Uncomment and configure when deploying to AWS
+# remote_write:
+#   - url: ${PROMETHEUS_REMOTE_WRITE_URL}
+#     sigv4:
+#       region: ${AWS_REGION}
+#     queue_config:
+#       max_samples_per_send: 1000
+#       max_shards: 200
+#       capacity: 2500

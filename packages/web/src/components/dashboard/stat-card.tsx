@@ -1,7 +1,13 @@
 import { Link } from '@tanstack/react-router';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
 export type StatCardVariant = 'default' | 'green' | 'blue' | 'purple' | 'orange' | 'info';
@@ -15,6 +21,7 @@ interface StatCardProps {
   onAction?: () => void;
   variant?: StatCardVariant;
   className?: string;
+  tooltip?: string;
 }
 
 const variantStyles: Record<StatCardVariant, string> = {
@@ -35,6 +42,7 @@ export function StatCard({
   onAction,
   variant = 'default',
   className,
+  tooltip,
 }: StatCardProps) {
   return (
     <Card className={cn('flex flex-col justify-center', variantStyles[variant], className)}>
@@ -48,6 +56,18 @@ export function StatCard({
               <Link to={link}>
                 <ArrowUpRight className="h-3 w-3 text-muted-foreground cursor-pointer hover:text-primary" />
               </Link>
+            )}
+            {tooltip && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="h-3 w-3 text-muted-foreground cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">{tooltip}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
           {actionLabel && (

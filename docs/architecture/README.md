@@ -43,6 +43,12 @@ graph TB
         VALKEY[(Valkey<br/>Cache + Sessions)]
     end
 
+    subgraph "Monitoring"
+        PROM[Prometheus<br/>Metrics Collection]
+        GRAFANA[Grafana<br/>Dashboards]
+        NODE_EXP[Node Exporter<br/>Host Metrics]
+    end
+
     subgraph "External Services"
         SENTRY[Sentry<br/>Error Tracking]
         IDP[Identity Providers<br/>Google, GitHub, OIDC, SAML]
@@ -64,6 +70,12 @@ graph TB
 
     API1 --> SENTRY
     API1 --> IDP
+
+    PROM -->|scrape /metrics| API1
+    PROM -->|scrape /metrics| API2
+    PROM -->|scrape /metrics| API3
+    PROM -->|scrape| NODE_EXP
+    GRAFANA -->|query| PROM
 ```
 
 ## Technology Stack
@@ -78,6 +90,9 @@ graph TB
 | **Cache** | Valkey | 8.x | Redis-compatible caching |
 | **Validation** | Zod | 4.x | Runtime type validation |
 | **Authentication** | Passport.js | 0.7.x | Multi-strategy authentication |
+| **Metrics** | Prometheus | 2.54.x | Metrics collection & alerting |
+| **Dashboards** | Grafana | 11.3.x | Metrics visualization |
+| **App Metrics** | prom-client | 15.x | Node.js Prometheus client |
 | **Package Manager** | pnpm | 9.x | Fast, disk-efficient package manager |
 | **Monorepo** | pnpm workspaces | - | Multi-package management |
 
@@ -421,9 +436,9 @@ argusiq-lite/
 │   │   │   ├── auth/           # Authentication strategies
 │   │   │   ├── db/             # Database schema & migrations
 │   │   │   ├── middleware/     # Request middleware
-│   │   │   ├── plugins/        # Fastify plugins
+│   │   │   ├── plugins/        # Fastify plugins (incl. metrics)
 │   │   │   ├── routes/         # API route handlers
-│   │   │   └── services/       # Business logic
+│   │   │   └── services/       # Business logic (incl. Prometheus client)
 │   │   └── Dockerfile
 │   │
 │   ├── shared/                 # Shared code
@@ -437,6 +452,13 @@ argusiq-lite/
 │           ├── components/
 │           ├── hooks/
 │           └── pages/
+│
+├── monitoring/                 # Observability stack
+│   ├── prometheus.yml          # Prometheus scrape config
+│   ├── alerts.yml              # Alert rules
+│   └── grafana/
+│       ├── provisioning/       # Auto-provisioned datasources
+│       └── dashboards/         # Pre-built dashboards
 │
 ├── docs/                       # Documentation
 │   └── architecture/           # Architecture docs
@@ -557,6 +579,39 @@ cd ../..
 pnpm dev
 ```
 
+### Monitoring Stack (Optional)
+
+The project includes a full Prometheus + Grafana monitoring stack for observability.
+
+```bash
+# Start monitoring services (Prometheus, Grafana, Node Exporter)
+docker compose --profile monitoring up -d
+```
+
+**Access URLs:**
+
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| API | http://localhost:3040 | - |
+| Web App | http://localhost:5173 | - |
+| API Metrics | http://localhost:3040/metrics | - |
+| Grafana | http://localhost:3001 | admin / argus_dev |
+| Prometheus | http://localhost:9090 | - |
+| Node Exporter | http://localhost:9100/metrics | - |
+
+**Pre-configured Dashboards:**
+- Grafana auto-provisions the "Argus System Health" dashboard showing CPU, memory, disk, API latency, request rates, and error rates.
+
+**Application Metrics:**
+The API exposes Prometheus metrics at `/metrics`:
+- `argus_http_requests_total` - HTTP request counter by method, route, status
+- `argus_http_request_duration_seconds` - Request latency histogram
+- `argus_active_connections` - Current active connections
+- `argus_database_pool_*` - Database connection pool metrics
+- `argus_cache_operations_total` - Cache hit/miss counters
+
+See [monitoring/README.md](../../monitoring/README.md) for full documentation including AWS deployment configuration.
+
 ### Database Migration
 
 The migration runner applies:
@@ -581,3 +636,7 @@ See [.env.example](../../.env.example) for all configuration options.
 | `JWT_SECRET` | Yes | Secret for JWT signing |
 | `NODE_ENV` | No | Environment (development/production) |
 | `SENTRY_DSN` | No | Sentry error tracking DSN |
+| `METRICS_ENABLED` | No | Enable Prometheus metrics (default: true) |
+| `PROMETHEUS_ENDPOINT` | No | Prometheus URL for queries (default: http://localhost:9090) |
+| `PROMETHEUS_AUTH` | No | Auth method: 'none' or 'sigv4' for AWS (default: none) |
+| `AWS_REGION` | No | AWS region (required when PROMETHEUS_AUTH=sigv4) |

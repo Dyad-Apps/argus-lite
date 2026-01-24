@@ -11,3 +11,4 @@ export * from './password-reset-token.repository.js';
 export * from './organization.repository.js';
 export * from './user-organization.repository.js';
 export * from './invitation.repository.js';
+export * from './audit-log.repository.js';

@@ -21,7 +21,9 @@ argusiq-lite/
 │   ├── api/          # Fastify backend API
 │   ├── shared/       # Shared types and utilities
 │   └── web/          # React frontend
+├── monitoring/       # Prometheus + Grafana config
 ├── docs/             # Documentation
+├── docker-compose.yml
 └── README.md
 ```
 
@@ -31,26 +33,46 @@ argusiq-lite/
 
 - Node.js 22+
 - pnpm 9+
-- PostgreSQL 15+ with LTREE extension
+- Docker & Docker Compose
 
 ### Installation
 
 ```bash
-# Install dependencies
+# Clone and install dependencies
 pnpm install
 
+# Start infrastructure (PostgreSQL, Valkey)
+docker compose up -d
+
 # Set up environment variables
-cp packages/api/.env.example packages/api/.env
+cp .env.example .env
+
+# Build the API package (required for migrations)
+cd packages/api && pnpm build
 
 # Run database migrations
-cd packages/api && pnpm db:migrate:run
+pnpm db:migrate:run
 
 # Seed the database
 pnpm db:seed
 
-# Start development servers
+# Start development servers (from project root)
 cd ../.. && pnpm dev
 ```
+
+### Optional: Start Monitoring Stack
+
+```bash
+# Start Prometheus, Grafana, and Node Exporter
+docker compose --profile monitoring up -d
+```
+
+**Access:**
+- **API**: http://localhost:3040
+- **Web**: http://localhost:5173
+- **Grafana**: http://localhost:3001 (admin / argus_dev)
+- **Prometheus**: http://localhost:9090
+- **API Metrics**: http://localhost:3040/metrics
 
 ## Documentation
 
@@ -58,14 +80,17 @@ cd ../.. && pnpm dev
 
 - [ADR-001: Multi-Tenant Model](docs/ADR-IMPLEMENTATION-STATUS.md#adr-001-multi-tenant-model-with-unlimited-recursive-tenant-trees) - Recursive tenant hierarchy with LTREE
 - [ADR-002: Subdomain Routing](docs/ADR-IMPLEMENTATION-STATUS.md#adr-002-subdomain-based-root-tenant-identification) - Root tenant identification via subdomain
+- [ADR-003: Page Development Workflow](docs/ADR-003-page-development-workflow.md) - Page planning and data source classification
 
 ### Technical Documentation
 
 | Document | Description |
 |----------|-------------|
 | [ADR Implementation Status](docs/ADR-IMPLEMENTATION-STATUS.md) | Tracks ADR requirements vs implementation |
+| [ADR-003 Page Development Workflow](docs/ADR-003-page-development-workflow.md) | Page planning and data source classification |
 | [Test Coverage Report](docs/TEST-COVERAGE.md) | Test coverage and gap analysis |
 | [Theming Guide](packages/web/docs/THEMING.md) | Frontend theming and customization |
+| [Monitoring Setup](monitoring/README.md) | Prometheus + Grafana monitoring stack |
 
 ## Development
 
@@ -104,8 +129,10 @@ pnpm db:seed
 - **Runtime**: Node.js 22
 - **Framework**: Fastify 5
 - **Database**: PostgreSQL with Drizzle ORM
+- **Cache**: Valkey (Redis-compatible)
 - **Auth**: JWT with refresh token rotation
 - **Validation**: Zod
+- **Metrics**: prom-client (Prometheus)
 
 ### Frontend (`packages/web`)
 
@@ -119,6 +146,14 @@ pnpm db:seed
 - **Types**: Branded types for IDs
 - **Validation**: Zod schemas
 - **Utilities**: Common utilities
+
+### Infrastructure (Docker Compose)
+
+- **Database**: PostgreSQL 17
+- **Cache**: Valkey 8
+- **Metrics**: Prometheus 2.54
+- **Dashboards**: Grafana 11.3
+- **Host Metrics**: Node Exporter 1.8
 
 ## Implementation Status
 

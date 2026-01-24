@@ -15,6 +15,7 @@ import authPlugin from './plugins/auth.js';
 import requestContextPlugin from './plugins/request-context.js';
 import rateLimitPlugin from './plugins/rate-limit.js';
 import { rlsContextPlugin } from './middleware/index.js';
+import metricsPlugin from './plugins/metrics.js';
 
 export type App = FastifyInstance;
 
@@ -55,6 +56,15 @@ export async function buildApp(): Promise<App> {
   app.addHook('onSend', async (request, reply) => {
     reply.header('x-request-id', request.id);
   });
+
+  // Register metrics plugin (Prometheus metrics endpoint)
+  if (process.env.METRICS_ENABLED !== 'false') {
+    await app.register(metricsPlugin, {
+      path: '/metrics',
+      collectHttpMetrics: true,
+      excludeRoutes: ['/metrics', '/health/live', '/health/ready'],
+    });
+  }
 
   // Register rate limiting
   await app.register(rateLimitPlugin);
