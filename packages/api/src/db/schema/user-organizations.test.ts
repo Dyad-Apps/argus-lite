@@ -282,7 +282,7 @@ describe('Tenant Context Switching Support', () => {
 
       // Filter active memberships
       const activeMemberships = accessList.filter(
-        (m) => m.expiresAt === undefined || m.expiresAt > now
+        (m) => m.expiresAt == null || m.expiresAt > now
       );
 
       expect(activeMemberships).toHaveLength(2);

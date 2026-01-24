@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard,
+  Home,
   Building2,
   Users,
   Settings,
@@ -26,9 +26,9 @@ export const mainNavigation: NavSection[] = [
     title: 'Main',
     items: [
       {
-        title: 'Dashboard',
+        title: 'Home',
         url: '/',
-        icon: LayoutDashboard,
+        icon: Home,
       },
       {
         title: 'Organizations',

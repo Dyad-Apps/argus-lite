@@ -41,7 +41,7 @@ export function DashboardHeader() {
         <SidebarTrigger />
         <Separator orientation="vertical" className="h-6" />
         {/* Breadcrumb placeholder - can be expanded later */}
-        <span className="text-sm font-medium text-muted-foreground">Dashboard</span>
+        <span className="text-sm font-medium text-muted-foreground">Home</span>
       </div>
 
       <div className="flex items-center gap-2">

@@ -5,15 +5,14 @@ import { DashboardHeader } from '@/components/dashboard-header';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  title?: string;
 }
 
-export function DashboardLayout({ children, title }: DashboardLayoutProps) {
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <DashboardHeader title={title} />
+        <DashboardHeader />
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
