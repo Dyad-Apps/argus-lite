@@ -1,0 +1,31 @@
+# Argus IQ Code Owners
+# These owners will be automatically requested for review
+
+# Default owners for everything
+* @argus/platform-team
+
+# Infrastructure changes require DevOps review
+/.github/workflows/ @argus/platform-team @argus/devops
+/infrastructure/ @argus/devops
+/helm/ @argus/devops
+**/Dockerfile @argus/devops
+docker-compose.yml @argus/devops
+
+# Database changes require DBA review
+/packages/api/src/db/ @argus/platform-team @argus/dba
+**/migrations/ @argus/platform-team @argus/dba
+/packages/api/drizzle.config.ts @argus/platform-team @argus/dba
+
+# Security-sensitive files
+.env* @argus/platform-team @argus/security
+**/auth/ @argus/platform-team @argus/security
+**/middleware/ @argus/platform-team @argus/security
+
+# Shared package (affects all consumers)
+/packages/shared/ @argus/platform-team
+
+# API package
+/packages/api/ @argus/platform-team
+
+# Web package
+/packages/web/ @argus/platform-team @argus/frontend

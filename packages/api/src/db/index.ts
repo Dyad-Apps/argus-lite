@@ -59,3 +59,6 @@ export async function checkDatabaseHealth(): Promise<{
 export async function closeDatabaseConnection(): Promise<void> {
   await queryClient.end();
 }
+
+// Export RLS context utilities
+export * from './rls-context.js';

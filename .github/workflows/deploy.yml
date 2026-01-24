@@ -1,0 +1,392 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop  # -> staging environment
+      - main     # -> production environment
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '9.15.0'
+  AWS_REGION: us-east-1
+
+jobs:
+  # ============================================================================
+  # Determine Environment
+  # ============================================================================
+  determine-environment:
+    name: Determine Environment
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      deploy_prod: ${{ steps.env.outputs.deploy_prod }}
+    steps:
+      - id: env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+            echo "deploy_prod=true" >> $GITHUB_OUTPUT
+          else
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "deploy_prod=false" >> $GITHUB_OUTPUT
+          fi
+
+  # ============================================================================
+  # Build & Test
+  # ============================================================================
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: argus
+          POSTGRES_PASSWORD: argus_test
+          POSTGRES_DB: argus_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      valkey:
+        image: valkey/valkey:8-alpine
+        ports:
+          - 6379:6379
+
+    env:
+      DATABASE_URL: postgresql://argus:argus_test@localhost:5432/argus_test
+      VALKEY_URL: redis://localhost:6379
+      JWT_SECRET: test-jwt-secret-for-ci-only
+      NODE_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Run database migrations
+        run: |
+          cd packages/api
+          pnpm db:push --force
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            packages/api/dist
+            packages/web/dist
+          retention-days: 1
+
+  # ============================================================================
+  # Build & Push Docker Image
+  # ============================================================================
+  build-and-push:
+    name: Build Docker
+    needs: [determine-environment, build-and-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tags }}
+      image_digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/api
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: packages/api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/${{ github.repository }}/api:${{ github.sha }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+        continue-on-error: true
+
+      - name: Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+        continue-on-error: true
+
+  # ============================================================================
+  # Deploy to Dev (develop branch)
+  # ============================================================================
+  deploy-dev:
+    name: Deploy Dev
+    if: needs.determine-environment.outputs.environment == 'dev'
+    needs: [determine-environment, build-and-push]
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ vars.DEV_URL }}
+    concurrency:
+      group: deploy-dev
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+        if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
+        continue-on-error: true
+
+      - name: Run database migrations
+        run: |
+          echo "Running migrations on dev database..."
+          # TODO: Uncomment when AWS is configured
+          # DB_URL=$(aws secretsmanager get-secret-value \
+          #   --secret-id argus/dev/database \
+          #   --query SecretString --output text | jq -r .url)
+          # DATABASE_URL=$DB_URL pnpm --filter @argus/api db:migrate:prod
+
+      - name: Deploy to Dev (ECS)
+        run: |
+          echo "Deploying to dev..."
+          echo "Image: ghcr.io/${{ github.repository }}/api:${{ github.sha }}"
+          # TODO: Uncomment when ECS is configured
+          # aws ecs update-service \
+          #   --cluster argus-dev-cluster \
+          #   --service api-service \
+          #   --task-definition argus-api-dev \
+          #   --force-new-deployment
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          # TODO: Uncomment when ECS is configured
+          # aws ecs wait services-stable \
+          #   --cluster argus-dev-cluster \
+          #   --services api-service
+
+      - name: Smoke test
+        run: |
+          echo "Running smoke tests..."
+          # TODO: curl -f ${{ vars.DEV_URL }}/health/ready || exit 1
+
+  # ============================================================================
+  # Deploy to Staging (main branch)
+  # ============================================================================
+  deploy-staging:
+    name: Deploy Staging
+    if: needs.determine-environment.outputs.environment == 'staging'
+    needs: [determine-environment, build-and-push]
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ vars.STAGING_URL }}
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+        if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
+        continue-on-error: true
+
+      - name: Run database migrations
+        run: |
+          echo "Running migrations on staging database..."
+          # TODO: Uncomment when AWS is configured
+          # DB_URL=$(aws secretsmanager get-secret-value \
+          #   --secret-id argus/staging/database \
+          #   --query SecretString --output text | jq -r .url)
+          # DATABASE_URL=$DB_URL pnpm --filter @argus/api db:migrate:prod
+
+      - name: Deploy to Staging (ECS)
+        run: |
+          echo "Deploying to staging..."
+          echo "Image: ghcr.io/${{ github.repository }}/api:${{ github.sha }}"
+          # TODO: Uncomment when ECS is configured
+          # CURRENT_TASK=$(aws ecs describe-services \
+          #   --cluster argus-staging-cluster --services api-service \
+          #   --query 'services[0].taskDefinition' --output text)
+          # echo "ROLLBACK_TASK=$CURRENT_TASK" >> $GITHUB_ENV
+          #
+          # aws ecs update-service \
+          #   --cluster argus-staging-cluster \
+          #   --service api-service \
+          #   --task-definition argus-api-staging \
+          #   --force-new-deployment
+
+      - name: Wait for deployment
+        id: wait
+        continue-on-error: true
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          # TODO: Uncomment when ECS is configured
+          # aws ecs wait services-stable \
+          #   --cluster argus-staging-cluster \
+          #   --services api-service \
+          #   --timeout 600
+
+      - name: Rollback on failure
+        if: steps.wait.outcome == 'failure'
+        run: |
+          echo "::error::Deployment failed, rolling back..."
+          # TODO: Uncomment when ECS is configured
+          # aws ecs update-service \
+          #   --cluster argus-staging-cluster \
+          #   --service api-service \
+          #   --task-definition $ROLLBACK_TASK \
+          #   --force-new-deployment
+          # exit 1
+
+      - name: Smoke test
+        run: |
+          echo "Running smoke tests..."
+          # TODO: curl -f ${{ vars.STAGING_URL }}/health/ready || exit 1
+
+  # ============================================================================
+  # Deploy to Production (main branch, requires approval)
+  # ============================================================================
+  deploy-production:
+    name: Deploy Production
+    if: needs.determine-environment.outputs.deploy_prod == 'true'
+    needs: [deploy-staging]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL }}
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+        if: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}
+        continue-on-error: true
+
+      - name: Run database migrations
+        run: |
+          echo "Running migrations on production database..."
+          # TODO: Uncomment when AWS is configured
+          # DB_URL=$(aws secretsmanager get-secret-value \
+          #   --secret-id argus/production/database \
+          #   --query SecretString --output text | jq -r .url)
+          # DATABASE_URL=$DB_URL pnpm --filter @argus/api db:migrate:prod
+
+      - name: Deploy to Production (ECS)
+        run: |
+          echo "Deploying to production..."
+          echo "Image: ghcr.io/${{ github.repository }}/api:${{ github.sha }}"
+          # TODO: Uncomment when ECS is configured
+          # CURRENT_TASK=$(aws ecs describe-services \
+          #   --cluster argus-production-cluster --services api-service \
+          #   --query 'services[0].taskDefinition' --output text)
+          # echo "ROLLBACK_TASK=$CURRENT_TASK" >> $GITHUB_ENV
+          #
+          # aws ecs update-service \
+          #   --cluster argus-production-cluster \
+          #   --service api-service \
+          #   --task-definition argus-api-production \
+          #   --force-new-deployment
+
+      - name: Wait for deployment
+        id: wait
+        continue-on-error: true
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          # TODO: Uncomment when ECS is configured
+          # aws ecs wait services-stable \
+          #   --cluster argus-production-cluster \
+          #   --services api-service \
+          #   --timeout 600
+
+      - name: Rollback on failure
+        if: steps.wait.outcome == 'failure'
+        run: |
+          echo "::error::Deployment failed, rolling back..."
+          # TODO: Uncomment when ECS is configured
+          # aws ecs update-service \
+          #   --cluster argus-production-cluster \
+          #   --service api-service \
+          #   --task-definition $ROLLBACK_TASK \
+          #   --force-new-deployment
+          # exit 1
+
+      - name: Smoke test
+        run: |
+          echo "Running smoke tests..."
+          # TODO: curl -f ${{ vars.PRODUCTION_URL }}/health/ready || exit 1

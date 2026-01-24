@@ -6,6 +6,11 @@
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+import { userRoutes } from './users.js';
+import { authRoutes } from './auth.js';
+import { ssoRoutes } from './sso.js';
+import { organizationRoutes } from './organizations.js';
+import { invitationRoutes } from './invitations.js';
 
 export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Version info endpoint
@@ -27,9 +32,18 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
     })
   );
 
-  // Placeholder for entity routes (to be implemented in Sprint 1)
-  // await app.register(entityRoutes, { prefix: '/entities' });
+  // Auth routes
+  await app.register(authRoutes, { prefix: '/auth' });
 
-  // Placeholder for type definition routes (to be implemented in Sprint 1)
-  // await app.register(typeRoutes, { prefix: '/types' });
+  // SSO routes
+  await app.register(ssoRoutes, { prefix: '/sso' });
+
+  // User routes
+  await app.register(userRoutes, { prefix: '/users' });
+
+  // Organization routes
+  await app.register(organizationRoutes, { prefix: '/organizations' });
+
+  // Invitation routes (no prefix, routes include full paths)
+  await app.register(invitationRoutes);
 }

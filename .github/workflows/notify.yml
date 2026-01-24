@@ -1,0 +1,98 @@
+name: Slack Notification
+
+on:
+  workflow_call:
+    inputs:
+      status:
+        description: 'Deployment status (success/failure)'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment'
+        required: true
+        type: string
+      message:
+        description: 'Optional custom message'
+        required: false
+        type: string
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: false
+
+jobs:
+  notify:
+    name: Send Notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack notification
+        if: ${{ secrets.SLACK_BOT_TOKEN != '' }}
+        uses: slackapi/slack-github-action@v1
+        with:
+          channel-id: ${{ vars.SLACK_DEPLOY_CHANNEL || 'deployments' }}
+          payload: |
+            {
+              "text": "${{ inputs.status == 'success' && '✅' || '❌' }} Deployment ${{ inputs.status }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "${{ inputs.status == 'success' && '✅ Deployment Successful' || '❌ Deployment Failed' }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Environment:*\n${{ inputs.environment }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${{ github.ref_name }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n<${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n${{ github.actor }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ inputs.message || '' }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Workflow"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Log notification (fallback)
+        if: ${{ secrets.SLACK_BOT_TOKEN == '' }}
+        run: |
+          echo "📢 Deployment Notification"
+          echo "Status: ${{ inputs.status }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+          echo "Message: ${{ inputs.message || 'N/A' }}"

@@ -72,3 +72,25 @@ export const telemetryQualityEnum = pgEnum('telemetry_quality', [
   'uncertain',
   'bad',
 ]);
+
+/**
+ * Organization membership roles.
+ */
+export const organizationRoleEnum = pgEnum('organization_role', [
+  'owner',
+  'admin',
+  'member',
+  'viewer',
+]);
+
+/**
+ * Identity provider types for SSO.
+ */
+export const identityProviderTypeEnum = pgEnum('identity_provider_type', [
+  'oidc',      // OpenID Connect (generic)
+  'saml',      // SAML 2.0
+  'google',    // Google OAuth2
+  'microsoft', // Microsoft/Azure AD
+  'github',    // GitHub OAuth2
+  'okta',      // Okta OIDC
+]);

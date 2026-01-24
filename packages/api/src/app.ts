@@ -11,6 +11,10 @@ import { getFastifyLoggerConfig } from '@argus/shared';
 import { registerRoutes } from './routes/index.js';
 import { errorHandler } from './plugins/error-handler.js';
 import { sentryPlugin } from './plugins/sentry.js';
+import authPlugin from './plugins/auth.js';
+import requestContextPlugin from './plugins/request-context.js';
+import rateLimitPlugin from './plugins/rate-limit.js';
+import { rlsContextPlugin } from './middleware/index.js';
 
 export type App = FastifyInstance;
 
@@ -50,6 +54,20 @@ export async function buildApp(): Promise<App> {
   // Add request ID to response headers
   app.addHook('onSend', async (request, reply) => {
     reply.header('x-request-id', request.id);
+  });
+
+  // Register rate limiting
+  await app.register(rateLimitPlugin);
+
+  // Register request context plugin (sets up AsyncLocalStorage)
+  await app.register(requestContextPlugin);
+
+  // Register auth plugin (adds authenticate and optionalAuth decorators)
+  await app.register(authPlugin);
+
+  // Register RLS context middleware (sets PostgreSQL session variables for row-level security)
+  await app.register(rlsContextPlugin, {
+    excludeRoutes: ['/health', '/ready'],
   });
 
   // Health endpoints (unversioned)
