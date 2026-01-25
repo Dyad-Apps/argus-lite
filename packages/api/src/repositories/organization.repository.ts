@@ -141,6 +141,168 @@ export class OrganizationRepository {
     return result.length === 0;
   }
 
+  // ===========================================
+  // Hierarchy Methods
+  // ===========================================
+
+  /**
+   * Gets direct children of an organization
+   */
+  async getChildren(
+    parentId: OrganizationId,
+    options?: PaginationOptions,
+    trx?: Transaction
+  ): Promise<PaginatedResult<Organization>> {
+    const executor = getExecutor(trx);
+    const pageSize = getPageSize(options);
+    const offset = calculateOffset(options);
+
+    // Get total count
+    const countResult = await executor
+      .select({ count: sql<number>`count(*)` })
+      .from(organizations)
+      .where(eq(organizations.parentOrganizationId, parentId));
+    const totalCount = Number(countResult[0]?.count ?? 0);
+
+    // Get data
+    const data = await executor
+      .select()
+      .from(organizations)
+      .where(eq(organizations.parentOrganizationId, parentId))
+      .orderBy(organizations.name)
+      .limit(pageSize)
+      .offset(offset);
+
+    return buildPaginatedResult(data, totalCount, options);
+  }
+
+  /**
+   * Gets all descendants of an organization (using LTREE path)
+   */
+  async getDescendants(
+    orgId: OrganizationId,
+    trx?: Transaction
+  ): Promise<Organization[]> {
+    const executor = getExecutor(trx);
+
+    // First get the organization to get its path
+    const org = await this.findById(orgId, trx);
+    if (!org || !org.path) {
+      return [];
+    }
+
+    // Use LTREE descendant query
+    const result = await executor
+      .select()
+      .from(organizations)
+      .where(sql`${organizations.path} <@ ${org.path} AND ${organizations.id} != ${orgId}`)
+      .orderBy(organizations.depth, organizations.name);
+
+    return result;
+  }
+
+  /**
+   * Gets all ancestors of an organization (using LTREE path)
+   */
+  async getAncestors(
+    orgId: OrganizationId,
+    trx?: Transaction
+  ): Promise<Organization[]> {
+    const executor = getExecutor(trx);
+
+    // First get the organization to get its path
+    const org = await this.findById(orgId, trx);
+    if (!org || !org.path) {
+      return [];
+    }
+
+    // Use LTREE ancestor query
+    const result = await executor
+      .select()
+      .from(organizations)
+      .where(sql`${organizations.path} @> ${org.path} AND ${organizations.id} != ${orgId}`)
+      .orderBy(organizations.depth);
+
+    return result;
+  }
+
+  /**
+   * Gets the full hierarchy tree from a root organization
+   */
+  async getHierarchyTree(
+    rootId: OrganizationId,
+    trx?: Transaction
+  ): Promise<Organization[]> {
+    const executor = getExecutor(trx);
+
+    // Get all organizations in this root's tree
+    const result = await executor
+      .select()
+      .from(organizations)
+      .where(eq(organizations.rootOrganizationId, rootId))
+      .orderBy(organizations.depth, organizations.name);
+
+    return result;
+  }
+
+  /**
+   * Creates a child organization under a parent
+   */
+  async createChild(
+    parentId: OrganizationId,
+    data: Omit<NewOrganization, 'parentOrganizationId' | 'rootOrganizationId' | 'isRoot' | 'depth'>,
+    trx?: Transaction
+  ): Promise<Organization> {
+    const executor = getExecutor(trx);
+
+    // Get parent organization
+    const parent = await this.findById(parentId, trx);
+    if (!parent) {
+      throw new Error('Parent organization not found');
+    }
+
+    if (!parent.canHaveChildren) {
+      throw new Error('Parent organization cannot have children');
+    }
+
+    // Calculate child properties
+    const childDepth = parent.depth + 1;
+    const childPath = parent.path
+      ? `${parent.path}.${data.slug.toLowerCase().replace(/-/g, '_')}`
+      : data.slug.toLowerCase().replace(/-/g, '_');
+
+    // Create child organization
+    const result = await executor
+      .insert(organizations)
+      .values({
+        ...data,
+        parentOrganizationId: parentId,
+        rootOrganizationId: parent.rootOrganizationId ?? parent.id,
+        isRoot: false,
+        depth: childDepth,
+        path: childPath,
+      })
+      .returning();
+
+    return result[0];
+  }
+
+  /**
+   * Finds an organization by subdomain (for root orgs only)
+   */
+  async findBySubdomain(
+    subdomain: string,
+    trx?: Transaction
+  ): Promise<Organization | null> {
+    const executor = getExecutor(trx);
+    const result = await executor
+      .select()
+      .from(organizations)
+      .where(and(eq(organizations.subdomain, subdomain.toLowerCase()), eq(organizations.isRoot, true)))
+      .limit(1);
+    return result[0] ?? null;
+  }
+
   /**
    * Executes operations within a transaction
    */

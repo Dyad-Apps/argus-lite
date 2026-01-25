@@ -367,6 +367,16 @@ Covers user authentication, organization management, role-based access control, 
 - Role-based access control (RBAC)
 - **[ADDED]** SSO integration (Google, GitHub, OIDC, SAML)
 
+### [Phase 1b: RBAC, Groups & Tenant Profiles](./phase-1b-rbac-tenant-profiles.md)
+Covers advanced RBAC system, user groups, and tenant profile configuration templates.
+
+**Key Components:**
+- **[NEW]** Tenant profiles with capabilities and limits
+- **[NEW]** User groups with membership management
+- **[NEW]** Full RBAC with roles, permissions, and assignments
+- **[NEW]** Role inheritance via groups and SSO
+- **[NEW]** Scope-based permissions (organization, children, tree)
+
 ### [Phase 2: Database & Row-Level Security](./phase-2-database-rls.md)
 Covers database schema design, multi-tenant data isolation, and migration strategies.
 

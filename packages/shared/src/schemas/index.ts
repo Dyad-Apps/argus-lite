@@ -9,3 +9,6 @@ export * from './user.schema.js';
 export * from './organization.schema.js';
 export * from './membership.schema.js';
 export * from './invitation.schema.js';
+export * from './tenant-profile.schema.js';
+export * from './group.schema.js';
+export * from './role.schema.js';

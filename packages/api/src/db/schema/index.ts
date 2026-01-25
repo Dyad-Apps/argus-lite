@@ -25,5 +25,10 @@ export * from './identity-providers.js';
 export * from './user-identities.js';
 export * from './platform-settings.js';
 
+// Tenant management and RBAC
+export * from './tenant-profiles.js';
+export * from './user-groups.js';
+export * from './roles.js';
+
 // Relations (must be last to avoid circular deps)
 export * from './relations.js';

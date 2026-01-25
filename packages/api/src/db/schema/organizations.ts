@@ -11,6 +11,7 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import { organizationPlanEnum, loginBackgroundTypeEnum } from './enums.js';
+import { tenantProfiles } from './tenant-profiles.js';
 
 /**
  * Organizations in the multi-organization system.
@@ -72,6 +73,14 @@ export const organizations = pgTable(
 
     // === Common Fields ===
 
+    // Optional description for the organization
+    description: varchar('description', { length: 1000 }),
+
+    // Tenant profile assignment (defines capabilities and limits)
+    profileId: uuid('profile_id').references(() => tenantProfiles.id, {
+      onDelete: 'set null',
+    }),
+
     // Plan/tier determines feature availability
     plan: organizationPlanEnum('plan').notNull().default('free'),
 
@@ -80,6 +89,9 @@ export const organizations = pgTable(
 
     // Settings stored as JSON
     settings: jsonb('settings').$type<OrganizationSettings>(),
+
+    // Override limits from the profile for this specific organization
+    quotaOverrides: jsonb('quota_overrides').$type<QuotaOverrides>(),
 
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
@@ -94,6 +106,7 @@ export const organizations = pgTable(
     index('idx_organizations_parent').on(table.parentOrganizationId),
     index('idx_organizations_root').on(table.rootOrganizationId),
     index('idx_organizations_org_code').on(table.orgCode),
+    index('idx_organizations_profile').on(table.profileId),
     // org_code unique within root organization
     uniqueIndex('idx_organizations_org_code_root').on(
       table.orgCode,
@@ -103,6 +116,18 @@ export const organizations = pgTable(
     // Note: GiST index for LTREE created via raw migration
   ]
 );
+
+/**
+ * Quota overrides - override limits from the tenant profile
+ */
+export interface QuotaOverrides {
+  maxUsers?: number;
+  maxDevices?: number;
+  maxAssets?: number;
+  maxChildOrganizations?: number;
+  dataRetentionDays?: number;
+  storageGb?: number;
+}
 
 /**
  * Organization settings JSON structure
@@ -116,6 +141,8 @@ export interface OrganizationSettings {
     mfaRequired?: boolean;
     apiAccess?: boolean;
     crossOrgSharing?: boolean; // Allow sharing assets with other orgs
+    allowWhiteLabeling?: boolean; // Allow org to customize branding
+    allowImpersonation?: boolean; // Allow platform admins to impersonate users
   };
   capabilities?: {
     maxUsers?: number;
