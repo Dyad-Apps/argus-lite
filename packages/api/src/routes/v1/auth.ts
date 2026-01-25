@@ -14,6 +14,7 @@ import {
 } from '@argus/shared';
 import {
   getUserRepository,
+  getUserOrganizationRepository,
   getRefreshTokenRepository,
   hashRefreshToken,
   getPasswordResetTokenRepository,
@@ -28,6 +29,7 @@ import { createUserId } from '@argus/shared';
 
 export async function authRoutes(app: FastifyInstance): Promise<void> {
   const userRepo = getUserRepository();
+  const userOrgRepo = getUserOrganizationRepository();
   const refreshTokenRepo = getRefreshTokenRepository();
   const passwordResetRepo = getPasswordResetTokenRepository();
 
@@ -82,6 +84,15 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         lastName: lastName ?? null,
         rootOrganizationId: organizationId,
         primaryOrganizationId: organizationId,
+      });
+
+      // Add user to organization as a member
+      // This creates the user_organizations entry needed for membership checks
+      await userOrgRepo.addMember({
+        userId: user.id,
+        organizationId: organizationId,
+        role: 'member',
+        isPrimary: true,
       });
 
       return reply.status(201).send({
