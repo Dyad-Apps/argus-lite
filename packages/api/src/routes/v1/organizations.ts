@@ -35,6 +35,7 @@ import {
   getBrandingRepository,
 } from '../../repositories/index.js';
 import { auditService } from '../../services/audit.service.js';
+import { hashPassword, generateRandomPassword } from '../../utils/password.js';
 
 export async function organizationRoutes(app: FastifyInstance): Promise<void> {
   const orgRepo = getOrganizationRepository();
@@ -221,6 +222,7 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
         isRoot: true,
         canHaveChildren: true,
         subdomain,
+        profileId: profileId || null,
         settings: {
           features: {
             allowWhiteLabeling,
@@ -229,8 +231,50 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
         },
       });
 
-      // TODO: Create admin user with adminEmail and add as owner
-      // TODO: Associate profileId with organization if provided
+      // Update root_organization_id to point to itself (required for root orgs)
+      await orgRepo.update(createOrganizationId(org.id), {
+        rootOrganizationId: org.id,
+      });
+
+      // Create admin user if email is provided
+      let adminUser = null;
+      if (adminEmail) {
+        // Check if user already exists
+        const existingUser = await userRepo.findByEmail(adminEmail);
+
+        if (existingUser) {
+          // Use existing user as admin
+          adminUser = existingUser;
+        } else {
+          // Create new user with a random password
+          const temporaryPassword = generateRandomPassword();
+          const passwordHash = await hashPassword(temporaryPassword);
+
+          adminUser = await userRepo.create({
+            email: adminEmail.toLowerCase(),
+            passwordHash,
+            firstName: 'Admin',
+            lastName: name, // Use org name as last name initially
+            rootOrganizationId: org.id,
+            primaryOrganizationId: org.id,
+            status: 'active',
+          });
+
+          // TODO: Send welcome email with password reset link
+          app.log.info(
+            { userId: adminUser.id, email: adminEmail },
+            'Created admin user for new organization'
+          );
+        }
+
+        // Add user as owner of the organization
+        await memberRepo.addMember({
+          userId: createUserId(adminUser.id),
+          organizationId: createOrganizationId(org.id),
+          role: 'owner',
+          isPrimary: true,
+        });
+      }
 
       // Audit log the organization creation
       await auditService.logOrgManagement('create_root_organization', createOrganizationId(org.id), {

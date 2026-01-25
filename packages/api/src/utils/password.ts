@@ -12,6 +12,7 @@
  */
 
 import * as argon2 from 'argon2';
+import { randomBytes } from 'crypto';
 
 // OWASP recommended parameters for Argon2id
 const ARGON2_OPTIONS: argon2.Options = {
@@ -72,4 +73,21 @@ export async function needsRehash(hash: string): Promise<boolean> {
     // If we can't check, assume it needs rehashing
     return true;
   }
+}
+
+/**
+ * Generates a cryptographically secure random password.
+ *
+ * @param length - The length of the password (default: 16)
+ * @returns A random password string
+ */
+export function generateRandomPassword(length: number = 16): string {
+  const charset =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+  const bytes = randomBytes(length);
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += charset[bytes[i] % charset.length];
+  }
+  return password;
 }

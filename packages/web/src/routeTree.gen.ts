@@ -13,9 +13,11 @@ import { Route as UsersRouteImport } from './routes/users'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RolesRouteImport } from './routes/roles'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
+import { Route as OrganizationProfilesRouteImport } from './routes/organization-profiles'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrganizationsOrgIdRouteImport } from './routes/organizations/$orgId'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
 const UsersRoute = UsersRouteImport.update({
@@ -38,6 +40,11 @@ const OrganizationsRoute = OrganizationsRouteImport.update({
   path: '/organizations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationProfilesRoute = OrganizationProfilesRouteImport.update({
+  id: '/organization-profiles',
+  path: '/organization-profiles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -53,6 +60,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationsOrgIdRoute = OrganizationsOrgIdRouteImport.update({
+  id: '/$orgId',
+  path: '/$orgId',
+  getParentRoute: () => OrganizationsRoute,
+} as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
@@ -63,32 +75,38 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/login': typeof LoginRoute
-  '/organizations': typeof OrganizationsRoute
+  '/organization-profiles': typeof OrganizationProfilesRoute
+  '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/organizations/$orgId': typeof OrganizationsOrgIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/login': typeof LoginRoute
-  '/organizations': typeof OrganizationsRoute
+  '/organization-profiles': typeof OrganizationProfilesRoute
+  '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/organizations/$orgId': typeof OrganizationsOrgIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/login': typeof LoginRoute
-  '/organizations': typeof OrganizationsRoute
+  '/organization-profiles': typeof OrganizationProfilesRoute
+  '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/organizations/$orgId': typeof OrganizationsOrgIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,38 +114,45 @@ export interface FileRouteTypes {
     | '/'
     | '/activity'
     | '/login'
+    | '/organization-profiles'
     | '/organizations'
     | '/roles'
     | '/settings'
     | '/users'
     | '/auth/callback'
+    | '/organizations/$orgId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/activity'
     | '/login'
+    | '/organization-profiles'
     | '/organizations'
     | '/roles'
     | '/settings'
     | '/users'
     | '/auth/callback'
+    | '/organizations/$orgId'
   id:
     | '__root__'
     | '/'
     | '/activity'
     | '/login'
+    | '/organization-profiles'
     | '/organizations'
     | '/roles'
     | '/settings'
     | '/users'
     | '/auth/callback'
+    | '/organizations/$orgId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ActivityRoute: typeof ActivityRoute
   LoginRoute: typeof LoginRoute
-  OrganizationsRoute: typeof OrganizationsRoute
+  OrganizationProfilesRoute: typeof OrganizationProfilesRoute
+  OrganizationsRoute: typeof OrganizationsRouteWithChildren
   RolesRoute: typeof RolesRoute
   SettingsRoute: typeof SettingsRoute
   UsersRoute: typeof UsersRoute
@@ -164,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organization-profiles': {
+      id: '/organization-profiles'
+      path: '/organization-profiles'
+      fullPath: '/organization-profiles'
+      preLoaderRoute: typeof OrganizationProfilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -185,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organizations/$orgId': {
+      id: '/organizations/$orgId'
+      path: '/$orgId'
+      fullPath: '/organizations/$orgId'
+      preLoaderRoute: typeof OrganizationsOrgIdRouteImport
+      parentRoute: typeof OrganizationsRoute
+    }
     '/auth/callback': {
       id: '/auth/callback'
       path: '/auth/callback'
@@ -195,11 +234,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OrganizationsRouteChildren {
+  OrganizationsOrgIdRoute: typeof OrganizationsOrgIdRoute
+}
+
+const OrganizationsRouteChildren: OrganizationsRouteChildren = {
+  OrganizationsOrgIdRoute: OrganizationsOrgIdRoute,
+}
+
+const OrganizationsRouteWithChildren = OrganizationsRoute._addFileChildren(
+  OrganizationsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ActivityRoute: ActivityRoute,
   LoginRoute: LoginRoute,
-  OrganizationsRoute: OrganizationsRoute,
+  OrganizationProfilesRoute: OrganizationProfilesRoute,
+  OrganizationsRoute: OrganizationsRouteWithChildren,
   RolesRoute: RolesRoute,
   SettingsRoute: SettingsRoute,
   UsersRoute: UsersRoute,

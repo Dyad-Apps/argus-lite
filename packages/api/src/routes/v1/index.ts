@@ -14,7 +14,7 @@ import { organizationRoutes } from './organizations.js';
 import { invitationRoutes } from './invitations.js';
 import { dashboardRoutes } from './dashboard.js';
 import { auditLogRoutes } from './audit-logs.js';
-import { tenantProfileRoutes } from './tenant-profiles.js';
+import { organizationProfileRoutes } from './organization-profiles.js';
 import { groupRoutes } from './groups.js';
 import { roleRoutes } from './roles.js';
 
@@ -60,8 +60,8 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Audit log routes (security and compliance)
   await app.register(auditLogRoutes, { prefix: '/audit-logs' });
 
-  // Tenant profile routes (organization templates)
-  await app.register(tenantProfileRoutes, { prefix: '/tenant-profiles' });
+  // Organization profile routes (organization templates)
+  await app.register(organizationProfileRoutes, { prefix: '/organization-profiles' });
 
   // Group routes (no prefix, routes include full paths with /organizations/:orgId)
   await app.register(groupRoutes);

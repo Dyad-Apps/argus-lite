@@ -195,7 +195,106 @@ async function seed() {
     `;
     console.log(`   ✅ Created GitHub provider (${githubProvider.id})`);
 
-    // Step 5: Create organization branding (optional - table may not exist)
+    // Step 5: Create default organization profiles
+    console.log('\n📊 Creating default organization profiles...');
+    try {
+      // Enterprise profile
+      await client`
+        INSERT INTO organization_profiles (
+          name, description, type, is_system, capabilities, limits
+        ) VALUES (
+          'Enterprise',
+          'Full-featured plan for large organizations with advanced security and compliance needs',
+          'root',
+          true,
+          ${JSON.stringify({
+            sso: true,
+            whiteLabeling: true,
+            impersonation: true,
+            advancedAuditLogs: true,
+            apiAccess: true,
+            customDomain: true,
+            childOrganizations: true,
+            maxChildDepth: 5,
+          })},
+          ${JSON.stringify({
+            maxUsers: -1,
+            maxOrganizations: -1,
+            maxRoles: -1,
+            maxGroups: -1,
+            storageGb: -1,
+            apiRequestsPerDay: -1,
+          })}
+        )
+      `;
+      console.log('   ✅ Created Enterprise profile (system)');
+
+      // Standard profile
+      await client`
+        INSERT INTO organization_profiles (
+          name, description, type, is_system, capabilities, limits
+        ) VALUES (
+          'Standard',
+          'Standard plan for growing teams with essential collaboration features',
+          'root',
+          true,
+          ${JSON.stringify({
+            sso: true,
+            whiteLabeling: false,
+            impersonation: false,
+            advancedAuditLogs: false,
+            apiAccess: true,
+            customDomain: false,
+            childOrganizations: true,
+            maxChildDepth: 2,
+          })},
+          ${JSON.stringify({
+            maxUsers: 100,
+            maxOrganizations: 5,
+            maxRoles: 10,
+            maxGroups: 20,
+            storageGb: 50,
+            apiRequestsPerDay: 10000,
+          })}
+        )
+      `;
+      console.log('   ✅ Created Standard profile (system)');
+
+      // Starter profile
+      await client`
+        INSERT INTO organization_profiles (
+          name, description, type, is_system, capabilities, limits
+        ) VALUES (
+          'Starter',
+          'Basic plan for small teams getting started',
+          'root',
+          true,
+          ${JSON.stringify({
+            sso: false,
+            whiteLabeling: false,
+            impersonation: false,
+            advancedAuditLogs: false,
+            apiAccess: false,
+            customDomain: false,
+            childOrganizations: false,
+            maxChildDepth: 0,
+          })},
+          ${JSON.stringify({
+            maxUsers: 10,
+            maxOrganizations: 1,
+            maxRoles: 3,
+            maxGroups: 5,
+            storageGb: 5,
+            apiRequestsPerDay: 1000,
+          })}
+        )
+      `;
+      console.log('   ✅ Created Starter profile (system)');
+    } catch (error) {
+      console.log('   ⚠️  Organization profiles table not found or error:', (error as Error).message);
+    }
+
+    // Step 6: Create organization branding (optional - table may not exist)
     console.log('\n🎨 Creating organization branding...');
     try {
       await client`

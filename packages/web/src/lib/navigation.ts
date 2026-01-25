@@ -5,6 +5,7 @@ import {
   Settings,
   Shield,
   Activity,
+  Layers,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -45,6 +46,11 @@ export const mainNavigation: NavSection[] = [
   {
     title: 'Administration',
     items: [
+      {
+        title: 'Organization Profiles',
+        url: '/organization-profiles',
+        icon: Layers,
+      },
       {
         title: 'Roles & Permissions',
         url: '/roles',

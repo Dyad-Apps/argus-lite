@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import {
   Building2,
@@ -10,6 +10,7 @@ import {
   Users,
   RefreshCw,
   Loader2,
+  ExternalLink,
 } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
@@ -78,12 +79,22 @@ interface OrganizationListResponse {
   };
 }
 
-// Organization profiles (will be loaded from API in future)
-const mockProfiles = [
-  { id: 'enterprise', name: 'Enterprise' },
-  { id: 'standard', name: 'Standard' },
-  { id: 'starter', name: 'Starter' },
-];
+interface OrganizationProfile {
+  id: string;
+  name: string;
+  description: string | null;
+  type: string;
+}
+
+interface OrganizationProfileListResponse {
+  data: OrganizationProfile[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+  };
+}
 
 interface CreateOrgFormData {
   name: string;
@@ -109,6 +120,7 @@ const initialFormData: CreateOrgFormData = {
 
 function OrganizationsPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [organizationProfiles, setOrganizationProfiles] = useState<OrganizationProfile[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [formData, setFormData] = useState<CreateOrgFormData>(initialFormData);
@@ -130,9 +142,20 @@ function OrganizationsPage() {
     }
   }, []);
 
+  const fetchOrganizationProfiles = useCallback(async () => {
+    try {
+      const response = await apiClient.get<OrganizationProfileListResponse>('/organization-profiles');
+      setOrganizationProfiles(response.data);
+    } catch (err) {
+      console.error('Failed to fetch organization profiles:', err);
+      // Non-critical, don't show error to user
+    }
+  }, []);
+
   useEffect(() => {
     fetchOrganizations();
-  }, [fetchOrganizations]);
+    fetchOrganizationProfiles();
+  }, [fetchOrganizations, fetchOrganizationProfiles]);
 
   const filteredOrgs = organizations.filter(
     (org) =>
@@ -282,16 +305,28 @@ function OrganizationsPage() {
                   onValueChange={(value) => updateFormData('profileId', value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a profile..." />
+                    <SelectValue placeholder="Select a profile (optional)..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockProfiles.map((profile) => (
-                      <SelectItem key={profile.id} value={profile.id}>
-                        {profile.name}
+                    {organizationProfiles.length > 0 ? (
+                      organizationProfiles.map((profile) => (
+                        <SelectItem key={profile.id} value={profile.id}>
+                          {profile.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="none" disabled>
+                        No profiles available
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-muted-foreground">
+                  {organizationProfiles.length === 0
+                    ? 'Create organization profiles in the Organization Profiles page first'
+                    : 'Defines capabilities and limits for this organization'
+                  }
+                </p>
               </div>
 
               {/* Root Organization Admin Email */}
@@ -443,7 +478,11 @@ function OrganizationsPage() {
                       <Checkbox />
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-3">
+                      <Link
+                        to="/organizations/$orgId"
+                        params={{ orgId: org.id }}
+                        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                      >
                         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                           <Building2 className="h-4 w-4 text-primary" />
                         </div>
@@ -453,7 +492,7 @@ function OrganizationsPage() {
                             {org.orgCode}
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -473,9 +512,17 @@ function OrganizationsPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Edit
+                          <DropdownMenuItem asChild>
+                            <Link to="/organizations/$orgId" params={{ orgId: org.id }}>
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              View Details
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to="/organizations/$orgId" params={{ orgId: org.id }}>
+                              <Pencil className="mr-2 h-4 w-4" />
+                              Edit
+                            </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Users className="mr-2 h-4 w-4" />

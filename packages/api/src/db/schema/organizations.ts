@@ -11,7 +11,7 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
 import { organizationPlanEnum, loginBackgroundTypeEnum } from './enums.js';
-import { tenantProfiles } from './tenant-profiles.js';
+import { organizationProfiles } from './organization-profiles.js';
 
 /**
  * Organizations in the multi-organization system.
@@ -76,8 +76,8 @@ export const organizations = pgTable(
     // Optional description for the organization
     description: varchar('description', { length: 1000 }),
 
-    // Tenant profile assignment (defines capabilities and limits)
-    profileId: uuid('profile_id').references(() => tenantProfiles.id, {
+    // Organization profile assignment (defines capabilities and limits)
+    profileId: uuid('profile_id').references(() => organizationProfiles.id, {
       onDelete: 'set null',
     }),
 

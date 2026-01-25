@@ -1,5 +1,5 @@
 /**
- * Tenant Profile repository for data access
+ * Organization Profile repository for data access
  */
 
 import { eq, and, sql } from 'drizzle-orm';
@@ -12,56 +12,56 @@ import {
   getExecutor,
   withTransaction,
 } from './base.repository.js';
-import { tenantProfiles, type ProfileCapabilities, type ProfileLimits } from '../db/schema/index.js';
+import { organizationProfiles, type ProfileCapabilities, type ProfileLimits } from '../db/schema/index.js';
 import { Transaction } from '../db/index.js';
 
 // Infer types from Drizzle schema
-export type TenantProfile = typeof tenantProfiles.$inferSelect;
-export type NewTenantProfile = typeof tenantProfiles.$inferInsert;
+export type OrganizationProfile = typeof organizationProfiles.$inferSelect;
+export type NewOrganizationProfile = typeof organizationProfiles.$inferInsert;
 
-export class TenantProfileRepository {
+export class OrganizationProfileRepository {
   /**
-   * Creates a new tenant profile
+   * Creates a new organization profile
    */
-  async create(data: NewTenantProfile, trx?: Transaction): Promise<TenantProfile> {
+  async create(data: NewOrganizationProfile, trx?: Transaction): Promise<OrganizationProfile> {
     const executor = getExecutor(trx);
-    const result = await executor.insert(tenantProfiles).values(data).returning();
+    const result = await executor.insert(organizationProfiles).values(data).returning();
     return result[0];
   }
 
   /**
-   * Finds a tenant profile by ID
+   * Finds an organization profile by ID
    */
-  async findById(id: string, trx?: Transaction): Promise<TenantProfile | null> {
+  async findById(id: string, trx?: Transaction): Promise<OrganizationProfile | null> {
     const executor = getExecutor(trx);
     const result = await executor
       .select()
-      .from(tenantProfiles)
-      .where(eq(tenantProfiles.id, id))
+      .from(organizationProfiles)
+      .where(eq(organizationProfiles.id, id))
       .limit(1);
     return result[0] ?? null;
   }
 
   /**
-   * Finds a tenant profile by name
+   * Finds an organization profile by name
    */
-  async findByName(name: string, trx?: Transaction): Promise<TenantProfile | null> {
+  async findByName(name: string, trx?: Transaction): Promise<OrganizationProfile | null> {
     const executor = getExecutor(trx);
     const result = await executor
       .select()
-      .from(tenantProfiles)
-      .where(eq(tenantProfiles.name, name))
+      .from(organizationProfiles)
+      .where(eq(organizationProfiles.name, name))
       .limit(1);
     return result[0] ?? null;
   }
 
   /**
-   * Finds all tenant profiles with pagination
+   * Finds all organization profiles with pagination
    */
   async findAll(
     options?: PaginationOptions & { activeOnly?: boolean; type?: string },
     trx?: Transaction
-  ): Promise<PaginatedResult<TenantProfile>> {
+  ): Promise<PaginatedResult<OrganizationProfile>> {
     const executor = getExecutor(trx);
     const pageSize = getPageSize(options);
     const offset = calculateOffset(options);
@@ -71,10 +71,10 @@ export class TenantProfileRepository {
     // Build where conditions
     const conditions = [];
     if (activeOnly) {
-      conditions.push(eq(tenantProfiles.isActive, true));
+      conditions.push(eq(organizationProfiles.isActive, true));
     }
     if (profileType) {
-      conditions.push(sql`${tenantProfiles.type} = ${profileType}`);
+      conditions.push(sql`${organizationProfiles.type} = ${profileType}`);
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
@@ -82,16 +82,16 @@ export class TenantProfileRepository {
     // Get total count
     const countResult = await executor
       .select({ count: sql<number>`count(*)` })
-      .from(tenantProfiles)
+      .from(organizationProfiles)
       .where(whereClause);
     const totalCount = Number(countResult[0]?.count ?? 0);
 
     // Get data
     const data = await executor
       .select()
-      .from(tenantProfiles)
+      .from(organizationProfiles)
       .where(whereClause)
-      .orderBy(tenantProfiles.name)
+      .orderBy(organizationProfiles.name)
       .limit(pageSize)
       .offset(offset);
 
@@ -99,24 +99,24 @@ export class TenantProfileRepository {
   }
 
   /**
-   * Updates a tenant profile by ID
+   * Updates an organization profile by ID
    */
   async update(
     id: string,
-    data: Partial<Omit<NewTenantProfile, 'id' | 'createdAt' | 'isSystem'>>,
+    data: Partial<Omit<NewOrganizationProfile, 'id' | 'createdAt' | 'isSystem'>>,
     trx?: Transaction
-  ): Promise<TenantProfile | null> {
+  ): Promise<OrganizationProfile | null> {
     const executor = getExecutor(trx);
     const result = await executor
-      .update(tenantProfiles)
+      .update(organizationProfiles)
       .set({ ...data, updatedAt: new Date() })
-      .where(eq(tenantProfiles.id, id))
+      .where(eq(organizationProfiles.id, id))
       .returning();
     return result[0] ?? null;
   }
 
   /**
-   * Deletes a tenant profile by ID (only non-system profiles)
+   * Deletes an organization profile by ID (only non-system profiles)
    */
   async delete(id: string, trx?: Transaction): Promise<boolean> {
     const executor = getExecutor(trx);
@@ -128,9 +128,9 @@ export class TenantProfileRepository {
     }
 
     const result = await executor
-      .delete(tenantProfiles)
-      .where(and(eq(tenantProfiles.id, id), eq(tenantProfiles.isSystem, false)))
-      .returning({ id: tenantProfiles.id });
+      .delete(organizationProfiles)
+      .where(and(eq(organizationProfiles.id, id), eq(organizationProfiles.isSystem, false)))
+      .returning({ id: organizationProfiles.id });
     return result.length > 0;
   }
 
@@ -139,14 +139,14 @@ export class TenantProfileRepository {
    */
   async isNameAvailable(name: string, excludeId?: string, trx?: Transaction): Promise<boolean> {
     const executor = getExecutor(trx);
-    const conditions = [eq(tenantProfiles.name, name)];
+    const conditions = [eq(organizationProfiles.name, name)];
     if (excludeId) {
-      conditions.push(sql`${tenantProfiles.id} != ${excludeId}`);
+      conditions.push(sql`${organizationProfiles.id} != ${excludeId}`);
     }
 
     const result = await executor
       .select({ count: sql<number>`1` })
-      .from(tenantProfiles)
+      .from(organizationProfiles)
       .where(and(...conditions))
       .limit(1);
     return result.length === 0;
@@ -161,11 +161,11 @@ export class TenantProfileRepository {
 }
 
 // Singleton instance
-let tenantProfileRepository: TenantProfileRepository | null = null;
+let organizationProfileRepository: OrganizationProfileRepository | null = null;
 
-export function getTenantProfileRepository(): TenantProfileRepository {
-  if (!tenantProfileRepository) {
-    tenantProfileRepository = new TenantProfileRepository();
+export function getOrganizationProfileRepository(): OrganizationProfileRepository {
+  if (!organizationProfileRepository) {
+    organizationProfileRepository = new OrganizationProfileRepository();
   }
-  return tenantProfileRepository;
+  return organizationProfileRepository;
 }

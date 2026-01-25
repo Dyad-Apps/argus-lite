@@ -1,5 +1,5 @@
 /**
- * Tenant Profile schemas for validation
+ * Organization Profile schemas for validation
  */
 
 import { z } from 'zod';
@@ -11,42 +11,51 @@ export type ProfileType = z.infer<typeof profileTypeSchema>;
 /** Profile capabilities */
 export const profileCapabilitiesSchema = z.object({
   whiteLabeling: z.boolean().optional(),
+  sso: z.boolean().optional(),
   ssoEnabled: z.boolean().optional(),
   mfaEnabled: z.boolean().optional(),
   apiAccess: z.boolean().optional(),
   aiFeatures: z.boolean().optional(),
   advancedAnalytics: z.boolean().optional(),
+  advancedAuditLogs: z.boolean().optional(),
   customIntegrations: z.boolean().optional(),
+  customDomain: z.boolean().optional(),
   canHaveChildren: z.boolean().optional(),
+  childOrganizations: z.boolean().optional(),
+  impersonation: z.boolean().optional(),
   maxChildDepth: z.number().int().min(0).optional(),
 });
 export type ProfileCapabilities = z.infer<typeof profileCapabilitiesSchema>;
 
-/** Profile limits */
+/** Profile limits (-1 means unlimited) */
 export const profileLimitsSchema = z.object({
-  maxUsers: z.number().int().min(0).optional(),
-  maxDevices: z.number().int().min(0).optional(),
-  maxAssets: z.number().int().min(0).optional(),
-  maxDashboards: z.number().int().min(0).optional(),
-  maxApiKeys: z.number().int().min(0).optional(),
-  maxChildOrganizations: z.number().int().min(0).optional(),
+  maxUsers: z.number().int().min(-1).optional(),
+  maxDevices: z.number().int().min(-1).optional(),
+  maxAssets: z.number().int().min(-1).optional(),
+  maxDashboards: z.number().int().min(-1).optional(),
+  maxApiKeys: z.number().int().min(-1).optional(),
+  maxChildOrganizations: z.number().int().min(-1).optional(),
+  maxOrganizations: z.number().int().min(-1).optional(),
+  maxRoles: z.number().int().min(-1).optional(),
+  maxGroups: z.number().int().min(-1).optional(),
+  apiRequestsPerDay: z.number().int().min(-1).optional(),
   dataRetentionDays: z.number().int().min(1).optional(),
-  storageGb: z.number().min(0).optional(),
+  storageGb: z.number().min(-1).optional(),
 });
 export type ProfileLimits = z.infer<typeof profileLimitsSchema>;
 
-/** Create tenant profile request */
-export const createTenantProfileSchema = z.object({
+/** Create organization profile request */
+export const createOrganizationProfileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   description: z.string().max(500).optional(),
   type: profileTypeSchema.default('universal'),
   capabilities: profileCapabilitiesSchema.optional(),
   limits: profileLimitsSchema.optional(),
 });
-export type CreateTenantProfileInput = z.infer<typeof createTenantProfileSchema>;
+export type CreateOrganizationProfileInput = z.infer<typeof createOrganizationProfileSchema>;
 
-/** Update tenant profile request */
-export const updateTenantProfileSchema = z.object({
+/** Update organization profile request */
+export const updateOrganizationProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   description: z.string().max(500).nullable().optional(),
   type: profileTypeSchema.optional(),
@@ -54,10 +63,10 @@ export const updateTenantProfileSchema = z.object({
   limits: profileLimitsSchema.optional(),
   isActive: z.boolean().optional(),
 });
-export type UpdateTenantProfileInput = z.infer<typeof updateTenantProfileSchema>;
+export type UpdateOrganizationProfileInput = z.infer<typeof updateOrganizationProfileSchema>;
 
-/** Tenant profile response */
-export const tenantProfileResponseSchema = z.object({
+/** Organization profile response */
+export const organizationProfileResponseSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   description: z.string().nullable(),
@@ -69,11 +78,11 @@ export const tenantProfileResponseSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
-export type TenantProfileResponse = z.infer<typeof tenantProfileResponseSchema>;
+export type OrganizationProfileResponse = z.infer<typeof organizationProfileResponseSchema>;
 
-/** Tenant profile list response */
-export const tenantProfileListResponseSchema = z.object({
-  data: z.array(tenantProfileResponseSchema),
+/** Organization profile list response */
+export const organizationProfileListResponseSchema = z.object({
+  data: z.array(organizationProfileResponseSchema),
   pagination: z.object({
     page: z.number(),
     pageSize: z.number(),
@@ -83,4 +92,4 @@ export const tenantProfileListResponseSchema = z.object({
     hasPrevious: z.boolean(),
   }),
 });
-export type TenantProfileListResponse = z.infer<typeof tenantProfileListResponseSchema>;
+export type OrganizationProfileListResponse = z.infer<typeof organizationProfileListResponseSchema>;

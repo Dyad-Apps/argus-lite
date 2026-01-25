@@ -25,8 +25,8 @@ export * from './identity-providers.js';
 export * from './user-identities.js';
 export * from './platform-settings.js';
 
-// Tenant management and RBAC
-export * from './tenant-profiles.js';
+// Organization profiles and RBAC
+export * from './organization-profiles.js';
 export * from './user-groups.js';
 export * from './roles.js';
 

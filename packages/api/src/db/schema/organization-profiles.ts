@@ -1,5 +1,5 @@
 /**
- * Tenant Profiles - Configuration templates for organizations
+ * Organization Profiles - Configuration templates for organizations
  *
  * Profiles define capabilities and limits that can be assigned to organizations.
  * This enables consistent configuration across similar organization types.
@@ -57,10 +57,10 @@ export interface ProfileLimits {
 }
 
 /**
- * Tenant profiles table
+ * Organization profiles table
  */
-export const tenantProfiles = pgTable(
-  'tenant_profiles',
+export const organizationProfiles = pgTable(
+  'organization_profiles',
   {
     id: uuid('id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 100 }).notNull(),
@@ -89,12 +89,12 @@ export const tenantProfiles = pgTable(
       .defaultNow(),
   },
   (table) => [
-    index('idx_tenant_profiles_name').on(table.name),
-    index('idx_tenant_profiles_type').on(table.type),
-    index('idx_tenant_profiles_active').on(table.isActive),
+    index('idx_organization_profiles_name').on(table.name),
+    index('idx_organization_profiles_type').on(table.type),
+    index('idx_organization_profiles_active').on(table.isActive),
   ]
 );
 
 // Infer types from schema
-export type TenantProfile = typeof tenantProfiles.$inferSelect;
-export type NewTenantProfile = typeof tenantProfiles.$inferInsert;
+export type OrganizationProfile = typeof organizationProfiles.$inferSelect;
+export type NewOrganizationProfile = typeof organizationProfiles.$inferInsert;

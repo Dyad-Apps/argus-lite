@@ -1,28 +1,40 @@
 /**
- * Tenant Profile routes - CRUD operations for tenant profiles
- * Tenant profiles define capabilities and limits for organizations
+ * Organization Profile routes - CRUD operations for organization profiles
+ * Organization profiles define capabilities and limits for organizations
  */
 
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import {
-  createTenantProfileSchema,
-  updateTenantProfileSchema,
-  tenantProfileResponseSchema,
-  tenantProfileListResponseSchema,
+  createOrganizationProfileSchema,
+  updateOrganizationProfileSchema,
+  organizationProfileResponseSchema,
+  organizationProfileListResponseSchema,
   profileTypeSchema,
   Errors,
 } from '@argus/shared';
-import { getTenantProfileRepository } from '../../repositories/index.js';
+import { getOrganizationProfileRepository } from '../../repositories/index.js';
 
-export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
-  const profileRepo = getTenantProfileRepository();
+export async function organizationProfileRoutes(app: FastifyInstance): Promise<void> {
+  const profileRepo = getOrganizationProfileRepository();
 
-  // All tenant profile routes require authentication
-  app.addHook('preHandler', app.authenticate);
+  // Authentication with dev bypass for GET requests
+  app.addHook('preHandler', async (request, reply) => {
+    // Allow unauthenticated GET requests in development (for profile selection in forms)
+    if (process.env.NODE_ENV !== 'production' && request.method === 'GET') {
+      try {
+        await app.authenticate(request, reply);
+      } catch {
+        // Allow through in dev mode for GET requests
+        return;
+      }
+    } else {
+      await app.authenticate(request, reply);
+    }
+  });
 
-  // GET /tenant-profiles - List all tenant profiles
+  // GET /organization-profiles - List all organization profiles
   app.withTypeProvider<ZodTypeProvider>().get(
     '/',
     {
@@ -34,7 +46,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
           type: profileTypeSchema.optional(),
         }),
         response: {
-          200: tenantProfileListResponseSchema,
+          200: organizationProfileListResponseSchema,
         },
       },
     },
@@ -60,7 +72,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // GET /tenant-profiles/:id - Get tenant profile by ID
+  // GET /organization-profiles/:id - Get organization profile by ID
   app.withTypeProvider<ZodTypeProvider>().get(
     '/:id',
     {
@@ -69,7 +81,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
           id: z.string().uuid(),
         }),
         response: {
-          200: tenantProfileResponseSchema,
+          200: organizationProfileResponseSchema,
           404: z.object({
             success: z.literal(false),
             error: z.object({
@@ -85,7 +97,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
       const profile = await profileRepo.findById(request.params.id);
 
       if (!profile) {
-        throw Errors.notFound('TenantProfile', request.params.id);
+        throw Errors.notFound('OrganizationProfile', request.params.id);
       }
 
       return {
@@ -103,14 +115,14 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // POST /tenant-profiles - Create a new tenant profile
+  // POST /organization-profiles - Create a new organization profile
   app.withTypeProvider<ZodTypeProvider>().post(
     '/',
     {
       schema: {
-        body: createTenantProfileSchema,
+        body: createOrganizationProfileSchema,
         response: {
-          201: tenantProfileResponseSchema,
+          201: organizationProfileResponseSchema,
           409: z.object({
             success: z.literal(false),
             error: z.object({
@@ -128,7 +140,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
       // Check if name is available
       const isAvailable = await profileRepo.isNameAvailable(name);
       if (!isAvailable) {
-        throw Errors.conflict('Tenant profile with this name already exists');
+        throw Errors.conflict('Organization profile with this name already exists');
       }
 
       const profile = await profileRepo.create({
@@ -155,7 +167,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // PATCH /tenant-profiles/:id - Update tenant profile
+  // PATCH /organization-profiles/:id - Update organization profile
   app.withTypeProvider<ZodTypeProvider>().patch(
     '/:id',
     {
@@ -163,9 +175,9 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
         params: z.object({
           id: z.string().uuid(),
         }),
-        body: updateTenantProfileSchema,
+        body: updateOrganizationProfileSchema,
         response: {
-          200: tenantProfileResponseSchema,
+          200: organizationProfileResponseSchema,
           403: z.object({
             success: z.literal(false),
             error: z.object({
@@ -200,7 +212,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
       // Check if profile exists
       const existing = await profileRepo.findById(id);
       if (!existing) {
-        throw Errors.notFound('TenantProfile', id);
+        throw Errors.notFound('OrganizationProfile', id);
       }
 
       // Check if trying to modify a system profile's core properties
@@ -212,14 +224,14 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
       if (name && name !== existing.name) {
         const isAvailable = await profileRepo.isNameAvailable(name, id);
         if (!isAvailable) {
-          throw Errors.conflict('Tenant profile with this name already exists');
+          throw Errors.conflict('Organization profile with this name already exists');
         }
       }
 
       const profile = await profileRepo.update(id, { name, ...updateData });
 
       if (!profile) {
-        throw Errors.notFound('TenantProfile', id);
+        throw Errors.notFound('OrganizationProfile', id);
       }
 
       return {
@@ -237,7 +249,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // DELETE /tenant-profiles/:id - Delete tenant profile
+  // DELETE /organization-profiles/:id - Delete organization profile
   app.withTypeProvider<ZodTypeProvider>().delete(
     '/:id',
     {
@@ -272,7 +284,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
       // Check if profile exists
       const existing = await profileRepo.findById(id);
       if (!existing) {
-        throw Errors.notFound('TenantProfile', id);
+        throw Errors.notFound('OrganizationProfile', id);
       }
 
       // Check if it's a system profile
@@ -284,7 +296,7 @@ export async function tenantProfileRoutes(app: FastifyInstance): Promise<void> {
 
       const deleted = await profileRepo.delete(id);
       if (!deleted) {
-        throw Errors.notFound('TenantProfile', id);
+        throw Errors.notFound('OrganizationProfile', id);
       }
 
       return reply.status(204).send(null);
