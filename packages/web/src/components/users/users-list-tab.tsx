@@ -28,6 +28,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { apiClient } from '@/lib/api-client';
+import { EditUserDialog } from './edit-user-dialog';
 
 interface User {
   id: string;
@@ -65,6 +66,7 @@ export function UsersListTab({ onUserSelect }: UsersListTabProps) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -259,7 +261,10 @@ export function UsersListTab({ onUserSelect }: UsersListTabProps) {
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={(e) => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingUser(user);
+                              }}
                             >
                               <Pencil className="h-4 w-4 text-muted-foreground" />
                             </Button>
@@ -353,6 +358,14 @@ export function UsersListTab({ onUserSelect }: UsersListTabProps) {
           </div>
         )}
       </CardContent>
+
+      {/* Edit User Dialog */}
+      <EditUserDialog
+        user={editingUser}
+        open={!!editingUser}
+        onOpenChange={(open) => !open && setEditingUser(null)}
+        onUserUpdated={fetchUsers}
+      />
     </Card>
   );
 }

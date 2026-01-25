@@ -2,7 +2,7 @@
  * Role repository for data access
  */
 
-import { eq, and, sql, or, isNull } from 'drizzle-orm';
+import { eq, and, sql, or, isNull, ne } from 'drizzle-orm';
 import {
   PaginatedResult,
   PaginationOptions,
@@ -88,19 +88,21 @@ export class RoleRepository {
 
   /**
    * Finds all system roles (global roles with null organizationId)
+   * Excludes hidden roles like Super Admin
    */
   async findSystemRoles(trx?: Transaction): Promise<Role[]> {
     const executor = getExecutor(trx);
     const result = await executor
       .select()
       .from(roles)
-      .where(eq(roles.isSystem, true))
+      .where(and(eq(roles.isSystem, true), ne(roles.name, 'Super Admin')))
       .orderBy(roles.name);
     return result;
   }
 
   /**
    * Finds all roles available to an organization (org-specific + system roles)
+   * Excludes hidden roles like Super Admin
    */
   async findByOrganization(
     organizationId: OrganizationId,
@@ -112,10 +114,13 @@ export class RoleRepository {
     const offset = calculateOffset(options);
     const includeSystem = options?.includeSystem ?? true;
 
-    // Build where clause: org roles + optionally system roles
-    const conditions = includeSystem
+    // Build where clause: org roles + optionally system roles, excluding hidden roles
+    const baseConditions = includeSystem
       ? or(eq(roles.organizationId, organizationId), eq(roles.isSystem, true))
       : eq(roles.organizationId, organizationId);
+
+    // Exclude Super Admin (hidden system role)
+    const conditions = and(baseConditions, ne(roles.name, 'Super Admin'));
 
     // Get total count
     const countResult = await executor

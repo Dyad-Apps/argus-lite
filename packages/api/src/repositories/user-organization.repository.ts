@@ -12,7 +12,7 @@ import {
   getExecutor,
   withTransaction,
 } from './base.repository.js';
-import { userOrganizations, users, organizations } from '../db/schema/index.js';
+import { userOrganizations, users, organizations, roles, userRoleAssignments } from '../db/schema/index.js';
 import { Transaction } from '../db/index.js';
 import { type UserId, type OrganizationId } from '@argus/shared';
 
@@ -248,6 +248,10 @@ export class UserOrganizationRepository {
     minRole: OrganizationRole,
     trx?: Transaction
   ): Promise<boolean> {
+    // Super admins have full access everywhere
+    const superAdmin = await this.isSuperAdmin(userId, trx);
+    if (superAdmin) return true;
+
     const membership = await this.findMembership(userId, organizationId, trx);
     if (!membership) return false;
 
@@ -259,6 +263,63 @@ export class UserOrganizationRepository {
     };
 
     return roleHierarchy[membership.role] >= roleHierarchy[minRole];
+  }
+
+  /**
+   * Checks if a user is a Super Admin (has Super Admin role at a root organization)
+   * Super Admins have access to all organizations in the system
+   */
+  async isSuperAdmin(userId: UserId, trx?: Transaction): Promise<boolean> {
+    const executor = getExecutor(trx);
+
+    // Check if user has "Super Admin" role assigned at any root organization
+    const result = await executor
+      .select({ count: sql<number>`1` })
+      .from(userRoleAssignments)
+      .innerJoin(roles, eq(userRoleAssignments.roleId, roles.id))
+      .innerJoin(organizations, eq(userRoleAssignments.organizationId, organizations.id))
+      .where(
+        and(
+          eq(userRoleAssignments.userId, userId),
+          eq(roles.name, 'Super Admin'),
+          eq(roles.isSystem, true),
+          eq(organizations.isRoot, true)
+        )
+      )
+      .limit(1);
+
+    return result.length > 0;
+  }
+
+  /**
+   * Finds membership or returns synthetic membership for super admins
+   * Super admins get virtual "owner" access to any organization
+   */
+  async findMembershipOrSuperAdmin(
+    userId: UserId,
+    organizationId: OrganizationId,
+    trx?: Transaction
+  ): Promise<UserOrganization | null> {
+    // First check direct membership
+    const membership = await this.findMembership(userId, organizationId, trx);
+    if (membership) return membership;
+
+    // Check if user is a super admin
+    const superAdmin = await this.isSuperAdmin(userId, trx);
+    if (superAdmin) {
+      // Return synthetic membership with owner role
+      return {
+        userId,
+        organizationId,
+        role: 'owner',
+        isPrimary: false,
+        joinedAt: new Date(),
+        invitedBy: null,
+        expiresAt: null,
+      } as UserOrganization;
+    }
+
+    return null;
   }
 
   /**

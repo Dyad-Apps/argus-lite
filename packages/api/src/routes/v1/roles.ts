@@ -17,6 +17,7 @@ import {
   userRoleAssignmentResponseSchema,
   roleScopeSchema,
   roleSourceSchema,
+  apiErrorResponseSchema,
   Errors,
   createOrganizationId,
   createUserId,
@@ -93,22 +94,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           200: roleListResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
@@ -122,8 +109,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         throw Errors.notFound('Organization', request.params.orgId);
       }
 
-      // Check if user is a member of the organization
-      const isMember = await memberRepo.findMembership(request.user!.id, orgId);
+      // Check if user is a member of the organization (or super admin)
+      const isMember = await memberRepo.findMembershipOrSuperAdmin(request.user!.id, orgId);
       if (!isMember) {
         throw Errors.forbidden('You are not a member of this organization');
       }
@@ -162,22 +149,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           200: roleResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
@@ -191,8 +164,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         throw Errors.notFound('Organization', request.params.orgId);
       }
 
-      // Check if user is a member of the organization
-      const isMember = await memberRepo.findMembership(request.user!.id, orgId);
+      // Check if user is a member of the organization (or super admin)
+      const isMember = await memberRepo.findMembershipOrSuperAdmin(request.user!.id, orgId);
       if (!isMember) {
         throw Errors.forbidden('You are not a member of this organization');
       }
@@ -232,30 +205,9 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         body: createRoleSchema,
         response: {
           201: roleResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          409: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
+          409: apiErrorResponseSchema,
         },
       },
     },
@@ -320,30 +272,9 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         body: updateRoleSchema,
         response: {
           200: roleResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          409: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
+          409: apiErrorResponseSchema,
         },
       },
     },
@@ -418,22 +349,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           204: z.null(),
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
@@ -492,22 +409,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           200: userRoleAssignmentsResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
@@ -521,8 +424,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         throw Errors.notFound('Organization', request.params.orgId);
       }
 
-      // Check if user is a member of the organization
-      const isMember = await memberRepo.findMembership(request.user!.id, orgId);
+      // Check if user is a member of the organization (or super admin)
+      const isMember = await memberRepo.findMembershipOrSuperAdmin(request.user!.id, orgId);
       if (!isMember) {
         throw Errors.forbidden('You are not a member of this organization');
       }
@@ -563,30 +466,9 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         body: assignUserRoleSchema,
         response: {
           201: userRoleAssignmentResponseSchema,
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          409: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
+          409: apiErrorResponseSchema,
         },
       },
     },
@@ -673,22 +555,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           204: z.null(),
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
@@ -751,30 +619,9 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
             assignedAt: z.string().datetime(),
             assignedBy: z.string().uuid().nullable(),
           }),
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          409: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
+          409: apiErrorResponseSchema,
         },
       },
     },
@@ -851,22 +698,8 @@ export async function roleRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           204: z.null(),
-          403: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
-          404: z.object({
-            success: z.literal(false),
-            error: z.object({
-              code: z.string(),
-              message: z.string(),
-              timestamp: z.string(),
-            }),
-          }),
+          403: apiErrorResponseSchema,
+          404: apiErrorResponseSchema,
         },
       },
     },
