@@ -62,17 +62,40 @@ export const updateOrganizationSchema = z.object({
 });
 export type UpdateOrganizationInput = z.infer<typeof updateOrganizationSchema>;
 
+/** Organization settings schema */
+export const organizationSettingsSchema = z.object({
+  timezone: z.string().optional(),
+  locale: z.string().optional(),
+  dateFormat: z.string().optional(),
+  features: z.object({
+    ssoRequired: z.boolean().optional(),
+    mfaRequired: z.boolean().optional(),
+    apiAccess: z.boolean().optional(),
+    crossOrgSharing: z.boolean().optional(),
+    allowWhiteLabeling: z.boolean().optional(),
+    allowImpersonation: z.boolean().optional(),
+  }).optional(),
+}).nullable();
+export type OrganizationSettings = z.infer<typeof organizationSettingsSchema>;
+
 /** Organization response */
 export const organizationResponseSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
   slug: z.string(),
   orgCode: z.string().optional(),
+  description: z.string().nullable().optional(),
   isActive: z.boolean(),
   isRoot: z.boolean().optional(),
+  canHaveChildren: z.boolean().optional(),
+  depth: z.number().optional(),
+  path: z.string().nullable().optional(),
+  subdomain: z.string().nullable().optional(),
+  plan: z.string().optional(),
   profileId: z.string().uuid().nullable().optional(),
-  allowWhiteLabeling: z.boolean().optional(),
-  allowImpersonation: z.boolean().optional(),
+  parentOrganizationId: z.string().uuid().nullable().optional(),
+  rootOrganizationId: z.string().uuid().nullable().optional(),
+  settings: organizationSettingsSchema.optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
