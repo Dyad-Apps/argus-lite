@@ -19,6 +19,7 @@ import { groupRoutes } from './groups.js';
 import { roleRoutes } from './roles.js';
 import { ssoConnectionRoutes } from './sso-connections.js';
 import { impersonationRoutes } from './impersonation.js';
+import { platformSettingsRoutes } from './platform-settings.js';
 
 export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Version info endpoint
@@ -76,4 +77,7 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
 
   // Impersonation routes (admin functionality)
   await app.register(impersonationRoutes);
+
+  // Platform settings routes (super admin only)
+  await app.register(platformSettingsRoutes);
 }

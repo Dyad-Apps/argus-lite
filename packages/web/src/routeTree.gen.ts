@@ -16,6 +16,7 @@ import { Route as RolesRouteImport } from './routes/roles'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
 import { Route as OrganizationProfilesRouteImport } from './routes/organization-profiles'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as BrandingRouteImport } from './routes/branding'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
@@ -57,6 +58,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BrandingRoute = BrandingRouteImport.update({
+  id: '/branding',
+  path: '/branding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ActivityRoute = ActivityRouteImport.update({
   id: '/activity',
   path: '/activity',
@@ -86,6 +92,7 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/branding': typeof BrandingRoute
   '/login': typeof LoginRoute
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/organizations': typeof OrganizationsRouteWithChildren
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/branding': typeof BrandingRoute
   '/login': typeof LoginRoute
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/roles': typeof RolesRoute
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/branding': typeof BrandingRoute
   '/login': typeof LoginRoute
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/organizations': typeof OrganizationsRouteWithChildren
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/activity'
+    | '/branding'
     | '/login'
     | '/organization-profiles'
     | '/organizations'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/activity'
+    | '/branding'
     | '/login'
     | '/organization-profiles'
     | '/roles'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/activity'
+    | '/branding'
     | '/login'
     | '/organization-profiles'
     | '/organizations'
@@ -172,6 +184,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ActivityRoute: typeof ActivityRoute
+  BrandingRoute: typeof BrandingRoute
   LoginRoute: typeof LoginRoute
   OrganizationProfilesRoute: typeof OrganizationProfilesRoute
   OrganizationsRoute: typeof OrganizationsRouteWithChildren
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/branding': {
+      id: '/branding'
+      path: '/branding'
+      fullPath: '/branding'
+      preLoaderRoute: typeof BrandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/activity': {
       id: '/activity'
       path: '/activity'
@@ -288,6 +308,7 @@ const OrganizationsRouteWithChildren = OrganizationsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ActivityRoute: ActivityRoute,
+  BrandingRoute: BrandingRoute,
   LoginRoute: LoginRoute,
   OrganizationProfilesRoute: OrganizationProfilesRoute,
   OrganizationsRoute: OrganizationsRouteWithChildren,

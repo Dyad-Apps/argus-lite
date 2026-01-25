@@ -197,6 +197,13 @@ export function createApiClient(options: ApiClientOptions = {}) {
         body: body ? JSON.stringify(body) : undefined,
       }),
 
+    put: <T = unknown>(endpoint: string, body?: unknown, init?: RequestInit) =>
+      request<T>(endpoint, {
+        ...init,
+        method: 'PUT',
+        body: body ? JSON.stringify(body) : undefined,
+      }),
+
     patch: <T = unknown>(endpoint: string, body?: unknown, init?: RequestInit) =>
       request<T>(endpoint, {
         ...init,

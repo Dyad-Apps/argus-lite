@@ -7,6 +7,7 @@ import {
   Activity,
   Layers,
   Lock,
+  Paintbrush,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -66,6 +67,11 @@ export const mainNavigation: NavSection[] = [
         title: 'Security',
         url: '/security',
         icon: Lock,
+      },
+      {
+        title: 'White Labeling',
+        url: '/branding',
+        icon: Paintbrush,
       },
       {
         title: 'Settings',

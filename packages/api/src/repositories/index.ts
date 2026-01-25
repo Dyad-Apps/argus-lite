@@ -18,3 +18,5 @@ export * from './role.repository.js';
 export * from './branding.repository.js';
 export * from './identity-provider.repository.js';
 export * from './impersonation.repository.js';
+export * from './platform-settings.repository.js';
+export * from './system-admin.repository.js';
