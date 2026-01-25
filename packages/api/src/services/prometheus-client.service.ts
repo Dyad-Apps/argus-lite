@@ -48,11 +48,12 @@ export function getPrometheusConfig(): PrometheusConfig {
 }
 
 /**
- * Check if Prometheus is configured and available
+ * Check if Prometheus is explicitly configured via environment variable
  */
 export function isPrometheusConfigured(): boolean {
-  const config = getPrometheusConfig();
-  return !!config.endpoint && config.endpoint !== '';
+  // Only return true if PROMETHEUS_ENDPOINT is explicitly set
+  // Don't rely on the default localhost:9090 since it's unlikely to exist
+  return !!process.env.PROMETHEUS_ENDPOINT;
 }
 
 /**
