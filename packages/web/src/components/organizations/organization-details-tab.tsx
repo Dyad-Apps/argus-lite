@@ -42,12 +42,12 @@ interface Organization {
   updatedAt: string;
 }
 
-interface TenantDetailsTabProps {
+interface OrganizationDetailsTabProps {
   organization: Organization;
   onUpdated: () => void;
 }
 
-export function TenantDetailsTab({ organization, onUpdated }: TenantDetailsTabProps) {
+export function OrganizationDetailsTab({ organization, onUpdated }: OrganizationDetailsTabProps) {
   const [formData, setFormData] = useState({
     name: organization.name,
     description: organization.description || '',

@@ -1,7 +1,7 @@
-export { TenantOverviewTab } from './tenant-overview-tab';
-export { TenantDetailsTab } from './tenant-details-tab';
-export { ChildTenantsTab } from './child-tenants-tab';
-export { TenantHierarchyTab } from './tenant-hierarchy-tab';
-export { TenantBrandingTab } from './tenant-branding-tab';
+export { OrganizationOverviewTab } from './organization-overview-tab';
+export { OrganizationDetailsTab } from './organization-details-tab';
+export { ChildOrganizationsTab } from './child-organizations-tab';
+export { OrganizationHierarchyTab } from './organization-hierarchy-tab';
+export { OrganizationBrandingTab } from './organization-branding-tab';
 export { CreateChildDialog } from './create-child-dialog';
-export { DeleteTenantDialog } from './delete-tenant-dialog';
+export { DeleteOrganizationDialog } from './delete-organization-dialog';

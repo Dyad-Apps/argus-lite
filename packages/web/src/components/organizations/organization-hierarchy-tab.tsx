@@ -33,11 +33,11 @@ interface HierarchyNode extends Organization {
   childCount?: number;
 }
 
-interface TenantHierarchyTabProps {
+interface OrganizationHierarchyTabProps {
   organization: Organization;
 }
 
-export function TenantHierarchyTab({ organization }: TenantHierarchyTabProps) {
+export function OrganizationHierarchyTab({ organization }: OrganizationHierarchyTabProps) {
   const [hierarchyData, setHierarchyData] = useState<HierarchyNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -35,7 +35,7 @@ interface OrganizationBranding {
   customCss: string | null;
 }
 
-interface TenantBrandingTabProps {
+interface OrganizationBrandingTabProps {
   organization: Organization;
   onUpdated: () => void;
 }
@@ -54,7 +54,7 @@ const defaultBranding: Omit<OrganizationBranding, 'id' | 'organizationId'> = {
   customCss: null,
 };
 
-export function TenantBrandingTab({ organization, onUpdated }: TenantBrandingTabProps) {
+export function OrganizationBrandingTab({ organization, onUpdated }: OrganizationBrandingTabProps) {
   const [branding, setBranding] = useState<Omit<OrganizationBranding, 'id' | 'organizationId'>>(defaultBranding);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);

@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CreateChildDialog } from './create-child-dialog';
-import { DeleteTenantDialog } from './delete-tenant-dialog';
+import { DeleteOrganizationDialog } from './delete-organization-dialog';
 
 interface Organization {
   id: string;
@@ -47,12 +47,12 @@ interface Organization {
   createdAt: string;
 }
 
-interface ChildTenantsTabProps {
+interface ChildOrganizationsTabProps {
   organization: Organization;
   onChildCreated: () => void;
 }
 
-export function ChildTenantsTab({ organization, onChildCreated }: ChildTenantsTabProps) {
+export function ChildOrganizationsTab({ organization, onChildCreated }: ChildOrganizationsTabProps) {
   const [children, setChildren] = useState<Organization[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -252,7 +252,7 @@ export function ChildTenantsTab({ organization, onChildCreated }: ChildTenantsTa
       />
 
       {/* Delete Confirmation Dialog */}
-      <DeleteTenantDialog
+      <DeleteOrganizationDialog
         organization={deleteTarget}
         open={!!deleteTarget}
         onOpenChange={(open) => !open && setDeleteTarget(null)}

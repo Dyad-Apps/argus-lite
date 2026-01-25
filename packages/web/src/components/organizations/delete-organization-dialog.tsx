@@ -18,19 +18,19 @@ interface Organization {
   orgCode: string;
 }
 
-interface DeleteTenantDialogProps {
+interface DeleteOrganizationDialogProps {
   organization: Organization | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
 }
 
-export function DeleteTenantDialog({
+export function DeleteOrganizationDialog({
   organization,
   open,
   onOpenChange,
   onConfirm,
-}: DeleteTenantDialogProps) {
+}: DeleteOrganizationDialogProps) {
   const [confirmation, setConfirmation] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 

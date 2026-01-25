@@ -44,17 +44,17 @@ interface OrganizationStats {
   activeUsers: number;
 }
 
-interface TenantOverviewTabProps {
+interface OrganizationOverviewTabProps {
   organization: Organization;
   stats: OrganizationStats;
   onNavigateToTab: (tab: string) => void;
 }
 
-export function TenantOverviewTab({
+export function OrganizationOverviewTab({
   organization,
   stats,
   onNavigateToTab,
-}: TenantOverviewTabProps) {
+}: OrganizationOverviewTabProps) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',

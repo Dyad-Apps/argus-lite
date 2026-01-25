@@ -16,11 +16,13 @@ import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TenantOverviewTab } from '@/components/organizations/tenant-overview-tab';
-import { TenantDetailsTab } from '@/components/organizations/tenant-details-tab';
-import { ChildTenantsTab } from '@/components/organizations/child-tenants-tab';
-import { TenantHierarchyTab } from '@/components/organizations/tenant-hierarchy-tab';
-import { TenantBrandingTab } from '@/components/organizations/tenant-branding-tab';
+import {
+  OrganizationOverviewTab,
+  OrganizationDetailsTab,
+  ChildOrganizationsTab,
+  OrganizationHierarchyTab,
+  OrganizationBrandingTab,
+} from '@/components/organizations';
 
 export const Route = createFileRoute('/organizations/$orgId')({
   component: OrganizationDetailsPage,
@@ -215,7 +217,7 @@ function OrganizationDetailsPage() {
         </TabsList>
 
         <TabsContent value="overview">
-          <TenantOverviewTab
+          <OrganizationOverviewTab
             organization={organization}
             stats={stats}
             onNavigateToTab={setActiveTab}
@@ -223,7 +225,7 @@ function OrganizationDetailsPage() {
         </TabsContent>
 
         <TabsContent value="details">
-          <TenantDetailsTab
+          <OrganizationDetailsTab
             organization={organization}
             onUpdated={handleOrganizationUpdated}
           />
@@ -231,7 +233,7 @@ function OrganizationDetailsPage() {
 
         {organization.canHaveChildren && (
           <TabsContent value="children">
-            <ChildTenantsTab
+            <ChildOrganizationsTab
               organization={organization}
               onChildCreated={handleOrganizationUpdated}
             />
@@ -239,12 +241,12 @@ function OrganizationDetailsPage() {
         )}
 
         <TabsContent value="hierarchy">
-          <TenantHierarchyTab organization={organization} />
+          <OrganizationHierarchyTab organization={organization} />
         </TabsContent>
 
         {organization.settings?.features?.allowWhiteLabeling && (
           <TabsContent value="branding">
-            <TenantBrandingTab
+            <OrganizationBrandingTab
               organization={organization}
               onUpdated={handleOrganizationUpdated}
             />
