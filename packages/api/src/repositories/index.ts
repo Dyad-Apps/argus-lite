@@ -16,3 +16,5 @@ export * from './organization-profile.repository.js';
 export * from './group.repository.js';
 export * from './role.repository.js';
 export * from './branding.repository.js';
+export * from './identity-provider.repository.js';
+export * from './impersonation.repository.js';

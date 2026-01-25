@@ -6,6 +6,8 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { DashboardHeader } from '@/components/dashboard-header';
 import { Footer } from '@/components/footer';
 import { ThemeProvider } from '@/components/theme-provider';
+import { ImpersonationProvider } from '@/contexts/impersonation-context';
+import { ImpersonationBanner } from '@/components/impersonation/impersonation-banner';
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -45,17 +47,20 @@ function RootLayout() {
   // SidebarProvider creates the flex container, AppSidebar and SidebarInset are direct children
   return (
     <ThemeProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <DashboardHeader />
-          <div className="flex-1 p-4 lg:p-6 bg-background">
-            <Outlet />
-          </div>
-          <Footer />
-        </SidebarInset>
-        {import.meta.env.DEV && <TanStackRouterDevtools />}
-      </SidebarProvider>
+      <ImpersonationProvider>
+        <ImpersonationBanner />
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <DashboardHeader />
+            <div className="flex-1 p-4 lg:p-6 bg-background">
+              <Outlet />
+            </div>
+            <Footer />
+          </SidebarInset>
+          {import.meta.env.DEV && <TanStackRouterDevtools />}
+        </SidebarProvider>
+      </ImpersonationProvider>
     </ThemeProvider>
   );
 }

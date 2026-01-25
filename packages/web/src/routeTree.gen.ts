@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsersRouteImport } from './routes/users'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SecurityRouteImport } from './routes/security'
 import { Route as RolesRouteImport } from './routes/roles'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
 import { Route as OrganizationProfilesRouteImport } from './routes/organization-profiles'
@@ -29,6 +30,11 @@ const UsersRoute = UsersRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RolesRoute = RolesRouteImport.update({
@@ -84,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/roles': typeof RolesRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/organization-profiles': typeof OrganizationProfilesRoute
   '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
+  '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/organization-profiles'
     | '/organizations'
     | '/roles'
+    | '/security'
     | '/settings'
     | '/users'
     | '/auth/callback'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/organization-profiles'
     | '/roles'
+    | '/security'
     | '/settings'
     | '/users'
     | '/auth/callback'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/organization-profiles'
     | '/organizations'
     | '/roles'
+    | '/security'
     | '/settings'
     | '/users'
     | '/auth/callback'
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   OrganizationProfilesRoute: typeof OrganizationProfilesRoute
   OrganizationsRoute: typeof OrganizationsRouteWithChildren
   RolesRoute: typeof RolesRoute
+  SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
   UsersRoute: typeof UsersRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -183,6 +196,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roles': {
@@ -272,6 +292,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrganizationProfilesRoute: OrganizationProfilesRoute,
   OrganizationsRoute: OrganizationsRouteWithChildren,
   RolesRoute: RolesRoute,
+  SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
   UsersRoute: UsersRoute,
   AuthCallbackRoute: AuthCallbackRoute,

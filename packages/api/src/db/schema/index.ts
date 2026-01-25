@@ -30,5 +30,8 @@ export * from './organization-profiles.js';
 export * from './user-groups.js';
 export * from './roles.js';
 
+// Security features
+export * from './impersonation-sessions.js';
+
 // Relations (must be last to avoid circular deps)
 export * from './relations.js';

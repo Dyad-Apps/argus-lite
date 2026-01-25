@@ -17,6 +17,8 @@ import { auditLogRoutes } from './audit-logs.js';
 import { organizationProfileRoutes } from './organization-profiles.js';
 import { groupRoutes } from './groups.js';
 import { roleRoutes } from './roles.js';
+import { ssoConnectionRoutes } from './sso-connections.js';
+import { impersonationRoutes } from './impersonation.js';
 
 export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Version info endpoint
@@ -68,4 +70,10 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
 
   // Role routes (no prefix, routes include full paths)
   await app.register(roleRoutes);
+
+  // SSO connection management routes (no prefix, routes include full paths with /organizations/:orgId)
+  await app.register(ssoConnectionRoutes);
+
+  // Impersonation routes (admin functionality)
+  await app.register(impersonationRoutes);
 }

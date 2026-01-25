@@ -6,6 +6,7 @@ import {
   Shield,
   Activity,
   Layers,
+  Lock,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -60,6 +61,11 @@ export const mainNavigation: NavSection[] = [
         title: 'Activity Log',
         url: '/activity',
         icon: Activity,
+      },
+      {
+        title: 'Security',
+        url: '/security',
+        icon: Lock,
       },
       {
         title: 'Settings',
