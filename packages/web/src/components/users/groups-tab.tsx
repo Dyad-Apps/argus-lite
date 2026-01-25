@@ -47,6 +47,7 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { apiClient } from '@/lib/api-client';
+import { ManageGroupMembersDialog } from './manage-group-members-dialog';
 
 interface Organization {
   id: string;
@@ -104,6 +105,9 @@ export function GroupsTab() {
   const [isCreating, setIsCreating] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
   const [newGroupDescription, setNewGroupDescription] = useState('');
+
+  // Manage members dialog state
+  const [manageMembersGroup, setManageMembersGroup] = useState<Group | null>(null);
 
   // Fetch organizations
   useEffect(() => {
@@ -382,7 +386,11 @@ export function GroupsTab() {
                             </Tooltip>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => setManageMembersGroup(group)}
+                                >
                                   <UserPlus className="h-4 w-4 text-muted-foreground" />
                                 </Button>
                               </TooltipTrigger>
@@ -411,6 +419,14 @@ export function GroupsTab() {
           )}
         </CardContent>
       </Card>
+
+      {/* Manage Members Dialog */}
+      <ManageGroupMembersDialog
+        group={manageMembersGroup}
+        open={!!manageMembersGroup}
+        onOpenChange={(open) => !open && setManageMembersGroup(null)}
+        onMembersChanged={fetchGroups}
+      />
     </div>
   );
 }

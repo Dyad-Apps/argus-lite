@@ -47,6 +47,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { apiClient } from '@/lib/api-client';
+import { EditRoleDialog } from './edit-role-dialog';
 
 interface Organization {
   id: string;
@@ -115,6 +116,9 @@ export function RolesTab() {
   const [newRoleName, setNewRoleName] = useState('');
   const [newRoleDescription, setNewRoleDescription] = useState('');
   const [newRoleScope, setNewRoleScope] = useState<'organization' | 'children' | 'tree'>('organization');
+
+  // Edit dialog state
+  const [editingRole, setEditingRole] = useState<Role | null>(null);
 
   // Fetch organizations
   useEffect(() => {
@@ -436,7 +440,11 @@ export function RolesTab() {
                             <div className="flex items-center justify-center gap-1">
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <Button variant="ghost" size="icon">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => setEditingRole(role)}
+                                  >
                                     <Pencil className="h-4 w-4 text-muted-foreground" />
                                   </Button>
                                 </TooltipTrigger>
@@ -466,6 +474,17 @@ export function RolesTab() {
           )}
         </CardContent>
       </Card>
+
+      {/* Edit Role Dialog */}
+      {selectedOrgId && (
+        <EditRoleDialog
+          role={editingRole}
+          organizationId={selectedOrgId}
+          open={!!editingRole}
+          onOpenChange={(open) => !open && setEditingRole(null)}
+          onRoleUpdated={fetchRoles}
+        />
+      )}
     </div>
   );
 }
