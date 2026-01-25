@@ -153,7 +153,7 @@ export type LoginBackgroundType = z.infer<typeof loginBackgroundTypeSchema>;
 
 /** Organization branding response */
 export const organizationBrandingResponseSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid().nullable(),
   organizationId: z.string().uuid(),
   logoUrl: z.string().nullable(),
   logoDarkUrl: z.string().nullable(),

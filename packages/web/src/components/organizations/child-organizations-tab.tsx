@@ -151,7 +151,7 @@ export function ChildOrganizationsTab({ organization, onChildCreated }: ChildOrg
                 <TableHead>Depth</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Can Have Children</TableHead>
-                <TableHead className="w-[80px]">Actions</TableHead>
+                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

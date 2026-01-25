@@ -17,6 +17,7 @@ import { Route as OrganizationProfilesRouteImport } from './routes/organization-
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
 import { Route as OrganizationsOrgIdRouteImport } from './routes/organizations/$orgId'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
@@ -60,6 +61,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganizationsIndexRoute = OrganizationsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OrganizationsRoute,
+} as any)
 const OrganizationsOrgIdRoute = OrganizationsOrgIdRouteImport.update({
   id: '/$orgId',
   path: '/$orgId',
@@ -82,18 +88,19 @@ export interface FileRoutesByFullPath {
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/organizations/': typeof OrganizationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/login': typeof LoginRoute
   '/organization-profiles': typeof OrganizationProfilesRoute
-  '/organizations': typeof OrganizationsRouteWithChildren
   '/roles': typeof RolesRoute
   '/settings': typeof SettingsRoute
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/organizations': typeof OrganizationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +114,7 @@ export interface FileRoutesById {
   '/users': typeof UsersRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/organizations/': typeof OrganizationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,18 +129,19 @@ export interface FileRouteTypes {
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/organizations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/activity'
     | '/login'
     | '/organization-profiles'
-    | '/organizations'
     | '/roles'
     | '/settings'
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/organizations'
   id:
     | '__root__'
     | '/'
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/organizations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organizations/': {
+      id: '/organizations/'
+      path: '/'
+      fullPath: '/organizations/'
+      preLoaderRoute: typeof OrganizationsIndexRouteImport
+      parentRoute: typeof OrganizationsRoute
+    }
     '/organizations/$orgId': {
       id: '/organizations/$orgId'
       path: '/$orgId'
@@ -236,10 +253,12 @@ declare module '@tanstack/react-router' {
 
 interface OrganizationsRouteChildren {
   OrganizationsOrgIdRoute: typeof OrganizationsOrgIdRoute
+  OrganizationsIndexRoute: typeof OrganizationsIndexRoute
 }
 
 const OrganizationsRouteChildren: OrganizationsRouteChildren = {
   OrganizationsOrgIdRoute: OrganizationsOrgIdRoute,
+  OrganizationsIndexRoute: OrganizationsIndexRoute,
 }
 
 const OrganizationsRouteWithChildren = OrganizationsRoute._addFileChildren(

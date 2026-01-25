@@ -70,7 +70,19 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
           id: org.id,
           name: org.name,
           slug: org.slug,
+          orgCode: org.orgCode,
+          description: org.description,
           isActive: org.isActive,
+          isRoot: org.isRoot,
+          canHaveChildren: org.canHaveChildren,
+          depth: org.depth,
+          path: org.path,
+          subdomain: org.subdomain,
+          plan: org.plan,
+          profileId: org.profileId,
+          parentOrganizationId: org.parentOrganizationId,
+          rootOrganizationId: org.rootOrganizationId,
+          settings: org.settings,
           createdAt: org.createdAt.toISOString(),
           updatedAt: org.updatedAt.toISOString(),
         })),
@@ -974,7 +986,7 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
       if (!branding) {
         // Return default branding if none exists
         return {
-          id: '',
+          id: null,
           organizationId: orgId,
           logoUrl: null,
           logoDarkUrl: null,

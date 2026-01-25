@@ -77,10 +77,10 @@ export function CreateChildDialog({
 
   const fetchProfiles = async () => {
     try {
-      const response = await apiClient.get<{ data: TenantProfile[] }>('/tenant-profiles');
+      const response = await apiClient.get<{ data: TenantProfile[] }>('/organization-profiles');
       setProfiles(response.data || []);
     } catch (err) {
-      console.error('Failed to fetch tenant profiles:', err);
+      console.error('Failed to fetch organization profiles:', err);
       // Continue without profiles - they're optional
     }
   };
