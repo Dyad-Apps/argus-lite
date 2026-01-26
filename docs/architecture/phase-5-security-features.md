@@ -98,10 +98,15 @@ sequenceDiagram
 
 User impersonation allows system administrators to access the platform as another user for support and debugging purposes. All impersonation sessions are logged and audited.
 
+**Two types of administrators can impersonate:**
+- **Super Admins** - Full platform access, can impersonate any user (except other super admins)
+- **Org Admins** - Organization-scoped, can only impersonate users within their organization(s)
+
 ```mermaid
 graph TB
     subgraph "Impersonation Flow"
-        ADMIN[System Admin]
+        SUPER[Super Admin]
+        ORG[Org Admin]
         TARGET[Target User]
         SESSION[Impersonation Session]
         BANNER[Impersonation Banner]
@@ -113,12 +118,30 @@ graph TB
         EXCLUDE[Cannot: Change password, Delete account]
     end
 
-    ADMIN -->|Starts| SESSION
+    SUPER -->|Can impersonate any user| SESSION
+    ORG -->|Can impersonate org users only| SESSION
     SESSION -->|Assumes identity of| TARGET
     SESSION --> BANNER
     SESSION --> VIEW
     SESSION --> ACT
 ```
+
+### Impersonation Permission Matrix
+
+| Impersonator | Can Impersonate | Cannot Impersonate |
+|--------------|-----------------|-------------------|
+| **Super Admin** | Any user except other super admins | Super admins |
+| **Org Admin** | Users in their organization(s) | Super admins, other org admins, users outside their org(s) |
+
+### Admin-Level Access Controls
+
+| Action | Super Admin | Org Admin |
+|--------|-------------|-----------|
+| Start impersonation | Any non-super-admin | Org users only |
+| View all active sessions | ✅ | ❌ |
+| Revoke any session | ✅ | ❌ |
+| End own session | ✅ | ✅ |
+| View own history | ✅ | ✅ |
 
 ### Impersonation Session Schema
 
@@ -172,8 +195,14 @@ sequenceDiagram
     Admin->>UI: Select user to impersonate
     Admin->>UI: Enter reason
     UI->>API: POST /impersonation/start
-    API->>DB: Verify admin is super_admin
+    API->>DB: Check admin role (super_admin or org_admin)
     API->>DB: Verify target user exists
+
+    alt Admin is org_admin
+        API->>DB: Verify target is NOT a system admin
+        API->>DB: Verify target is in admin's organization(s)
+    end
+
     API->>ImpersonationService: Create session
     ImpersonationService->>DB: INSERT impersonation_session
     ImpersonationService->>ImpersonationService: Generate impersonation JWT
@@ -217,6 +246,15 @@ A prominent banner is displayed during impersonation:
 | Delete account | No | Security restriction |
 | Start another impersonation | No | Must end current first |
 | Access admin settings | No | Scoped to target's permissions |
+
+### Org Admin Specific Restrictions
+
+| Restriction | Description |
+|-------------|-------------|
+| Organization scope | Can only impersonate users in organizations where they are admin/owner |
+| Cannot impersonate system admins | Cannot impersonate super_admins or other org_admins |
+| No platform-wide access | Cannot view all impersonation sessions |
+| Cannot revoke others' sessions | Can only end their own impersonation session |
 
 ---
 
@@ -457,21 +495,53 @@ All impersonation activities are logged:
 ### Permission Checks
 
 ```typescript
+// Check if user can impersonate others
+async canImpersonate(userId: UserId): Promise<boolean> {
+  const role = await systemAdminRepository.getRole(userId);
+  return role === 'super_admin' || role === 'org_admin';
+}
+
 // Before starting impersonation
-async canImpersonate(adminId: string, targetUserId: string): Promise<boolean> {
-  // 1. Admin must be super_admin
-  const admin = await this.systemAdminRepository.findByUserId(adminId);
-  if (!admin || admin.role !== 'super_admin') return false;
+async startImpersonation(options: StartImpersonationOptions): Promise<ImpersonationResult> {
+  // 1. Verify impersonator can impersonate (super_admin or org_admin)
+  const canImpersonate = await this.canImpersonate(options.impersonatorId);
+  if (!canImpersonate) {
+    throw new Error('You do not have permission to impersonate users');
+  }
 
-  // 2. Target cannot be another super_admin
-  const target = await this.systemAdminRepository.findByUserId(targetUserId);
-  if (target?.role === 'super_admin') return false;
+  // 2. Target cannot be a super_admin
+  const isSuperAdminTarget = await systemAdminRepository.isSuperAdmin(options.targetUserId);
+  if (isSuperAdminTarget) {
+    throw new Error('Cannot impersonate Super Admin users');
+  }
 
-  // 3. No existing active session
-  const active = await this.repository.findActiveSession(adminId);
-  if (active) return false;
+  // 3. Check org_admin restrictions
+  const isSuperAdmin = await this.isSuperAdmin(options.impersonatorId);
+  if (!isSuperAdmin) {
+    // Must be org_admin - they cannot impersonate other system admins
+    const targetRole = await systemAdminRepository.getRole(options.targetUserId);
+    if (targetRole === 'super_admin' || targetRole === 'org_admin') {
+      throw new Error('Organization admins cannot impersonate other system administrators');
+    }
 
-  return true;
+    // Verify target is in one of their organizations
+    const adminOrgs = await this.getAdminOrganizations(options.impersonatorId);
+    const targetMemberships = await memberRepo.getUserOrganizations(options.targetUserId);
+    const targetOrgIds = targetMemberships.map((m) => m.organizationId);
+
+    const hasAccess = adminOrgs.some((orgId) => targetOrgIds.includes(orgId));
+    if (!hasAccess) {
+      throw new Error('You can only impersonate users within your organization');
+    }
+  }
+
+  // 4. No existing active session
+  const active = await this.repository.findActiveSession(options.impersonatorId);
+  if (active) {
+    throw new Error('You already have an active impersonation session');
+  }
+
+  // ... create session and return token
 }
 ```
 

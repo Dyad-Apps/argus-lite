@@ -478,10 +478,16 @@ Platform-level administrator accounts.
 |--------|------|-------------|-------------|
 | `id` | UUID | PK | Admin record identifier |
 | `user_id` | UUID | FK, UNIQUE, NOT NULL | Linked user |
-| `role` | ENUM | DEFAULT 'support' | super_admin, support, billing |
+| `role` | ENUM | DEFAULT 'support' | super_admin, org_admin, support, billing |
 | `is_active` | BOOLEAN | DEFAULT true | Active flag |
 | `created_at` | TIMESTAMP | DEFAULT NOW() | Creation time |
 | `created_by` | UUID | FK | Creating admin |
+
+**System Roles:**
+- `super_admin` - Full platform access, can impersonate any non-super-admin user
+- `org_admin` - Organization admin, can impersonate users within their organization(s) only
+- `support` - Read-only access with limited impersonation
+- `billing` - Billing and subscription management only
 
 ---
 
@@ -680,7 +686,7 @@ Audit trail for permission checks and security enforcement.
 |------|--------|
 | `organization_plan` | free, starter, professional, enterprise |
 | `login_background_type` | default, solid, image, particles |
-| `system_role` | super_admin, support, billing |
+| `system_role` | super_admin, org_admin, support, billing |
 | `profile_type` | root, child, universal |
 
 ### RBAC
