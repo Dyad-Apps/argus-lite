@@ -1,48 +1,80 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Users as UsersIcon,
   Plus,
-  Mail,
   Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UsersListTab, GroupsTab, RolesTab } from '@/components/users';
+import { UsersListTab, GroupsTab, RolesTab, CreateUserWizard, UsersListTabRef } from '@/components/users';
+import { apiClient } from '@/lib/api-client';
 
 export const Route = createFileRoute('/users')({
   component: UsersPage,
 });
 
-function UsersPage() {
-  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState('');
+interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  role: string;
+  isPrimary: boolean;
+}
 
-  const handleInviteUser = () => {
-    // TODO: Call API to invite user
-    console.log('Inviting user:', inviteEmail, 'with role:', inviteRole);
-    setIsInviteDialogOpen(false);
-    setInviteEmail('');
-    setInviteRole('');
+interface Group {
+  id: string;
+  name: string;
+}
+
+function UsersPage() {
+  const navigate = useNavigate();
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [currentOrganizationId, setCurrentOrganizationId] = useState<string | null>(null);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const usersListRef = useRef<UsersListTabRef | null>(null);
+
+  const handleUserSelect = (user: { id: string }) => {
+    navigate({ to: '/users/$userId', params: { userId: user.id } });
+  };
+
+  const fetchOrganization = useCallback(async () => {
+    try {
+      const response = await apiClient.get<{
+        organizations: Organization[];
+        currentOrganizationId: string | null;
+      }>('/auth/organizations');
+      setCurrentOrganizationId(response.currentOrganizationId);
+    } catch (err) {
+      console.error('Failed to fetch organization:', err);
+    }
+  }, []);
+
+  const fetchGroups = useCallback(async () => {
+    if (!currentOrganizationId) return;
+    try {
+      const response = await apiClient.get<{ data: Group[] }>(
+        `/organizations/${currentOrganizationId}/groups`
+      );
+      setGroups(response.data || []);
+    } catch (err) {
+      console.error('Failed to fetch groups:', err);
+      setGroups([]);
+    }
+  }, [currentOrganizationId]);
+
+  useEffect(() => {
+    fetchOrganization();
+  }, [fetchOrganization]);
+
+  useEffect(() => {
+    if (currentOrganizationId) {
+      fetchGroups();
+    }
+  }, [currentOrganizationId, fetchGroups]);
+
+  const handleUserCreated = () => {
+    usersListRef.current?.refresh();
   };
 
   return (
@@ -54,63 +86,22 @@ function UsersPage() {
             Manage users, groups, and roles
           </p>
         </div>
-        <Dialog open={isInviteDialogOpen} onOpenChange={setIsInviteDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Invite User
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Invite User</DialogTitle>
-              <DialogDescription>
-                Send an invitation email to add a new user to the organization.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="user@example.com"
-                  value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="role">Role</Label>
-                <Select value={inviteRole} onValueChange={setInviteRole}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="member">Member</SelectItem>
-                    <SelectItem value="viewer">Viewer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsInviteDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleInviteUser}
-                disabled={!inviteEmail || !inviteRole}
-              >
-                <Mail className="mr-2 h-4 w-4" />
-                Send Invite
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => setIsCreateDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Create User
+        </Button>
       </div>
+
+      {/* Create User Wizard */}
+      {currentOrganizationId && (
+        <CreateUserWizard
+          open={isCreateDialogOpen}
+          onOpenChange={setIsCreateDialogOpen}
+          onUserCreated={handleUserCreated}
+          organizationId={currentOrganizationId}
+          groups={groups}
+        />
+      )}
 
       <Tabs defaultValue="users" className="space-y-4">
         <TabsList>
@@ -129,7 +120,7 @@ function UsersPage() {
         </TabsList>
 
         <TabsContent value="users">
-          <UsersListTab />
+          <UsersListTab ref={usersListRef} onUserSelect={handleUserSelect} />
         </TabsContent>
 
         <TabsContent value="groups">

@@ -1,8 +1,7 @@
 import { createFileRoute, useSearch, useNavigate } from '@tanstack/react-router';
 import { Shield, Mail, Bell } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { GeneralSettingsTab, MailServerTab } from '@/components/settings';
+import { GeneralSettingsTab, MailServerTab, NotificationSettingsTab } from '@/components/settings';
 
 type SettingsTab = 'general' | 'mail' | 'notifications';
 
@@ -60,22 +59,7 @@ function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="notifications" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5" />
-                Notification Settings
-              </CardTitle>
-              <CardDescription>
-                Configure email notifications and alerts.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Notification settings coming soon.
-              </p>
-            </CardContent>
-          </Card>
+          <NotificationSettingsTab />
         </TabsContent>
       </Tabs>
     </div>

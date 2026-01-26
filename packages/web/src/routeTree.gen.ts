@@ -20,6 +20,7 @@ import { Route as BrandingRouteImport } from './routes/branding'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrganizationsIndexRouteImport } from './routes/organizations/index'
+import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
 import { Route as OrganizationsOrgIdRouteImport } from './routes/organizations/$orgId'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
@@ -78,6 +79,11 @@ const OrganizationsIndexRoute = OrganizationsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => OrganizationsRoute,
 } as any)
+const UsersUserIdRoute = UsersUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => UsersRoute,
+} as any)
 const OrganizationsOrgIdRoute = OrganizationsOrgIdRouteImport.update({
   id: '/$orgId',
   path: '/$orgId',
@@ -99,9 +105,10 @@ export interface FileRoutesByFullPath {
   '/roles': typeof RolesRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
-  '/users': typeof UsersRoute
+  '/users': typeof UsersRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/organizations/': typeof OrganizationsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -113,9 +120,10 @@ export interface FileRoutesByTo {
   '/roles': typeof RolesRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
-  '/users': typeof UsersRoute
+  '/users': typeof UsersRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/organizations': typeof OrganizationsIndexRoute
 }
 export interface FileRoutesById {
@@ -129,9 +137,10 @@ export interface FileRoutesById {
   '/roles': typeof RolesRoute
   '/security': typeof SecurityRoute
   '/settings': typeof SettingsRoute
-  '/users': typeof UsersRoute
+  '/users': typeof UsersRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/organizations/$orgId': typeof OrganizationsOrgIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/organizations/': typeof OrganizationsIndexRoute
 }
 export interface FileRouteTypes {
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/users/$userId'
     | '/organizations/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/users/$userId'
     | '/organizations'
   id:
     | '__root__'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/auth/callback'
     | '/organizations/$orgId'
+    | '/users/$userId'
     | '/organizations/'
   fileRoutesById: FileRoutesById
 }
@@ -191,7 +203,7 @@ export interface RootRouteChildren {
   RolesRoute: typeof RolesRoute
   SecurityRoute: typeof SecurityRoute
   SettingsRoute: typeof SettingsRoute
-  UsersRoute: typeof UsersRoute
+  UsersRoute: typeof UsersRouteWithChildren
   AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
@@ -274,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationsIndexRouteImport
       parentRoute: typeof OrganizationsRoute
     }
+    '/users/$userId': {
+      id: '/users/$userId'
+      path: '/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof UsersUserIdRouteImport
+      parentRoute: typeof UsersRoute
+    }
     '/organizations/$orgId': {
       id: '/organizations/$orgId'
       path: '/$orgId'
@@ -305,6 +324,16 @@ const OrganizationsRouteWithChildren = OrganizationsRoute._addFileChildren(
   OrganizationsRouteChildren,
 )
 
+interface UsersRouteChildren {
+  UsersUserIdRoute: typeof UsersUserIdRoute
+}
+
+const UsersRouteChildren: UsersRouteChildren = {
+  UsersUserIdRoute: UsersUserIdRoute,
+}
+
+const UsersRouteWithChildren = UsersRoute._addFileChildren(UsersRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ActivityRoute: ActivityRoute,
@@ -315,7 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   RolesRoute: RolesRoute,
   SecurityRoute: SecurityRoute,
   SettingsRoute: SettingsRoute,
-  UsersRoute: UsersRoute,
+  UsersRoute: UsersRouteWithChildren,
   AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport

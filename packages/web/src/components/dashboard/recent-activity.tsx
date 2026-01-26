@@ -3,8 +3,10 @@
  * Displays recent audit log entries from the backend
  */
 
-import { Activity, Loader2, User, Building2, Shield, Database } from 'lucide-react';
+import { useState } from 'react';
+import { Activity, Loader2, User, Building2, Shield, Database, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export interface ActivityItem {
@@ -22,6 +24,7 @@ interface RecentActivityProps {
   data: ActivityItem[];
   isLoading?: boolean;
   className?: string;
+  itemsPerPage?: number;
 }
 
 function getCategoryIcon(category: string) {
@@ -66,18 +69,60 @@ export function RecentActivity({
   data,
   isLoading,
   className,
+  itemsPerPage = 5,
 }: RecentActivityProps) {
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const startIndex = currentPage * itemsPerPage;
+  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1));
+  };
+
   return (
-    <Card className={cn('h-full', className)}>
-      <CardHeader className="p-3 pb-0">
-        <div className="flex items-center gap-2">
-          <Activity className="h-3 w-3 text-muted-foreground" />
-          <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            Recent Activity
-          </CardTitle>
+    <Card className={cn('h-full flex flex-col', className)}>
+      <CardHeader className="p-3 pb-0 flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Activity className="h-3 w-3 text-muted-foreground" />
+            <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Recent Activity
+            </CardTitle>
+          </div>
+          {!isLoading && data.length > itemsPerPage && (
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={handlePrevPage}
+                disabled={currentPage === 0}
+              >
+                <ChevronLeft className="h-3 w-3" />
+              </Button>
+              <span className="text-[10px] text-muted-foreground min-w-[40px] text-center">
+                {currentPage + 1} / {totalPages}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={handleNextPage}
+                disabled={currentPage >= totalPages - 1}
+              >
+                <ChevronRight className="h-3 w-3" />
+              </Button>
+            </div>
+          )}
         </div>
       </CardHeader>
-      <CardContent className="p-3 pt-2">
+      <CardContent className="p-3 pt-2 flex-1 overflow-hidden">
         {isLoading ? (
           <div className="h-full w-full flex items-center justify-center py-8">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -89,7 +134,7 @@ export function RecentActivity({
           </div>
         ) : (
           <div className="space-y-2">
-            {data.map((item) => (
+            {paginatedData.map((item) => (
               <div
                 key={item.id}
                 className="flex items-start gap-2 py-1.5 border-b border-border/50 last:border-0"

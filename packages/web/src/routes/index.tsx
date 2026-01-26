@@ -73,7 +73,7 @@ function DashboardPage() {
   }, [fetchSystemLoad]);
 
   return (
-    <div className="flex flex-col gap-4 h-full overflow-hidden">
+    <div className="flex flex-col gap-4 h-full overflow-auto">
       {/* Top Row: Key Metrics + Platform Info */}
       <div
         className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"
@@ -117,30 +117,30 @@ function DashboardPage() {
 
       {/* Middle Row: Recent Activity + System Metrics */}
       <div
-        className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[260px]"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[260px] flex-shrink-0"
         data-tour-id="dashboard-system-health"
       >
         {/* Recent Activity */}
-        <div className="lg:col-span-2 h-full">
-          <RecentActivity data={recentActivity} isLoading={isLoading} />
+        <div className="lg:col-span-2 min-h-[260px]">
+          <RecentActivity data={recentActivity} isLoading={isLoading} className="h-full" />
         </div>
 
         {/* System Metrics (Prometheus) */}
-        <div className="h-full">
+        <div className="min-h-[260px]">
           <SystemMetricsCard data={systemMetrics} isLoading={isLoading} />
         </div>
       </div>
 
       {/* Bottom Row: System Load Chart + Quick Access */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[260px]">
-        <div className="lg:col-span-2 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[260px] flex-shrink-0">
+        <div className="lg:col-span-2 min-h-[260px]">
           <SystemLoadChart
             data={systemLoad}
             isLoading={isLoading}
             onRangeChange={handleRangeChange}
           />
         </div>
-        <div className="h-full" data-tour-id="dashboard-quick-links">
+        <div className="min-h-[260px]" data-tour-id="dashboard-quick-links">
           <QuickLinks />
         </div>
       </div>
