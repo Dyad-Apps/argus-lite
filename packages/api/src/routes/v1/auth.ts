@@ -428,4 +428,56 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       };
     }
   );
+
+  // GET /auth/organizations - Get current user's organizations
+  app.withTypeProvider<ZodTypeProvider>().get(
+    '/organizations',
+    {
+      preHandler: app.authenticate,
+      schema: {
+        response: {
+          200: z.object({
+            organizations: z.array(
+              z.object({
+                id: z.string().uuid(),
+                name: z.string(),
+                slug: z.string(),
+                role: z.enum(['owner', 'admin', 'member', 'viewer']),
+                isPrimary: z.boolean(),
+              })
+            ),
+            currentOrganizationId: z.string().uuid().nullable(),
+          }),
+          401: z.object({
+            success: z.literal(false),
+            error: z.object({
+              code: z.string(),
+              message: z.string(),
+              timestamp: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    async (request) => {
+      const userId = createUserId(request.user!.id);
+
+      // Get user's organizations
+      const memberships = await userOrgRepo.getUserOrganizations(userId);
+
+      // Find the primary organization
+      const primaryOrg = memberships.find((m) => m.isPrimary);
+
+      return {
+        organizations: memberships.map((m) => ({
+          id: m.organizationId,
+          name: m.organization.name,
+          slug: m.organization.slug,
+          role: m.role,
+          isPrimary: m.isPrimary,
+        })),
+        currentOrganizationId: primaryOrg?.organizationId ?? memberships[0]?.organizationId ?? null,
+      };
+    }
+  );
 }

@@ -237,7 +237,7 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // GET /admin/impersonate/sessions - Get all active sessions (admin only)
+  // GET /admin/impersonate/sessions - Get all active sessions (super admin only)
   app.withTypeProvider<ZodTypeProvider>().get(
     '/admin/impersonate/sessions',
     {
@@ -253,9 +253,9 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
       },
     },
     async (request) => {
-      // Only Super Admins can view all sessions
-      const canImpersonate = await impersonationService.canImpersonate(request.user!.id);
-      if (!canImpersonate) {
+      // Only Super Admins can view all sessions (not org_admins)
+      const isSuperAdmin = await impersonationService.isSuperAdmin(request.user!.id);
+      if (!isSuperAdmin) {
         throw Errors.forbidden('Only Super Admins can view all impersonation sessions');
       }
 
@@ -283,7 +283,7 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // POST /admin/impersonate/sessions/:id/revoke - Revoke a session (admin only)
+  // POST /admin/impersonate/sessions/:id/revoke - Revoke a session (super admin only)
   app.withTypeProvider<ZodTypeProvider>().post(
     '/admin/impersonate/sessions/:id/revoke',
     {
@@ -305,9 +305,9 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
     async (request) => {
       const { id } = request.params;
 
-      // Only Super Admins can revoke sessions
-      const canImpersonate = await impersonationService.canImpersonate(request.user!.id);
-      if (!canImpersonate) {
+      // Only Super Admins can revoke sessions (not org_admins)
+      const isSuperAdmin = await impersonationService.isSuperAdmin(request.user!.id);
+      if (!isSuperAdmin) {
         throw Errors.forbidden('Only Super Admins can revoke impersonation sessions');
       }
 

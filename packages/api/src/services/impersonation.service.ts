@@ -7,6 +7,7 @@
 
 import { getImpersonationRepository } from '../repositories/index.js';
 import { getUserRepository, getUserOrganizationRepository, getRoleRepository } from '../repositories/index.js';
+import { systemAdminRepository } from '../repositories/system-admin.repository.js';
 import { auditService } from './audit.service.js';
 import { signAccessToken } from '../utils/index.js';
 import type { UserId, OrganizationId } from '@argus/shared';
@@ -62,11 +63,36 @@ export interface ImpersonationStatus {
 class ImpersonationService {
   /**
    * Checks if a user can impersonate others
-   * Only Super Admins can impersonate
+   * Super Admins and Org Admins can impersonate (org admins only within their org)
    */
   async canImpersonate(userId: UserId): Promise<boolean> {
+    const role = await systemAdminRepository.getRole(userId);
+    return role === 'super_admin' || role === 'org_admin';
+  }
+
+  /**
+   * Checks if a user is a super admin (full platform access)
+   */
+  async isSuperAdmin(userId: UserId): Promise<boolean> {
+    return systemAdminRepository.isSuperAdmin(userId);
+  }
+
+  /**
+   * Checks if a user is an org admin
+   */
+  async isOrgAdmin(userId: UserId): Promise<boolean> {
+    return systemAdminRepository.isOrgAdmin(userId);
+  }
+
+  /**
+   * Gets the organizations where the user is an admin or owner
+   */
+  async getAdminOrganizations(userId: UserId): Promise<OrganizationId[]> {
     const memberRepo = getUserOrganizationRepository();
-    return memberRepo.isSuperAdmin(userId);
+    const memberships = await memberRepo.getUserOrganizations(userId);
+    return memberships
+      .filter((m) => m.role === 'admin' || m.role === 'owner')
+      .map((m) => m.organizationId as OrganizationId);
   }
 
   /**
@@ -74,9 +100,18 @@ class ImpersonationService {
    * Cannot impersonate other Super Admins
    */
   async canBeImpersonated(targetUserId: UserId): Promise<boolean> {
-    const memberRepo = getUserOrganizationRepository();
-    const isSuperAdmin = await memberRepo.isSuperAdmin(targetUserId);
+    const isSuperAdmin = await systemAdminRepository.isSuperAdmin(targetUserId);
     return !isSuperAdmin;
+  }
+
+  /**
+   * Checks if an org_admin can impersonate a specific target
+   * Org admins cannot impersonate other org_admins or super_admins
+   */
+  async canOrgAdminImpersonate(targetUserId: UserId): Promise<boolean> {
+    const role = await systemAdminRepository.getRole(targetUserId);
+    // Org admins cannot impersonate super_admins or other org_admins
+    return role !== 'super_admin' && role !== 'org_admin';
   }
 
   /**
@@ -85,6 +120,7 @@ class ImpersonationService {
   async startImpersonation(options: StartImpersonationOptions): Promise<ImpersonationResult> {
     const impersonationRepo = getImpersonationRepository();
     const userRepo = getUserRepository();
+    const memberRepo = getUserOrganizationRepository();
 
     // Verify impersonator can impersonate
     const canImpersonate = await this.canImpersonate(options.impersonatorId);
@@ -102,6 +138,32 @@ class ImpersonationService {
     const canBeImpersonated = await this.canBeImpersonated(options.targetUserId);
     if (!canBeImpersonated) {
       throw new Error('Cannot impersonate Super Admin users');
+    }
+
+    // Check org_admin restrictions - they can only impersonate within their organizations
+    const isSuperAdmin = await this.isSuperAdmin(options.impersonatorId);
+    if (!isSuperAdmin) {
+      // Must be org_admin - they cannot impersonate other system admins
+      const canOrgAdminImpersonate = await this.canOrgAdminImpersonate(options.targetUserId);
+      if (!canOrgAdminImpersonate) {
+        throw new Error('Organization admins cannot impersonate other system administrators');
+      }
+
+      // Verify target is in one of their organizations
+      const adminOrgs = await this.getAdminOrganizations(options.impersonatorId);
+      const targetMemberships = await memberRepo.getUserOrganizations(options.targetUserId);
+      const targetOrgIds = targetMemberships.map((m) => m.organizationId);
+
+      // Check if there's any overlap between admin's orgs and target's orgs
+      const hasAccess = adminOrgs.some((orgId) => targetOrgIds.includes(orgId));
+      if (!hasAccess) {
+        throw new Error('You can only impersonate users within your organization');
+      }
+
+      // If organizationId is specified, verify it's one of the admin's orgs
+      if (options.organizationId && !adminOrgs.includes(options.organizationId)) {
+        throw new Error('You do not have admin access to this organization');
+      }
     }
 
     // Check if impersonator already has an active session

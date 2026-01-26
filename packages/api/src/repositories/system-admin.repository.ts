@@ -18,23 +18,27 @@ export interface SystemAdminWithUser extends SystemAdmin {
   };
 }
 
+export type SystemRole = 'super_admin' | 'org_admin' | 'support' | 'billing';
+
 export interface SystemAdminRepository {
   getByUserId(userId: UserId): Promise<SystemAdmin | undefined>;
   getAll(): Promise<SystemAdminWithUser[]>;
   getActive(): Promise<SystemAdminWithUser[]>;
   create(
     userId: UserId,
-    role: 'super_admin' | 'support',
+    role: SystemRole,
     createdBy?: UserId
   ): Promise<SystemAdmin>;
   updateRole(
     userId: UserId,
-    role: 'super_admin' | 'support'
+    role: SystemRole
   ): Promise<SystemAdmin | undefined>;
   deactivate(userId: UserId): Promise<SystemAdmin | undefined>;
   activate(userId: UserId): Promise<SystemAdmin | undefined>;
   delete(userId: UserId): Promise<boolean>;
   isSuperAdmin(userId: UserId): Promise<boolean>;
+  isOrgAdmin(userId: UserId): Promise<boolean>;
+  getRole(userId: UserId): Promise<SystemRole | null>;
 }
 
 export function createSystemAdminRepository(): SystemAdminRepository {
@@ -97,7 +101,7 @@ export function createSystemAdminRepository(): SystemAdminRepository {
 
     async create(
       userId: UserId,
-      role: 'super_admin' | 'support',
+      role: SystemRole,
       createdBy?: UserId
     ): Promise<SystemAdmin> {
       const result = await db
@@ -113,7 +117,7 @@ export function createSystemAdminRepository(): SystemAdminRepository {
 
     async updateRole(
       userId: UserId,
-      role: 'super_admin' | 'support'
+      role: SystemRole
     ): Promise<SystemAdmin | undefined> {
       const result = await db
         .update(systemAdmins)
@@ -152,6 +156,17 @@ export function createSystemAdminRepository(): SystemAdminRepository {
     async isSuperAdmin(userId: UserId): Promise<boolean> {
       const admin = await this.getByUserId(userId);
       return admin?.role === 'super_admin' && admin?.isActive === true;
+    },
+
+    async isOrgAdmin(userId: UserId): Promise<boolean> {
+      const admin = await this.getByUserId(userId);
+      return admin?.role === 'org_admin' && admin?.isActive === true;
+    },
+
+    async getRole(userId: UserId): Promise<SystemRole | null> {
+      const admin = await this.getByUserId(userId);
+      if (!admin || !admin.isActive) return null;
+      return admin.role as SystemRole;
     },
   };
 }

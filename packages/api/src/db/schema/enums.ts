@@ -119,7 +119,8 @@ export const loginBackgroundTypeEnum = pgEnum('login_background_type', [
  * System admin roles (platform-level).
  */
 export const systemRoleEnum = pgEnum('system_role', [
-  'super_admin',  // Full platform access
+  'super_admin',  // Full platform access (root user only)
+  'org_admin',    // Organization admin - manage org branding, domain, cross-org settings
   'support',      // Read-only + impersonation
   'billing',      // Billing management only
 ]);

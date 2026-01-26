@@ -73,6 +73,9 @@ async function requireSuperAdmin(userId: UserId): Promise<void> {
 }
 
 export const platformSettingsRoutes: FastifyPluginAsyncZod = async (fastify) => {
+  // Require authentication for all platform settings routes
+  fastify.addHook('preHandler', fastify.authenticate);
+
   // GET /platform/settings - List all platform settings
   fastify.get(
     '/platform/settings',
