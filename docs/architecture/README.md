@@ -1,8 +1,8 @@
 # Argus IQ - Implementation Architecture
 
-> **Version:** 1.0.0
+> **Version:** 2.0.0
 > **Last Updated:** January 2026
-> **Status:** Sprint 1 Complete
+> **Status:** Phase 6 Complete
 
 ## Overview
 
@@ -395,6 +395,36 @@ Covers continuous integration, deployment pipelines, and infrastructure automati
 - Environment promotion (dev → staging → production)
 - Automated rollback strategies
 
+### [Phase 4: RBAC System UI](./phase-4-rbac-ui.md)
+Covers the user interface implementation for organization management, user/group management, and role management.
+
+**Key Components:**
+- **[NEW]** Organization hierarchy tree view
+- **[NEW]** Organization details with tabbed interface
+- **[NEW]** User management with groups and roles tabs
+- **[NEW]** Role permission matrix editor
+- **[NEW]** Create role/group/user wizards
+
+### [Phase 5: Security Features](./phase-5-security-features.md)
+Covers SSO connection management, user impersonation, and two-factor authentication.
+
+**Key Components:**
+- **[NEW]** SSO connection CRUD management
+- **[NEW]** User impersonation with JWT token swap
+- **[NEW]** Impersonation sessions with audit logging
+- **[NEW]** Security page with SSO, impersonation, and 2FA tabs
+- **[NEW]** Impersonation banner and context
+
+### [Phase 6: Platform Settings & Branding](./phase-6-platform-settings.md)
+Covers platform-wide settings and white-labeling/branding customization.
+
+**Key Components:**
+- **[NEW]** Platform settings key-value store
+- **[NEW]** System admin roles (super_admin, support, billing)
+- **[NEW]** Settings page with general/mail server/notifications tabs
+- **[NEW]** White-labeling branding editor
+- **[NEW]** Secret setting handling with masking
+
 ---
 
 ## Component Overview
@@ -502,6 +532,22 @@ This section documents significant changes made during implementation that devia
 | **PostgreSQL Port Change** | Infrastructure | Changed from 5432 to 5433 | Avoid conflicts with existing local PostgreSQL |
 | **Migration Safety Workflow** | CI/CD | Added workflow to block destructive migrations | Prevent production data loss |
 
+### Sprint 2 Changes (Phases 4-6)
+
+| Change | Category | Description | Rationale |
+|--------|----------|-------------|-----------|
+| **RBAC UI Components** | Frontend | Organization hierarchy tree view, tabbed details pages | Visual organization management |
+| **User Management Tabs** | Frontend | Users page with Users/Groups/Roles tabs | Unified user/group/role management |
+| **Role Permission Matrix** | Frontend | Visual permission editor for custom roles | Intuitive permission configuration |
+| **SSO Connections** | Security | CRUD API for SSO provider management | Organization-level SSO configuration |
+| **Impersonation System** | Security | JWT-based user impersonation with sessions | Support and debugging capability |
+| **Impersonation Banner** | Frontend | Prominent banner during impersonation | Clear visual indicator of impersonation |
+| **Platform Settings** | Backend | Key-value store for system configuration | Centralized platform configuration |
+| **System Admin Roles** | Security | super_admin, support, billing roles | Fine-grained admin access control |
+| **Secret Settings** | Security | Encrypted storage, masked API responses | Protect sensitive configuration |
+| **White-Labeling** | Frontend | Branding editor with logo, colors, login customization | Platform customization capability |
+| **Settings Tabs** | Frontend | General/Mail Server/Notifications tabs | Organized settings management |
+
 ### Detailed Change: SSO Support
 
 **Original Scope:** Basic JWT authentication with email/password
@@ -537,13 +583,65 @@ graph TB
 - New SSO routes (`/api/v1/sso/*`)
 - Identity management endpoints
 
+### Detailed Change: User Impersonation
+
+**Purpose:** Allow system administrators to access the platform as another user for support and debugging purposes.
+
+```mermaid
+sequenceDiagram
+    participant Admin
+    participant API
+    participant ImpersonationService
+    participant DB
+
+    Admin->>API: POST /impersonation/start
+    API->>DB: Verify admin is super_admin
+    API->>ImpersonationService: Create session
+    ImpersonationService->>DB: Store session
+    ImpersonationService-->>API: Impersonation JWT
+    API-->>Admin: Token with impersonator claims
+
+    Note over Admin: Works as target user
+
+    Admin->>API: POST /impersonation/end
+    API->>DB: Close session
+    API-->>Admin: Original admin token
+```
+
+**Impact:**
+- New `impersonation_sessions` database table
+- New impersonation service with JWT token management
+- New impersonation routes (`/api/v1/impersonation/*`)
+- ImpersonationContext for frontend state management
+- ImpersonationBanner component
+
+### Detailed Change: Platform Settings
+
+**Purpose:** Centralized key-value store for platform-wide configuration managed by system admins.
+
+**Features:**
+- Secret settings with encrypted storage and masked API responses
+- System admin roles (super_admin, support, billing) with different access levels
+- Platform branding configuration for white-labeling
+- Settings organized by category (security, rate limits, features, email)
+
+**Impact:**
+- New `platform_settings`, `system_admins`, `platform_branding` database tables
+- Settings and branding API routes
+- Settings page with tabbed UI (General, Mail Server, Notifications)
+- Branding editor with live preview
+
 ---
 
 ## Quick Links
 
 - [Phase 1: Authentication & Multi-Organization](./phase-1-auth-multi-org.md)
+- [Phase 1b: RBAC, Groups & Tenant Profiles](./phase-1b-rbac-tenant-profiles.md)
 - [Phase 2: Database & Row-Level Security](./phase-2-database-rls.md)
 - [Phase 3: CI/CD & Deployment](./phase-3-cicd-deployment.md)
+- [Phase 4: RBAC System UI](./phase-4-rbac-ui.md)
+- [Phase 5: Security Features](./phase-5-security-features.md)
+- [Phase 6: Platform Settings & Branding](./phase-6-platform-settings.md)
 
 ---
 
