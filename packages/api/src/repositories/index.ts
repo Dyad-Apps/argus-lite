@@ -27,3 +27,4 @@ export * from './asset.repository.js';
 export * from './person.repository.js';
 export * from './activity.repository.js';
 export * from './space.repository.js';
+export * from './type-definition.repository.js';

@@ -19,3 +19,4 @@ export * from './asset.schema.js';
 export * from './space.schema.js';
 export * from './person.schema.js';
 export * from './activity.schema.js';
+export * from './type-management.schema.js';

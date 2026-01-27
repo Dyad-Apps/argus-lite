@@ -26,6 +26,7 @@ import { assetRoutes } from './assets.js';
 import { spaceRoutes } from './spaces.js';
 import { personRoutes } from './persons.js';
 import { activityRoutes } from './activities.js';
+import { typeManagementRoutes } from './types.js';
 
 export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Version info endpoint
@@ -94,4 +95,5 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   await app.register(spaceRoutes, { prefix: '/spaces' });
   await app.register(personRoutes, { prefix: '/persons' });
   await app.register(activityRoutes, { prefix: '/activities' });
+  await app.register(typeManagementRoutes, { prefix: '/types' });
 }
