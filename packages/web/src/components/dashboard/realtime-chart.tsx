@@ -23,36 +23,42 @@ export const RealtimeChart = ({ data }: RealtimeChartProps) => {
                     <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wide">System Load (1h)</CardTitle>
                 </div>
             </CardHeader>
-            <CardContent className="p-2 h-[calc(100%-32px)]">
-                <div className="h-full w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                            <XAxis
-                                dataKey="time"
-                                tick={{ fontSize: 9, fill: '#9CA3AF' }}
-                                axisLine={false}
-                                tickLine={false}
-                                interval="preserveStartEnd"
-                                minTickGap={30}
-                                height={20}
-                            />
-                            <YAxis
-                                tick={{ fontSize: 9, fill: '#9CA3AF' }}
-                                axisLine={false}
-                                tickLine={false}
-                                domain={[0, 100]}
-                                width={30}
-                            />
-                            <Tooltip
-                                contentStyle={{ borderRadius: '4px', border: '1px solid #e5e7eb', fontSize: '10px', padding: '4px' }}
-                                itemStyle={{ padding: 0 }}
-                                labelStyle={{ fontWeight: 'bold', marginBottom: '4px' }}
-                            />
-                            <Line type="monotone" dataKey="cpu" name="CPU %" stroke="#3B82F6" strokeWidth={1.5} dot={false} />
-                            <Line type="monotone" dataKey="ram" name="Memory %" stroke="#8B5CF6" strokeWidth={1.5} dot={false} />
-                        </LineChart>
-                    </ResponsiveContainer>
+            <CardContent className="p-2">
+                <div className="w-full h-[200px] min-w-0" style={{ minHeight: '200px' }}>
+                    {chartData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
+                            <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                                <XAxis
+                                    dataKey="time"
+                                    tick={{ fontSize: 9, fill: '#9CA3AF' }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    interval="preserveStartEnd"
+                                    minTickGap={30}
+                                    height={20}
+                                />
+                                <YAxis
+                                    tick={{ fontSize: 9, fill: '#9CA3AF' }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    domain={[0, 100]}
+                                    width={30}
+                                />
+                                <Tooltip
+                                    contentStyle={{ borderRadius: '4px', border: '1px solid #e5e7eb', fontSize: '10px', padding: '4px' }}
+                                    itemStyle={{ padding: 0 }}
+                                    labelStyle={{ fontWeight: 'bold', marginBottom: '4px' }}
+                                />
+                                <Line type="monotone" dataKey="cpu" name="CPU %" stroke="#3B82F6" strokeWidth={1.5} dot={false} />
+                                <Line type="monotone" dataKey="ram" name="Memory %" stroke="#8B5CF6" strokeWidth={1.5} dot={false} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+                            Loading chart data...
+                        </div>
+                    )}
                 </div>
             </CardContent>
         </Card>
