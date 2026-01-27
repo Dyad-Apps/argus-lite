@@ -14,7 +14,7 @@ import { sentryPlugin } from './plugins/sentry.js';
 import authPlugin from './plugins/auth.js';
 import requestContextPlugin from './plugins/request-context.js';
 import rateLimitPlugin from './plugins/rate-limit.js';
-import { rlsContextPlugin } from './middleware/index.js';
+import { rlsContextPlugin, subdomainResolverPlugin } from './middleware/index.js';
 import metricsPlugin from './plugins/metrics.js';
 
 export type App = FastifyInstance;
@@ -71,6 +71,18 @@ export async function buildApp(): Promise<App> {
 
   // Register request context plugin (sets up AsyncLocalStorage)
   await app.register(requestContextPlugin);
+
+  // Register subdomain resolver middleware (must run BEFORE auth for organization context)
+  // Only enabled if BASE_DOMAIN is configured
+  if (process.env.BASE_DOMAIN) {
+    await app.register(subdomainResolverPlugin, {
+      baseDomain: process.env.BASE_DOMAIN,
+      defaultSubdomain: process.env.DEFAULT_SUBDOMAIN || 'app',
+      ignoreSubdomains: process.env.IGNORE_SUBDOMAINS?.split(',') || ['www', 'api'],
+      excludeRoutes: ['/health', '/ready', '/metrics'],
+      requireOrganization: process.env.REQUIRE_ORGANIZATION !== 'false',
+    });
+  }
 
   // Register auth plugin (adds authenticate and optionalAuth decorators)
   await app.register(authPlugin);

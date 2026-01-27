@@ -43,6 +43,81 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
   const userRepo = getUserRepository();
   const brandingRepo = getBrandingRepository();
 
+  // ===========================================
+  // Public Routes (no authentication required)
+  // ===========================================
+
+  // GET /organizations/by-subdomain/:subdomain - Get organization by subdomain (public)
+  // Used by the login page to discover organization and fetch branding
+  app.withTypeProvider<ZodTypeProvider>().get(
+    '/by-subdomain/:subdomain',
+    {
+      schema: {
+        params: z.object({
+          subdomain: z.string().min(1).max(63),
+        }),
+        response: {
+          200: z.object({
+            id: z.string().uuid(),
+            name: z.string(),
+            subdomain: z.string(),
+            logoUrl: z.string().nullable(),
+            logoDarkUrl: z.string().nullable(),
+            faviconUrl: z.string().nullable(),
+            primaryColor: z.string().nullable(),
+            accentColor: z.string().nullable(),
+            loginBackgroundType: z.enum(['default', 'image', 'particles', 'solid']).nullable(),
+            loginBackgroundUrl: z.string().nullable(),
+            loginBackgroundColor: z.string().nullable(),
+            loginWelcomeText: z.string().nullable(),
+            loginSubtitle: z.string().nullable(),
+          }),
+          404: z.object({
+            success: z.literal(false),
+            error: z.object({
+              code: z.string(),
+              message: z.string(),
+              timestamp: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    async (request) => {
+      const { subdomain } = request.params;
+
+      // Find organization by subdomain
+      const org = await orgRepo.findBySubdomain(subdomain);
+
+      if (!org || !org.isActive) {
+        throw Errors.notFound('Organization not found');
+      }
+
+      // Get branding for login page customization
+      const branding = await brandingRepo.findByOrganizationId(createOrganizationId(org.id));
+
+      return {
+        id: org.id,
+        name: org.name,
+        subdomain: org.subdomain!,
+        logoUrl: branding?.logoUrl ?? null,
+        logoDarkUrl: branding?.logoDarkUrl ?? null,
+        faviconUrl: branding?.faviconUrl ?? null,
+        primaryColor: branding?.primaryColor ?? null,
+        accentColor: branding?.accentColor ?? null,
+        loginBackgroundType: branding?.loginBackgroundType ?? null,
+        loginBackgroundUrl: branding?.loginBackgroundUrl ?? null,
+        loginBackgroundColor: branding?.loginBackgroundColor ?? null,
+        loginWelcomeText: branding?.loginWelcomeText ?? null,
+        loginSubtitle: branding?.loginSubtitle ?? null,
+      };
+    }
+  );
+
+  // ===========================================
+  // Authenticated Routes (all routes below require authentication)
+  // ===========================================
+
   // All organization routes require authentication
   app.addHook('preHandler', app.authenticate);
 

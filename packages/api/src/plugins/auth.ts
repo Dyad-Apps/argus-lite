@@ -5,13 +5,19 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import fp from 'fastify-plugin';
-import { Errors, type UserId } from '@argus/shared';
-import { verifyAccessToken, type DecodedAccessToken } from '../utils/index.js';
+import { Errors, type UserId, type OrganizationId } from '@argus/shared';
+import { verifyAccessToken, type DecodedAccessToken, type OrganizationContext } from '../utils/index.js';
 
 /** Authenticated user data attached to request */
 export interface AuthUser {
   id: UserId;
   email: string;
+
+  /**
+   * Organization context from JWT (ADR-002)
+   * Provides tenant context for all authenticated requests
+   */
+  organizationContext?: OrganizationContext;
 }
 
 /** Extend FastifyRequest to include user */
@@ -54,10 +60,11 @@ async function authPlugin(app: FastifyInstance): Promise<void> {
         throw Errors.unauthorized('Invalid or expired access token');
       }
 
-      // Attach user to request
+      // Attach user to request with organization context
       request.user = {
         id: decoded.sub,
         email: decoded.email,
+        organizationContext: decoded.org,
       };
     }
   );
@@ -76,6 +83,7 @@ async function authPlugin(app: FastifyInstance): Promise<void> {
           request.user = {
             id: decoded.sub,
             email: decoded.email,
+            organizationContext: decoded.org,
           };
         }
       }

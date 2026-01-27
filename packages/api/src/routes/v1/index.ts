@@ -10,6 +10,7 @@ import { userRoutes } from './users.js';
 import { authRoutes } from './auth.js';
 import { ssoRoutes } from './sso.js';
 import { socialAuthRoutes } from './social-auth.js';
+import { tenantSwitchRoutes } from './tenant-switch.js';
 import { organizationRoutes } from './organizations.js';
 import { invitationRoutes } from './invitations.js';
 import { dashboardRoutes } from './dashboard.js';
@@ -44,6 +45,7 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Auth routes (email/password + social login)
   await app.register(authRoutes, { prefix: '/auth' });
   await app.register(socialAuthRoutes, { prefix: '/auth' });
+  await app.register(tenantSwitchRoutes, { prefix: '/auth' });
 
   // SSO routes (enterprise identity providers)
   await app.register(ssoRoutes, { prefix: '/sso' });

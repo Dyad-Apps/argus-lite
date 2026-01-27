@@ -25,7 +25,7 @@ import {
   verifyPassword,
   signAccessToken,
 } from '../../utils/index.js';
-import { createUserId } from '@argus/shared';
+import { createUserId, createOrganizationId } from '@argus/shared';
 
 export async function authRoutes(app: FastifyInstance): Promise<void> {
   const userRepo = getUserRepository();
@@ -59,11 +59,16 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     async (request, reply) => {
       const { email, password, firstName, lastName, organizationId } = request.body;
 
-      // For now, organizationId is required - in a full implementation,
-      // this would come from subdomain resolution or invitation context
-      if (!organizationId) {
-        throw Errors.badRequest('Organization context required for registration');
+      // Get organization context from subdomain resolution or explicit parameter
+      // ADR-002: Subdomain resolver middleware attaches rootOrganizationId to request
+      const targetOrgId = organizationId ?? request.rootOrganizationId;
+
+      if (!targetOrgId) {
+        throw Errors.badRequest('Organization context required for registration. Please access via organization subdomain or provide organizationId.');
       }
+
+      // TypeScript narrowing: targetOrgId is guaranteed to be string after the check above
+      const orgId: string = targetOrgId;
 
       // Check if email already exists in this organization
       // ADR-002: Email is unique per root organization
@@ -82,15 +87,15 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         passwordHash,
         firstName: firstName ?? null,
         lastName: lastName ?? null,
-        rootOrganizationId: organizationId,
-        primaryOrganizationId: organizationId,
+        rootOrganizationId: orgId,
+        primaryOrganizationId: orgId,
       });
 
       // Add user to organization as a member
       // This creates the user_organizations entry needed for membership checks
       await userOrgRepo.addMember({
         userId: user.id,
-        organizationId: organizationId,
+        organizationId: orgId,
         role: 'member',
         isPrimary: true,
       });
@@ -165,8 +170,22 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
       const userId = createUserId(user.id);
       await userRepo.updateLastLogin(userId);
 
-      // Generate tokens
-      const accessToken = signAccessToken(userId, user.email);
+      // Build organization context (ADR-002)
+      // Get all accessible organizations for the user
+      const userOrgs = await userOrgRepo.getUserOrganizations(userId);
+      const accessibleOrganizationIds = userOrgs.map((membership) =>
+        createOrganizationId(membership.organizationId)
+      );
+
+      // Create organization context for JWT
+      const organizationContext = {
+        rootOrganizationId: createOrganizationId(user.rootOrganizationId),
+        currentOrganizationId: createOrganizationId(user.primaryOrganizationId),
+        accessibleOrganizationIds,
+      };
+
+      // Generate tokens with organization context
+      const accessToken = signAccessToken(userId, user.email, organizationContext);
       const { token: refreshToken } = await refreshTokenRepo.create(userId, {
         userAgent: request.headers['user-agent'] ?? undefined,
         ipAddress: request.ip,
@@ -257,8 +276,20 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
         }
       );
 
-      // Generate new access token
-      const accessToken = signAccessToken(userId, user.email);
+      // Build organization context (ADR-002)
+      const userOrgs = await userOrgRepo.getUserOrganizations(userId);
+      const accessibleOrganizationIds = userOrgs.map((membership) =>
+        createOrganizationId(membership.organizationId)
+      );
+
+      const organizationContext = {
+        rootOrganizationId: createOrganizationId(user.rootOrganizationId),
+        currentOrganizationId: createOrganizationId(user.primaryOrganizationId),
+        accessibleOrganizationIds,
+      };
+
+      // Generate new access token with organization context
+      const accessToken = signAccessToken(userId, user.email, organizationContext);
 
       return {
         accessToken,

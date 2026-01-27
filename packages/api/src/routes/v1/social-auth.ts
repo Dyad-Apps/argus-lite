@@ -11,25 +11,26 @@ import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { randomBytes } from 'crypto';
-import { Errors, createUserId } from '@argus/shared';
-import { getUserRepository, getRefreshTokenRepository } from '../../repositories/index.js';
+import { Errors, createUserId, createOrganizationId } from '@argus/shared';
+import { getUserRepository, getRefreshTokenRepository, getUserOrganizationRepository, getOrganizationRepository } from '../../repositories/index.js';
 import { signAccessToken } from '../../utils/index.js';
 import { sql } from '../../db/index.js';
 
 // State storage for CSRF protection
-const stateStore = new Map<string, { returnUrl?: string; createdAt: number }>();
+// Enhanced to include organizationId for org-scoped SSO
+const stateStore = new Map<string, { returnUrl?: string; organizationId?: string; createdAt: number }>();
 
 function generateState(): string {
   return randomBytes(32).toString('hex');
 }
 
-function storeState(state: string, returnUrl?: string): void {
-  stateStore.set(state, { returnUrl, createdAt: Date.now() });
+function storeState(state: string, returnUrl?: string, organizationId?: string): void {
+  stateStore.set(state, { returnUrl, organizationId, createdAt: Date.now() });
   // Clean up after 10 minutes
   setTimeout(() => stateStore.delete(state), 10 * 60 * 1000);
 }
 
-function validateAndClearState(state: string): { returnUrl?: string } | null {
+function validateAndClearState(state: string): { returnUrl?: string; organizationId?: string } | null {
   const data = stateStore.get(state);
   if (!data) return null;
 
@@ -40,28 +41,42 @@ function validateAndClearState(state: string): { returnUrl?: string } | null {
   }
 
   stateStore.delete(state);
-  return { returnUrl: data.returnUrl };
+  return { returnUrl: data.returnUrl, organizationId: data.organizationId };
 }
 
 export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
   const userRepo = getUserRepository();
   const refreshTokenRepo = getRefreshTokenRepository();
+  const userOrgRepo = getUserOrganizationRepository();
+  const orgRepo = getOrganizationRepository();
 
   // ============================================================================
   // Google OAuth2
   // ============================================================================
 
   // GET /auth/google - Initiate Google OAuth
+  // Supports org-scoped SSO: pass orgId to use organization's SSO configuration
   app.withTypeProvider<ZodTypeProvider>().get(
     '/google',
     {
       schema: {
         querystring: z.object({
           returnUrl: z.string().optional(),
+          orgId: z.string().uuid().optional(), // Organization-scoped SSO
         }),
       },
     },
     async (request, reply) => {
+      const { orgId } = request.query;
+
+      // Validate organization if orgId provided
+      if (orgId) {
+        const org = await orgRepo.findById(createOrganizationId(orgId));
+        if (!org || !org.isActive) {
+          throw Errors.badRequest('Invalid or inactive organization');
+        }
+      }
+
       const clientId = process.env.GOOGLE_CLIENT_ID;
       if (!clientId) {
         throw Errors.badRequest('Google OAuth not configured. Set GOOGLE_CLIENT_ID in environment.');
@@ -69,7 +84,7 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
 
       const state = generateState();
       const { returnUrl } = request.query;
-      storeState(state, returnUrl);
+      storeState(state, returnUrl, orgId);
 
       const baseUrl = `${request.protocol}://${request.hostname}`;
       const callbackUrl = `${baseUrl}/api/v1/auth/google/callback`;
@@ -172,32 +187,47 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
           return reply.redirect('/login?error=No email returned from Google');
         }
 
+        // Determine target organization from state or default
+        const targetOrgId = stateData.organizationId || request.rootOrganizationId;
+
         // Find or create user
         let user = await userRepo.findByEmail(googleUser.email);
 
         if (!user) {
           // Auto-create user for social login
-          // Note: For production, you might want to require organization context
-          // or redirect to a registration flow
+          let orgId: string;
 
-          // Get default organization (first one, for now)
-          // In production, this should be handled differently
-          const defaultOrgResult = await sql`
-            SELECT id FROM organizations WHERE is_root = true LIMIT 1
-          `;
+          if (targetOrgId) {
+            // Use organization from state (org-scoped SSO)
+            orgId = targetOrgId;
+          } else {
+            // Fallback: Get first root organization
+            const defaultOrgResult = await sql`
+              SELECT id FROM organizations WHERE is_root = true LIMIT 1
+            `;
 
-          if (defaultOrgResult.length === 0) {
-            return reply.redirect('/login?error=No organization configured. Please contact admin.');
+            if (defaultOrgResult.length === 0) {
+              return reply.redirect('/login?error=No organization configured. Please contact admin.');
+            }
+
+            orgId = defaultOrgResult[0].id;
           }
 
-          const orgId = defaultOrgResult[0].id;
+          // Get organization details for validation
+          const targetOrg = await orgRepo.findById(createOrganizationId(orgId));
+          if (!targetOrg || !targetOrg.isActive) {
+            return reply.redirect('/login?error=Organization is not active');
+          }
+
+          // Use rootOrganizationId if this is a child org
+          const rootOrgId = targetOrg.rootOrganizationId ?? targetOrg.id;
 
           user = await userRepo.create({
             email: googleUser.email,
             passwordHash: null, // Social login users don't have passwords
             firstName: googleUser.given_name || null,
             lastName: googleUser.family_name || null,
-            rootOrganizationId: orgId,
+            rootOrganizationId: rootOrgId,
             primaryOrganizationId: orgId,
             emailVerifiedAt: googleUser.verified_email ? new Date() : null,
             avatarUrl: googleUser.picture || null,
@@ -211,9 +241,21 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
           `;
         }
 
-        // Generate tokens
+        // Build organization context for JWT (ADR-002)
         const userId = createUserId(user.id);
-        const accessToken = signAccessToken(userId, user.email);
+        const userOrgs = await userOrgRepo.getUserOrganizations(userId);
+        const accessibleOrganizationIds = userOrgs.map((membership) =>
+          createOrganizationId(membership.organizationId)
+        );
+
+        const organizationContext = {
+          rootOrganizationId: createOrganizationId(user.rootOrganizationId),
+          currentOrganizationId: createOrganizationId(user.primaryOrganizationId),
+          accessibleOrganizationIds,
+        };
+
+        // Generate tokens with organization context
+        const accessToken = signAccessToken(userId, user.email, organizationContext);
         const { token: refreshToken } = await refreshTokenRepo.create(userId, {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
@@ -237,16 +279,28 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
   // ============================================================================
 
   // GET /auth/github - Initiate GitHub OAuth
+  // Supports org-scoped SSO: pass orgId to use organization's SSO configuration
   app.withTypeProvider<ZodTypeProvider>().get(
     '/github',
     {
       schema: {
         querystring: z.object({
           returnUrl: z.string().optional(),
+          orgId: z.string().uuid().optional(), // Organization-scoped SSO
         }),
       },
     },
     async (request, reply) => {
+      const { orgId } = request.query;
+
+      // Validate organization if orgId provided
+      if (orgId) {
+        const org = await orgRepo.findById(createOrganizationId(orgId));
+        if (!org || !org.isActive) {
+          throw Errors.badRequest('Invalid or inactive organization');
+        }
+      }
+
       const clientId = process.env.GITHUB_CLIENT_ID;
       if (!clientId) {
         throw Errors.badRequest('GitHub OAuth not configured. Set GITHUB_CLIENT_ID in environment.');
@@ -254,7 +308,7 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
 
       const state = generateState();
       const { returnUrl } = request.query;
-      storeState(state, returnUrl);
+      storeState(state, returnUrl, orgId);
 
       const baseUrl = `${request.protocol}://${request.hostname}`;
       const callbackUrl = `${baseUrl}/api/v1/auth/github/callback`;
@@ -365,20 +419,40 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
           return reply.redirect('/login?error=Could not get email from GitHub');
         }
 
+        // Determine target organization from state or default
+        const targetOrgId = stateData.organizationId || request.rootOrganizationId;
+
         // Find or create user
         let user = await userRepo.findByEmail(email);
 
         if (!user) {
-          // Get default organization
-          const defaultOrgResult = await sql`
-            SELECT id FROM organizations WHERE is_root = true LIMIT 1
-          `;
+          // Auto-create user for social login
+          let orgId: string;
 
-          if (defaultOrgResult.length === 0) {
-            return reply.redirect('/login?error=No organization configured. Please contact admin.');
+          if (targetOrgId) {
+            // Use organization from state (org-scoped SSO)
+            orgId = targetOrgId;
+          } else {
+            // Fallback: Get first root organization
+            const defaultOrgResult = await sql`
+              SELECT id FROM organizations WHERE is_root = true LIMIT 1
+            `;
+
+            if (defaultOrgResult.length === 0) {
+              return reply.redirect('/login?error=No organization configured. Please contact admin.');
+            }
+
+            orgId = defaultOrgResult[0].id;
           }
 
-          const orgId = defaultOrgResult[0].id;
+          // Get organization details for validation
+          const targetOrg = await orgRepo.findById(createOrganizationId(orgId));
+          if (!targetOrg || !targetOrg.isActive) {
+            return reply.redirect('/login?error=Organization is not active');
+          }
+
+          // Use rootOrganizationId if this is a child org
+          const rootOrgId = targetOrg.rootOrganizationId ?? targetOrg.id;
 
           const nameParts = githubUser.name?.split(' ') || [];
           user = await userRepo.create({
@@ -386,7 +460,7 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
             passwordHash: null,
             firstName: nameParts[0] || githubUser.login,
             lastName: nameParts.slice(1).join(' ') || null,
-            rootOrganizationId: orgId,
+            rootOrganizationId: rootOrgId,
             primaryOrganizationId: orgId,
             emailVerifiedAt: new Date(),
             avatarUrl: githubUser.avatar_url || null,
@@ -399,9 +473,21 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
           `;
         }
 
-        // Generate tokens
+        // Build organization context for JWT (ADR-002)
         const userId = createUserId(user.id);
-        const accessToken = signAccessToken(userId, user.email);
+        const userOrgs = await userOrgRepo.getUserOrganizations(userId);
+        const accessibleOrganizationIds = userOrgs.map((membership) =>
+          createOrganizationId(membership.organizationId)
+        );
+
+        const organizationContext = {
+          rootOrganizationId: createOrganizationId(user.rootOrganizationId),
+          currentOrganizationId: createOrganizationId(user.primaryOrganizationId),
+          accessibleOrganizationIds,
+        };
+
+        // Generate tokens with organization context
+        const accessToken = signAccessToken(userId, user.email, organizationContext);
         const { token: refreshToken } = await refreshTokenRepo.create(userId, {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
@@ -421,10 +507,14 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
   );
 
   // GET /auth/providers - List available social login providers
+  // Supports org-scoped providers: pass orgId to get organization's configured SSO
   app.withTypeProvider<ZodTypeProvider>().get(
     '/providers',
     {
       schema: {
+        querystring: z.object({
+          orgId: z.string().uuid().optional(), // Get org-specific providers
+        }),
         response: {
           200: z.object({
             providers: z.array(z.object({
@@ -436,23 +526,63 @@ export async function socialAuthRoutes(app: FastifyInstance): Promise<void> {
         },
       },
     },
-    async () => {
+    async (request) => {
+      const { orgId } = request.query;
       const providers = [];
 
-      if (process.env.GOOGLE_CLIENT_ID) {
-        providers.push({
-          type: 'google',
-          name: 'Google',
-          enabled: true,
-        });
-      }
+      // If orgId provided, return organization-specific SSO connections
+      if (orgId) {
+        // Get SSO connections from database for this organization
+        const ssoConnections = await sql`
+          SELECT type, name, display_name, enabled
+          FROM identity_providers
+          WHERE organization_id = ${orgId} AND enabled = true
+          ORDER BY display_name, name
+        `;
 
-      if (process.env.GITHUB_CLIENT_ID) {
-        providers.push({
-          type: 'github',
-          name: 'GitHub',
-          enabled: true,
-        });
+        for (const connection of ssoConnections) {
+          providers.push({
+            type: connection.type,
+            name: connection.display_name || connection.name,
+            enabled: connection.enabled,
+          });
+        }
+
+        // Fall back to platform-wide providers if org has no specific connections
+        if (providers.length === 0) {
+          if (process.env.GOOGLE_CLIENT_ID) {
+            providers.push({
+              type: 'google',
+              name: 'Google',
+              enabled: true,
+            });
+          }
+
+          if (process.env.GITHUB_CLIENT_ID) {
+            providers.push({
+              type: 'github',
+              name: 'GitHub',
+              enabled: true,
+            });
+          }
+        }
+      } else {
+        // Platform-wide providers (from environment variables)
+        if (process.env.GOOGLE_CLIENT_ID) {
+          providers.push({
+            type: 'google',
+            name: 'Google',
+            enabled: true,
+          });
+        }
+
+        if (process.env.GITHUB_CLIENT_ID) {
+          providers.push({
+            type: 'github',
+            name: 'GitHub',
+            enabled: true,
+          });
+        }
       }
 
       return { providers };

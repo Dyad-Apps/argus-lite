@@ -4,7 +4,7 @@
  */
 
 import jwt from 'jsonwebtoken';
-import { type UserId } from '@argus/shared';
+import { type UserId, type OrganizationId } from '@argus/shared';
 
 /** Impersonation claims for access tokens */
 export interface ImpersonationClaims {
@@ -13,11 +13,41 @@ export interface ImpersonationClaims {
   sessionId: string;
 }
 
+/**
+ * Organization context for JWT tokens (ADR-002)
+ * Provides multi-tenant context for all authenticated requests
+ */
+export interface OrganizationContext {
+  /**
+   * The root organization ID that the user belongs to (data isolation boundary)
+   */
+  rootOrganizationId: OrganizationId;
+
+  /**
+   * The current organization ID that the user is working within
+   * This is the active context for the session and can be switched via tenant switching API
+   */
+  currentOrganizationId: OrganizationId;
+
+  /**
+   * All organization IDs that the user has access to within the root organization
+   * Used for tenant switching and access validation
+   */
+  accessibleOrganizationIds: OrganizationId[];
+}
+
 /** Access token payload */
 export interface AccessTokenPayload {
   sub: UserId;
   email: string;
   type: 'access';
+
+  /**
+   * Organization context (ADR-002: Subdomain-Based Root Tenant Identification)
+   * Present for all authenticated users
+   */
+  org?: OrganizationContext;
+
   impersonation?: ImpersonationClaims;
 }
 
@@ -41,17 +71,20 @@ function getJwtSecret(): string {
  * Signs an access token for a user
  * @param userId - The user ID to include in the token
  * @param email - The user's email
+ * @param organizationContext - Organization context (root, current, accessible IDs) per ADR-002
  * @param impersonation - Optional impersonation claims for admin impersonation sessions
  */
 export function signAccessToken(
   userId: UserId,
   email: string,
+  organizationContext?: OrganizationContext,
   impersonation?: ImpersonationClaims
 ): string {
   const payload: AccessTokenPayload = {
     sub: userId,
     email,
     type: 'access',
+    ...(organizationContext && { org: organizationContext }),
     ...(impersonation && { impersonation }),
   };
 
