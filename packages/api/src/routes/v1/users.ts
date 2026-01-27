@@ -14,10 +14,19 @@ import {
   Errors,
   createUserId,
 } from '@argus/shared';
-import { getUserRepository } from '../../repositories/index.js';
+import {
+  getUserRepository,
+  getUserOrganizationRepository,
+  getSystemAdminRepository,
+} from '../../repositories/index.js';
 
 export async function userRoutes(app: FastifyInstance): Promise<void> {
   const userRepo = getUserRepository();
+  const memberRepo = getUserOrganizationRepository();
+  const systemAdminRepo = getSystemAdminRepository();
+
+  // All user routes require authentication
+  app.addHook('preHandler', app.authenticate);
 
   // GET /users - List all users
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -36,10 +45,37 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
     },
     async (request) => {
       const { page, pageSize, organizationId } = request.query;
+
+      // Check if user is a super admin (platform-wide access)
+      const isSuperAdmin = await systemAdminRepo.isSuperAdmin(request.user!.id);
+
+      // Determine which organization to filter by
+      let filterOrgId: string | undefined = organizationId;
+      if (!isSuperAdmin) {
+        // Non-super admins can only see users from their current organization
+        const currentOrgId = request.user!.organizationContext?.currentOrganizationId;
+        if (!currentOrgId) {
+          // No organization context, return empty list
+          return {
+            data: [],
+            pagination: {
+              page,
+              pageSize,
+              totalCount: 0,
+              totalPages: 0,
+              hasNext: false,
+              hasPrevious: false,
+            },
+          };
+        }
+        // Override any provided organizationId with user's current org
+        filterOrgId = currentOrgId;
+      }
+
       const result = await userRepo.findAll({
         page,
         pageSize,
-        organizationId: organizationId ? createUserId(organizationId) : undefined,
+        organizationId: filterOrgId ? createUserId(filterOrgId) : undefined,
       });
 
       return {

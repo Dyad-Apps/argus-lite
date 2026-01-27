@@ -172,3 +172,10 @@ export function createSystemAdminRepository(): SystemAdminRepository {
 }
 
 export const systemAdminRepository = createSystemAdminRepository();
+
+/**
+ * Get the singleton system admin repository instance
+ */
+export function getSystemAdminRepository(): SystemAdminRepository {
+  return systemAdminRepository;
+}

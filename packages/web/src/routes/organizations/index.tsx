@@ -155,7 +155,10 @@ function OrganizationsIndexPage() {
     fetchOrganizationProfiles();
   }, [fetchOrganizations, fetchOrganizationProfiles]);
 
-  const filteredOrgs = organizations.filter(
+  // Only show root organizations on this page
+  const rootOrgs = organizations.filter((org) => org.isRoot);
+
+  const filteredOrgs = rootOrgs.filter(
     (org) =>
       org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       org.orgCode.toLowerCase().includes(searchQuery.toLowerCase())
@@ -226,7 +229,7 @@ function OrganizationsIndexPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-primary">Organizations</h1>
           <p className="text-muted-foreground">
-            Total Root Organizations: {organizations.length}
+            Total Root Organizations: {rootOrgs.length}
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

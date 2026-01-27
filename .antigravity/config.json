@@ -1,0 +1,74 @@
+{
+  "version": "1.0",
+  "ai": {
+    "provider": "gemini",
+    "model": "gemini-1.5-pro-latest",
+    "temperature": 0.2,
+    "maxTokens": 8192,
+    "systemInstructions": ".antigravity/instructions.md",
+    "requirePlanningPhase": true
+  },
+  "agent": {
+    "tools": {
+      "fileOperations": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "search": true
+      },
+      "terminal": {
+        "enabled": true,
+        "requireApproval": true
+      },
+      "codeIntelligence": {
+        "semanticSearch": true,
+        "symbolNavigation": true,
+        "dependencyAnalysis": true
+      }
+    },
+    "workflow": {
+      "enforceDiscoveryPhase": true,
+      "requirePlanApproval": true,
+      "minFilesReadBeforeWrite": 3,
+      "contextGatheringDepth": "thorough"
+    }
+  },
+  "context": {
+    "includeFiles": [
+      "packages/*/src/**/*.{ts,tsx,js,jsx}",
+      "*.md",
+      ".env.example",
+      "package.json",
+      "tsconfig.json"
+    ],
+    "excludeFiles": [
+      "node_modules/**",
+      "**/dist/**",
+      "**/*.test.*",
+      "**/*.spec.*"
+    ],
+    "externalReferences": [
+      {
+        "path": "C:\\source\\platform-argus-mgmt\\planning\\META_MODEL_SPECIFICATION.md",
+        "description": "Architecture and meta-model specification",
+        "includeInContext": "onDemand"
+      },
+      {
+        "path": "C:\\source\\platfromresearch\\Research\\reference-ui",
+        "description": "UI design references and patterns",
+        "includeInContext": "onDemand"
+      }
+    ],
+    "maxContextSize": 1000000,
+    "smartContextSelection": true
+  },
+  "prompts": {
+    "beforeCodeChange": "Before making this change, have you: 1) Searched for similar implementations? 2) Read related files to understand patterns? 3) Checked external specs? 4) Created a plan?",
+    "planningTemplate": "## Discovery\n[What did you find?]\n\n## Analysis\n[What patterns exist?]\n\n## Plan\n[Specific changes]\n\n## Alternatives\n[What else was considered?]\n\n## Risks\n[What could break?]"
+  },
+  "validation": {
+    "requireTypeCheck": true,
+    "warnOnNewPatterns": true,
+    "enforceConsistency": true
+  }
+}

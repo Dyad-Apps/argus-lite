@@ -33,6 +33,7 @@ import {
   getUserOrganizationRepository,
   getUserRepository,
   getBrandingRepository,
+  getSystemAdminRepository,
 } from '../../repositories/index.js';
 import { auditService } from '../../services/audit.service.js';
 import { hashPassword, generateRandomPassword } from '../../utils/password.js';
@@ -42,6 +43,7 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
   const memberRepo = getUserOrganizationRepository();
   const userRepo = getUserRepository();
   const brandingRepo = getBrandingRepository();
+  const systemAdminRepo = getSystemAdminRepository();
 
   // ===========================================
   // Public Routes (no authentication required)
@@ -138,10 +140,25 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
     },
     async (request) => {
       const { page, pageSize, activeOnly } = request.query;
+
+      // Check if user is a super admin (platform-wide access)
+      const isSuperAdmin = await systemAdminRepo.isSuperAdmin(request.user!.id);
+
+      // Get all organizations
       const result = await orgRepo.findAll({ page, pageSize, activeOnly });
 
+      // Filter organizations based on user permissions
+      let filteredData = result.data;
+      if (!isSuperAdmin) {
+        // Non-super admins can only see organizations they have access to
+        const accessibleOrgIds = request.user!.organizationContext?.accessibleOrganizationIds || [];
+        filteredData = result.data.filter((org) =>
+          accessibleOrgIds.includes(createOrganizationId(org.id))
+        );
+      }
+
       return {
-        data: result.data.map((org) => ({
+        data: filteredData.map((org) => ({
           id: org.id,
           name: org.name,
           slug: org.slug,
@@ -161,7 +178,11 @@ export async function organizationRoutes(app: FastifyInstance): Promise<void> {
           createdAt: org.createdAt.toISOString(),
           updatedAt: org.updatedAt.toISOString(),
         })),
-        pagination: result.pagination,
+        pagination: {
+          ...result.pagination,
+          total: filteredData.length,
+          totalPages: Math.ceil(filteredData.length / pageSize),
+        },
       };
     }
   );

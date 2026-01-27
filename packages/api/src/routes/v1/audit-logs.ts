@@ -12,6 +12,7 @@ import {
   getRecentActivity,
   type AuditLogFilter,
 } from '../../repositories/audit-log.repository.js';
+import { getSystemAdminRepository } from '../../repositories/index.js';
 import { Errors, createOrganizationId, createUserId } from '@argus/shared';
 
 // Response schema for a single audit log
@@ -62,6 +63,11 @@ const recentActivityResponseSchema = z.object({
 });
 
 export async function auditLogRoutes(app: FastifyInstance): Promise<void> {
+  const systemAdminRepo = getSystemAdminRepository();
+
+  // All audit log routes require authentication
+  app.addHook('preHandler', app.authenticate);
+
   // GET /audit-logs - List audit logs with filters
   app.withTypeProvider<ZodTypeProvider>().get(
     '/',
@@ -90,10 +96,24 @@ export async function auditLogRoutes(app: FastifyInstance): Promise<void> {
       const { page, pageSize, startDate, endDate, organizationId, userId, ...rest } =
         request.query;
 
+      // Check if user is a super admin (platform-wide access)
+      const isSuperAdmin = await systemAdminRepo.isSuperAdmin(request.user!.id);
+
+      // Determine which organization to filter by
+      let filterOrgId: string | undefined = organizationId;
+      if (!isSuperAdmin) {
+        // Non-super admins can only see audit logs from their current organization
+        const currentOrgId = request.user!.organizationContext?.currentOrganizationId;
+        if (currentOrgId) {
+          // Override any provided organizationId with user's current org
+          filterOrgId = currentOrgId;
+        }
+      }
+
       const filter: AuditLogFilter = {
         ...rest,
-        organizationId: organizationId
-          ? createOrganizationId(organizationId)
+        organizationId: filterOrgId
+          ? createOrganizationId(filterOrgId)
           : undefined,
         userId: userId ? createUserId(userId) : undefined,
         startDate: startDate ? new Date(startDate) : undefined,
