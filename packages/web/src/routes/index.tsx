@@ -2,10 +2,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { QuickLinks } from '@/components/dashboard/quick-links';
-import { RecentActivity } from '@/components/dashboard/recent-activity';
-import { SystemMetricsCard } from '@/components/dashboard/system-metrics-card';
-import { SystemLoadChart } from '@/components/dashboard/system-load-chart';
-import { NotConfiguredCard } from '@/components/shared/placeholder-card';
+import { RealtimeChart } from '@/components/dashboard/realtime-chart';
+import { MessageChart } from '@/components/dashboard/message-chart';
+import { SystemResourceGroup } from '@/components/dashboard/system-resource-group';
 import { PLATFORM_VERSION } from '@/lib/theme-defaults';
 import {
   dashboardApi,
@@ -67,18 +66,11 @@ function DashboardPage() {
     return () => clearInterval(interval);
   }, [loadRange]);
 
-  const handleRangeChange = useCallback((range: number) => {
-    setLoadRange(range);
-    fetchSystemLoad(range);
-  }, [fetchSystemLoad]);
-
   return (
-    <div className="flex flex-col gap-4 h-full overflow-auto">
+    <div className="flex flex-col gap-4 h-full overflow-hidden">
+
       {/* Top Row: Key Metrics + Platform Info */}
-      <div
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"
-        data-tour-id="dashboard-stat-cards"
-      >
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3" data-tour-id="dashboard-stat-cards">
         <StatCard
           title="Organizations"
           value={stats?.organizations ?? '-'}
@@ -90,60 +82,56 @@ function DashboardPage() {
           value={stats?.users ?? '-'}
           link="/users"
           variant="green"
-          className="h-24"
+          className="h-24 border-l-4 border-l-green-500"
         />
         <StatCard
           title="Devices"
           value={stats?.devices ?? 0}
           variant="blue"
-          className="h-24"
-          tooltip="No devices configured yet"
+          className="h-24 border-l-4 border-l-blue-500"
+          tooltip="Device management coming soon"
         />
         <StatCard
           title="Assets"
           value={stats?.assets ?? 0}
           variant="purple"
-          className="h-24"
-          tooltip="No assets configured yet"
+          className="h-24 border-l-4 border-l-purple-500"
+          tooltip="Asset management coming soon"
         />
+
+        {/* Platform Info as Stat Card */}
         <StatCard
           title="Platform Version"
           value={`v${PLATFORM_VERSION}`}
           subValue="Stable"
           variant="info"
-          className="h-24"
+          className="h-24 bg-blue-50/50 border-blue-200"
         />
       </div>
 
-      {/* Middle Row: Recent Activity + System Metrics */}
-      <div
-        className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[260px] flex-shrink-0"
-        data-tour-id="dashboard-system-health"
-      >
-        {/* Recent Activity */}
-        <div className="lg:col-span-2 min-h-[260px]">
-          <RecentActivity data={recentActivity} isLoading={isLoading} className="h-full" />
+      {/* Middle Row: System Health (Charts) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[260px]" data-tour-id="dashboard-system-health">
+        {/* Realtime System Load */}
+        <div className="lg:col-span-2 h-full">
+          <RealtimeChart data={systemLoad} />
         </div>
 
-        {/* System Metrics (Prometheus) */}
-        <div className="min-h-[260px]">
-          <SystemMetricsCard data={systemMetrics} isLoading={isLoading} />
+        {/* Resource Usage Gauges */}
+        <div className="h-full">
+          <SystemResourceGroup data={systemMetrics} />
         </div>
       </div>
 
-      {/* Bottom Row: System Load Chart + Quick Access */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[260px] flex-shrink-0">
-        <div className="lg:col-span-2 min-h-[260px]">
-          <SystemLoadChart
-            data={systemLoad}
-            isLoading={isLoading}
-            onRangeChange={handleRangeChange}
-          />
+      {/* Bottom Row: Message Throughput & Quick Access */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[220px]">
+        <div className="lg:col-span-2 h-full" data-tour-id="dashboard-message-chart">
+          <MessageChart />
         </div>
-        <div className="min-h-[260px]" data-tour-id="dashboard-quick-links">
+        <div className="h-full" data-tour-id="dashboard-quick-links">
           <QuickLinks />
         </div>
       </div>
+
     </div>
   );
 }

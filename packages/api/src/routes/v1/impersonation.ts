@@ -248,7 +248,6 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
         }),
         response: {
           200: impersonationListResponseSchema,
-          403: apiErrorResponseSchema,
         },
       },
     },
@@ -296,9 +295,6 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
             success: z.literal(true),
             message: z.string(),
           }),
-          400: apiErrorResponseSchema,
-          403: apiErrorResponseSchema,
-          404: apiErrorResponseSchema,
         },
       },
     },

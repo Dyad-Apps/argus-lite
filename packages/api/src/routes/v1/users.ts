@@ -27,6 +27,7 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
         querystring: z.object({
           page: z.coerce.number().int().min(1).default(1),
           pageSize: z.coerce.number().int().min(1).max(100).default(20),
+          organizationId: z.string().uuid().optional(),
         }),
         response: {
           200: userListResponseSchema,
@@ -34,8 +35,12 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
       },
     },
     async (request) => {
-      const { page, pageSize } = request.query;
-      const result = await userRepo.findAll({ page, pageSize });
+      const { page, pageSize, organizationId } = request.query;
+      const result = await userRepo.findAll({
+        page,
+        pageSize,
+        organizationId: organizationId ? createUserId(organizationId) : undefined,
+      });
 
       return {
         data: result.data.map((user) => ({

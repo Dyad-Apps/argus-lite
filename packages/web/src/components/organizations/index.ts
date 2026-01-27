@@ -1,7 +1,10 @@
-export { OrganizationOverviewTab } from './organization-overview-tab';
-export { OrganizationDetailsTab } from './organization-details-tab';
-export { ChildOrganizationsTab } from './child-organizations-tab';
-export { OrganizationHierarchyTab } from './organization-hierarchy-tab';
-export { OrganizationBrandingTab } from './organization-branding-tab';
+export * from './organization-overview-tab';
+export * from './organization-details-tab';
+export * from './child-organizations-tab';
+export * from './organization-hierarchy-tab';
+export * from './organization-branding-tab';
+export * from './organization-audit-log-tab';
+export * from './organization-sso-tab';
+export * from './organization-api-access-tab';
 export { CreateChildDialog } from './create-child-dialog';
 export { DeleteOrganizationDialog } from './delete-organization-dialog';

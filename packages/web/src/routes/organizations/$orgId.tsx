@@ -2,7 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState, useEffect, useCallback } from 'react';
 import {
   Building2,
-  ArrowLeft,
   RefreshCw,
   Loader2,
   LayoutDashboard,
@@ -11,6 +10,10 @@ import {
   Network,
   Palette,
   Users,
+  Shield,
+  Key,
+  FileText,
+  ArrowLeft,
 } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
@@ -22,7 +25,12 @@ import {
   ChildOrganizationsTab,
   OrganizationHierarchyTab,
   OrganizationBrandingTab,
+  OrganizationAuditLogTab,
+  OrganizationSSOTab,
+  OrganizationAPIAccessTab,
 } from '@/components/organizations';
+import { StartImpersonationDialog } from '@/components/impersonation/start-impersonation-dialog';
+import { useImpersonationSafe } from '@/contexts/impersonation-context';
 
 export const Route = createFileRoute('/organizations/$orgId')({
   component: OrganizationDetailsPage,
@@ -62,6 +70,11 @@ interface OrganizationStats {
   activeUsers: number;
 }
 
+interface UserOrganization {
+  id: string;
+  role: 'owner' | 'admin' | 'member' | 'viewer';
+}
+
 function OrganizationDetailsPage() {
   const { orgId } = Route.useParams();
   const [organization, setOrganization] = useState<Organization | null>(null);
@@ -70,9 +83,12 @@ function OrganizationDetailsPage() {
     childCount: 0,
     activeUsers: 0,
   });
+  const [userRole, setUserRole] = useState<'owner' | 'admin' | 'member' | 'viewer' | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isImpersonateDialogOpen, setIsImpersonateDialogOpen] = useState(false);
+  const impersonation = useImpersonationSafe();
 
   const fetchOrganization = useCallback(async () => {
     try {
@@ -93,6 +109,18 @@ function OrganizationDetailsPage() {
       } catch {
         // Children endpoint might not exist yet
       }
+
+      // Fetch user role for this organization to handle RBAC
+      try {
+        const authResponse = await apiClient.get<{ organizations: UserOrganization[] }>('/auth/organizations');
+        const currentOrgMembership = authResponse.organizations.find(o => o.id === orgId);
+        if (currentOrgMembership) {
+          setUserRole(currentOrgMembership.role);
+        }
+      } catch (err) {
+        console.error('Failed to fetch user role:', err);
+      }
+
     } catch (err) {
       console.error('Failed to fetch organization:', err);
       setError('Failed to load organization details');
@@ -120,12 +148,11 @@ function OrganizationDetailsPage() {
   if (error || !organization) {
     return (
       <div className="space-y-6">
-        <Link to="/organizations">
-          <Button variant="ghost" size="sm">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Organizations
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Link to="/" className="hover:text-foreground">Home</Link>
+          <span>/</span>
+          <Link to="/organizations" className="hover:text-foreground">Organizations</Link>
+        </div>
         <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive text-sm">
           {error || 'Organization not found'}
         </div>
@@ -133,17 +160,58 @@ function OrganizationDetailsPage() {
     );
   }
 
+  const isAdminOrAbove = userRole === 'owner' || userRole === 'admin';
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
           <Link to="/organizations">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-4 w-4" />
+            <Button variant="ghost" size="sm">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Organizations
             </Button>
           </Link>
-          <div className="flex items-center gap-4">
+
+          <div className="flex items-center gap-2">
+            {/* Impersonate Button */}
+            {organization.settings?.features?.allowImpersonation && (
+              impersonation?.isActive ? (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => impersonation.endImpersonation()}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  End Session
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsImpersonateDialogOpen(true)}
+                >
+                  <Users className="mr-2 h-4 w-4" />
+                  Impersonate
+                </Button>
+              )
+            )}
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={fetchOrganization}
+              disabled={isLoading}
+            >
+              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            </Button>
+          </div>
+        </div>
+
+        {/* Title Section */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
               <Building2 className="h-6 w-6 text-primary" />
             </div>
@@ -177,19 +245,11 @@ function OrganizationDetailsPage() {
             </div>
           </div>
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={fetchOrganization}
-          disabled={isLoading}
-        >
-          <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-        </Button>
       </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
+        <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="overview">
             <LayoutDashboard className="mr-2 h-4 w-4" />
             Overview
@@ -208,7 +268,26 @@ function OrganizationDetailsPage() {
             <Network className="mr-2 h-4 w-4" />
             Hierarchy
           </TabsTrigger>
-          {organization.settings?.features?.allowWhiteLabeling && (
+          <TabsTrigger value="audit-logs">
+            <FileText className="mr-2 h-4 w-4" />
+            Audit Logs
+          </TabsTrigger>
+
+          {/* RBAC Protected Tabs */}
+          {isAdminOrAbove && (
+            <>
+              <TabsTrigger value="sso">
+                <Shield className="mr-2 h-4 w-4" />
+                Organization SSO
+              </TabsTrigger>
+              <TabsTrigger value="api-access">
+                <Key className="mr-2 h-4 w-4" />
+                API Access
+              </TabsTrigger>
+            </>
+          )}
+
+          {organization.settings?.features?.allowWhiteLabeling && isAdminOrAbove && (
             <TabsTrigger value="branding">
               <Palette className="mr-2 h-4 w-4" />
               Branding
@@ -244,7 +323,22 @@ function OrganizationDetailsPage() {
           <OrganizationHierarchyTab organization={organization} />
         </TabsContent>
 
-        {organization.settings?.features?.allowWhiteLabeling && (
+        <TabsContent value="audit-logs">
+          <OrganizationAuditLogTab organizationId={organization.id} />
+        </TabsContent>
+
+        {isAdminOrAbove && (
+          <>
+            <TabsContent value="sso">
+              <OrganizationSSOTab />
+            </TabsContent>
+            <TabsContent value="api-access">
+              <OrganizationAPIAccessTab />
+            </TabsContent>
+          </>
+        )}
+
+        {organization.settings?.features?.allowWhiteLabeling && isAdminOrAbove && (
           <TabsContent value="branding">
             <OrganizationBrandingTab
               organization={organization}
@@ -253,6 +347,12 @@ function OrganizationDetailsPage() {
           </TabsContent>
         )}
       </Tabs>
+
+      <StartImpersonationDialog
+        open={isImpersonateDialogOpen}
+        onOpenChange={setIsImpersonateDialogOpen}
+        organizationId={organization.id}
+      />
     </div>
   );
 }

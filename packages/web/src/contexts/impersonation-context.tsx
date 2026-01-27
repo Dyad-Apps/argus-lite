@@ -15,6 +15,7 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
+import { createApiClient, apiClient } from '@/lib/api-client';
 
 interface ImpersonatedUser {
   id: string;
@@ -36,7 +37,8 @@ interface ImpersonationContextValue extends ImpersonationState {
     impersonationToken: string,
     targetUser: ImpersonatedUser
   ) => void;
-  endImpersonation: () => Promise<void>;
+  endImpersonation: (sessionId?: string) => Promise<void>;
+  revokeSession: (sessionId: string) => Promise<void>;
 }
 
 const ImpersonationContext = createContext<ImpersonationContextValue | null>(
@@ -124,8 +126,8 @@ export function ImpersonationProvider({ children }: ImpersonationProviderProps) 
     []
   );
 
-  const endImpersonation = useCallback(async () => {
-    const sessionId = state.sessionId || localStorage.getItem(STORAGE_KEYS.SESSION_ID);
+  const endImpersonation = useCallback(async (forceSessionId?: string) => {
+    const sessionId = forceSessionId || state.sessionId || localStorage.getItem(STORAGE_KEYS.SESSION_ID);
     const originalAccessToken =
       state.originalAccessToken ||
       localStorage.getItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN);
@@ -133,21 +135,42 @@ export function ImpersonationProvider({ children }: ImpersonationProviderProps) 
       state.originalRefreshToken ||
       localStorage.getItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN);
 
-    // Call the API to end the session on the backend
+    // If we are NOT actively impersonating locally (e.g. cleaning up a zombie session from Security tab),
+    // just use the standard client which uses the current (Admin) token.
+    if (!state.isActive && !localStorage.getItem(STORAGE_KEYS.IS_IMPERSONATING)) {
+      try {
+        await apiClient.post('/admin/impersonate/end', { sessionId });
+        window.location.reload();
+        return;
+      } catch (err) {
+        console.error('Failed to end session via standard client:', err);
+        throw err;
+      }
+    }
+
+    // If we ARE impersonating, we must use the STASHED admin token to end it.
     if (sessionId) {
       try {
-        // Use the original admin token to end the session
-        await fetch('/api/v1/admin/impersonate/end', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${originalAccessToken}`,
+        // Use a temporary API client with the ORIGINAL tokens
+        const adminClient = createApiClient({
+          tokenStorage: {
+            getAccessToken: () => state.originalAccessToken || localStorage.getItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN),
+            getRefreshToken: () => state.originalRefreshToken || localStorage.getItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN),
+            setTokens: (access, refresh) => {
+              localStorage.setItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN, access);
+              localStorage.setItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN, refresh);
+            },
+            clearTokens: () => {
+              localStorage.removeItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN);
+              localStorage.removeItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN);
+            }
           },
-          body: JSON.stringify({ sessionId }),
+          onAuthError: () => { },
         });
+
+        await adminClient.post('/admin/impersonate/end', { sessionId });
       } catch (err) {
         console.error('Failed to end impersonation session on server:', err);
-        // Continue with local cleanup even if server call fails
       }
     }
 
@@ -176,7 +199,37 @@ export function ImpersonationProvider({ children }: ImpersonationProviderProps) 
 
     // Reload the page to reset all state with the admin token
     window.location.reload();
-  }, [state.sessionId, state.originalAccessToken, state.originalRefreshToken]);
+  }, [state.sessionId, state.originalAccessToken, state.originalRefreshToken, state.isActive]);
+
+  const revokeSession = useCallback(async (sessionIdToRevoke: string) => {
+    // Similar to endImpersonation, but for specific sessions and without ending the CURRENT local session
+    // unless it matches the revoked one.
+    try {
+      const adminClient = createApiClient({
+        tokenStorage: {
+          getAccessToken: () => state.originalAccessToken || localStorage.getItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN),
+          getRefreshToken: () => state.originalRefreshToken || localStorage.getItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN),
+          setTokens: (access, refresh) => {
+            localStorage.setItem(STORAGE_KEYS.ORIGINAL_ACCESS_TOKEN, access);
+            localStorage.setItem(STORAGE_KEYS.ORIGINAL_REFRESH_TOKEN, refresh);
+          },
+          clearTokens: () => { }
+        },
+        onAuthError: () => { },
+      });
+
+      await adminClient.post(`/admin/impersonate/sessions/${sessionIdToRevoke}/revoke`);
+
+      // If we revoked our OWN active session, we should trigger a full cleanup
+      const currentSessionId = state.sessionId || localStorage.getItem(STORAGE_KEYS.SESSION_ID);
+      if (currentSessionId === sessionIdToRevoke) {
+        await endImpersonation();
+      }
+    } catch (err) {
+      console.error('Failed to revoke session:', err);
+      throw err;
+    }
+  }, [state, endImpersonation]);
 
   // Check on mount if impersonation is active but tokens are inconsistent
   useEffect(() => {
@@ -204,6 +257,7 @@ export function ImpersonationProvider({ children }: ImpersonationProviderProps) 
         ...state,
         startImpersonation,
         endImpersonation,
+        revokeSession,
       }}
     >
       {children}

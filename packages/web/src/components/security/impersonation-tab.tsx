@@ -40,6 +40,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { apiClient } from '@/lib/api-client';
 import { useImpersonation } from '@/contexts/impersonation-context';
+import { StartImpersonationDialog } from '@/components/impersonation/start-impersonation-dialog';
 
 interface User {
   id: string;
@@ -106,12 +107,6 @@ export function ImpersonationTab() {
 
   // Start impersonation dialog state
   const [isStartDialogOpen, setIsStartDialogOpen] = useState(false);
-  const [isStarting, setIsStarting] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState<string>('');
-  const [reason, setReason] = useState('');
-  const [duration, setDuration] = useState('60');
 
   // Check if current user can impersonate
   useEffect(() => {
@@ -163,72 +158,16 @@ export function ImpersonationTab() {
     }
   }, [canImpersonate, fetchData]);
 
-  // Fetch users for impersonation target selection
-  const fetchUsers = async () => {
-    try {
-      setIsLoadingUsers(true);
-      const response = await apiClient.get<UserListResponse>('/users?pageSize=100');
-      setUsers(response.data);
-    } catch (err) {
-      console.error('Failed to fetch users:', err);
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  };
+
 
   const handleOpenStartDialog = () => {
     setIsStartDialogOpen(true);
-    fetchUsers();
-  };
-
-  const handleStartImpersonation = async () => {
-    if (!selectedUserId || !reason.trim()) return;
-
-    try {
-      setIsStarting(true);
-      const response = await apiClient.post<{
-        sessionId: string;
-        accessToken: string;
-        expiresAt: string;
-        targetUser: User;
-      }>('/admin/impersonate/start', {
-        targetUserId: selectedUserId,
-        reason: reason.trim(),
-        durationMinutes: parseInt(duration),
-      });
-
-      // Use the context to handle token swap and state management
-      impersonation.startImpersonation(
-        response.sessionId,
-        response.accessToken,
-        {
-          id: response.targetUser.id,
-          email: response.targetUser.email,
-          name: response.targetUser.firstName
-            ? `${response.targetUser.firstName} ${response.targetUser.lastName || ''}`.trim()
-            : undefined,
-        }
-      );
-
-      setIsStartDialogOpen(false);
-      setSelectedUserId('');
-      setReason('');
-
-      // Reload the page to apply the impersonation token across all components
-      window.location.reload();
-    } catch (err: any) {
-      console.error('Failed to start impersonation:', err);
-      alert(err?.data?.error?.message || 'Failed to start impersonation');
-    } finally {
-      setIsStarting(false);
-    }
   };
 
   const handleEndImpersonation = async () => {
     try {
-      // Use the context to handle token restoration and cleanup
-      await impersonation.endImpersonation();
-      // Note: endImpersonation will reload the page, so fetchData() isn't needed
+      // Pass the session ID from the API status if available, to recover if local context reads null
+      await impersonation.endImpersonation(status?.sessionId);
     } catch (err) {
       console.error('Failed to end impersonation:', err);
     }
@@ -238,10 +177,11 @@ export function ImpersonationTab() {
     if (!confirm('Are you sure you want to revoke this impersonation session?')) return;
 
     try {
-      await apiClient.post(`/admin/impersonate/sessions/${sessionId}/revoke`);
+      await impersonation.revokeSession(sessionId);
       fetchData();
     } catch (err) {
       console.error('Failed to revoke session:', err);
+      // alert('Failed to revoke session'); // Optional user feedback
     }
   };
 
@@ -495,87 +435,10 @@ export function ImpersonationTab() {
       </Card>
 
       {/* Start Impersonation Dialog */}
-      <Dialog open={isStartDialogOpen} onOpenChange={setIsStartDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Start Impersonation</DialogTitle>
-            <DialogDescription>
-              Select a user to impersonate and provide a reason for the audit log.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="user">Target User</Label>
-              {isLoadingUsers ? (
-                <div className="flex items-center justify-center py-4">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                </div>
-              ) : (
-                <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a user to impersonate" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {users.map((user) => (
-                      <SelectItem key={user.id} value={user.id}>
-                        {getUserDisplay(user)} ({user.email})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="reason">Reason (Required)</Label>
-              <Textarea
-                id="reason"
-                placeholder="Describe why you need to impersonate this user (min 10 characters)"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                rows={3}
-              />
-              <p className="text-xs text-muted-foreground">
-                This will be recorded in the audit log.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="duration">Duration</Label>
-              <Select value={duration} onValueChange={setDuration}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="15">15 minutes</SelectItem>
-                  <SelectItem value="30">30 minutes</SelectItem>
-                  <SelectItem value="60">1 hour</SelectItem>
-                  <SelectItem value="120">2 hours</SelectItem>
-                  <SelectItem value="240">4 hours</SelectItem>
-                  <SelectItem value="480">8 hours</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsStartDialogOpen(false);
-                setSelectedUserId('');
-                setReason('');
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleStartImpersonation}
-              disabled={!selectedUserId || reason.trim().length < 10 || isStarting}
-            >
-              {isStarting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Start Impersonation
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <StartImpersonationDialog
+        open={isStartDialogOpen}
+        onOpenChange={setIsStartDialogOpen}
+      />
     </div>
   );
 }

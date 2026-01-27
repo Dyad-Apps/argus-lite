@@ -79,25 +79,57 @@ export class UserRepository {
    * Finds all users with pagination (excludes soft deleted)
    */
   async findAll(
-    options?: PaginationOptions,
+    options?: PaginationOptions & { organizationId?: UserId },
     trx?: Transaction
   ): Promise<PaginatedResult<User>> {
     const executor = getExecutor(trx);
     const pageSize = getPageSize(options);
     const offset = calculateOffset(options);
 
-    // Get total count (excluding soft deleted)
-    const countResult = await executor
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(isNull(users.deletedAt));
-    const totalCount = Number(countResult[0]?.count ?? 0);
-
-    // Get data
-    const data = await executor
+    // Build base query
+    let query = executor
       .select()
       .from(users)
       .where(isNull(users.deletedAt))
+      .$dynamic();
+
+    // Add organization filter
+    if (options?.organizationId) {
+      // We need to filter by users belonging to the organization
+      // Using WHERE EXISTS for performance and to keep the main query simple
+      query = query.where(and(
+        isNull(users.deletedAt),
+        sql`EXISTS (
+          SELECT 1 FROM user_organizations uo 
+          WHERE uo.user_id = ${users.id} 
+          AND uo.organization_id = ${options.organizationId}
+        )`
+      ));
+    }
+
+    // Get count based on filter
+    const countQuery = executor
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(isNull(users.deletedAt))
+      .$dynamic();
+
+    if (options?.organizationId) {
+      countQuery.where(and(
+        isNull(users.deletedAt),
+        sql`EXISTS (
+            SELECT 1 FROM user_organizations uo 
+            WHERE uo.user_id = ${users.id} 
+            AND uo.organization_id = ${options.organizationId}
+            )`
+      ));
+    }
+
+    const countResult = await countQuery;
+    const totalCount = Number(countResult[0]?.count ?? 0);
+
+    // Execute query with pagination
+    const data = await query
       .orderBy(users.createdAt)
       .limit(pageSize)
       .offset(offset);

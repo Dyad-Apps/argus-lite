@@ -1,16 +1,22 @@
 import { Link, useLocation } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { mainNavigation } from '@/lib/navigation';
+import { apiClient } from '@/lib/api-client';
 
 interface BreadcrumbItem {
   label: string;
   href?: string;
 }
 
+interface ResolvedEntities {
+  [key: string]: string; // segment -> name
+}
+
 /**
- * Generates breadcrumbs from the current path
+ * Generates breadcrumbs from the current path by iterating segments
  */
-function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
+function getBreadcrumbs(pathname: string, resolvedNames: ResolvedEntities): BreadcrumbItem[] {
   const breadcrumbs: BreadcrumbItem[] = [];
 
   // Always start with Home
@@ -21,30 +27,85 @@ function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
     return breadcrumbs;
   }
 
-  // Find the matching navigation item
-  const allNavItems = mainNavigation.flatMap((section) => section.items);
-  const currentItem = allNavItems.find(
-    (item) => pathname === item.url || pathname.startsWith(item.url + '/')
-  );
+  const segments = pathname.split('/').filter(Boolean);
+  let currentPath = '';
 
-  if (currentItem) {
-    breadcrumbs.push({ label: currentItem.title });
-  } else {
-    // Fallback: use path segments
-    const segments = pathname.split('/').filter(Boolean);
-    segments.forEach((segment) => {
+  // Flatten navigation for easy lookup
+  const allNavItems = mainNavigation.flatMap((section) => section.items);
+
+  segments.forEach((segment) => {
+    currentPath += `/${segment}`;
+
+    // Check if this specific path corresponds to a navigation item
+    const navItem = allNavItems.find((item) => item.url === currentPath);
+
+    if (navItem) {
+      breadcrumbs.push({ label: navItem.title, href: navItem.url });
+    } else {
+      // Logic for dynamic segments (like IDs)
+      let label = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+
+      // If we have a resolved name for this segment (GUID), use it
+      if (resolvedNames[segment]) {
+        label = resolvedNames[segment];
+      }
+
       breadcrumbs.push({
-        label: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),
+        label,
+        href: currentPath,
       });
-    });
-  }
+    }
+  });
 
   return breadcrumbs;
 }
 
 export function Breadcrumbs() {
   const location = useLocation();
-  const breadcrumbs = getBreadcrumbs(location.pathname);
+  const [resolvedNames, setResolvedNames] = useState<ResolvedEntities>({});
+
+  useEffect(() => {
+    async function resolveEntities() {
+      const segments = location.pathname.split('/').filter(Boolean);
+      const newResolvedNames: ResolvedEntities = {};
+
+      for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        const prevSegment = segments[i - 1]; // e.g. "organizations", "users"
+
+        // Only try to resolve if it looks like a UUID (simplistic helper check)
+        if (segment.length > 20 && prevSegment) {
+          // Check if we already have it
+          if (resolvedNames[segment]) {
+            newResolvedNames[segment] = resolvedNames[segment];
+            continue;
+          }
+
+          try {
+            if (prevSegment === 'organizations') {
+              const res = await apiClient.get<{ name: string }>(`/organizations/${segment}`);
+              newResolvedNames[segment] = res.name;
+            } else if (prevSegment === 'users') {
+              const res = await apiClient.get<{ firstName: string | null; lastName: string | null; email: string }>(`/users/${segment}`);
+              const fullName = res.firstName || res.lastName
+                ? `${res.firstName || ''} ${res.lastName || ''}`.trim()
+                : res.email;
+              newResolvedNames[segment] = fullName;
+            }
+          } catch (e) {
+            // Ignore errors, keep ID/default label
+            console.debug('Failed to resolve breadcrumb name', e);
+          }
+        }
+      }
+
+      setResolvedNames(prev => ({ ...prev, ...newResolvedNames }));
+    }
+
+    resolveEntities();
+  }, [location.pathname]);
+
+  const breadcrumbs = getBreadcrumbs(location.pathname, resolvedNames);
 
   return (
     <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm">
@@ -62,6 +123,8 @@ export function Breadcrumbs() {
               <Link
                 to={item.href}
                 className="text-muted-foreground hover:text-foreground transition-colors"
+                // Prevent navigation if it's just the current page (though isLast handles visual style)
+                disabled={isLast}
               >
                 {item.label}
               </Link>
