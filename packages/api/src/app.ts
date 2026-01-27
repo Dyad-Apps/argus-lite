@@ -34,9 +34,30 @@ export async function buildApp(): Promise<App> {
     contentSecurityPolicy: false, // Configure properly in production
   });
 
+  // CORS configuration (environment-aware)
   await app.register(cors, {
-    origin: true, // Configure properly in production
+    origin: (origin, callback) => {
+      const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
+        ? process.env.CORS_ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+        : ['http://localhost:5173', 'http://localhost:3000']; // Development defaults
+
+      // Allow requests with no origin (e.g., mobile apps, Postman)
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`), false);
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
+    exposedHeaders: ['X-Request-ID', 'X-RateLimit-Limit', 'X-RateLimit-Remaining'],
+    maxAge: 86400, // 24 hours
   });
 
   // Register error handler
