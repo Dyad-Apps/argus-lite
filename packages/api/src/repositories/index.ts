@@ -20,3 +20,10 @@ export * from './identity-provider.repository.js';
 export * from './impersonation.repository.js';
 export * from './platform-settings.repository.js';
 export * from './system-admin.repository.js';
+
+// Phase 7: IoT Meta-Model repositories
+export * from './device.repository.js';
+export * from './asset.repository.js';
+export * from './person.repository.js';
+export * from './activity.repository.js';
+export * from './space.repository.js';

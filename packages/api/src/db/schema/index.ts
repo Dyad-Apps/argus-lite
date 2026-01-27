@@ -33,5 +33,19 @@ export * from './roles.js';
 // Security features
 export * from './impersonation-sessions.js';
 
+// Phase 7: IoT Meta-Model - Type Definitions
+export * from './device-types.js';
+export * from './asset-types.js';
+export * from './person-types.js';
+export * from './activity-types.js';
+export * from './space-types.js';
+
+// Phase 7: IoT Meta-Model - Base Types
+export * from './devices.js';
+export * from './assets.js';
+export * from './persons.js';
+export * from './activities.js';
+export * from './spaces.js';
+
 // Relations (must be last to avoid circular deps)
 export * from './relations.js';

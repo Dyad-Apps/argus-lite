@@ -124,3 +124,59 @@ export const systemRoleEnum = pgEnum('system_role', [
   'support',      // Read-only + impersonation
   'billing',      // Billing management only
 ]);
+
+/**
+ * Phase 7 Base Types - Device status.
+ */
+export const deviceStatusEnum = pgEnum('device_status_enum', [
+  'active',
+  'inactive',
+  'maintenance',
+  'offline',
+  'error',
+]);
+
+/**
+ * Phase 7 Base Types - Asset status.
+ */
+export const assetStatusEnum = pgEnum('asset_status_enum', [
+  'active',
+  'inactive',
+  'maintenance',
+  'retired',
+  'pending',
+]);
+
+/**
+ * Phase 7 Base Types - Activity status (expanded).
+ */
+export const activityStatusEnumPhase7 = pgEnum('activity_status_enum', [
+  'pending',
+  'pending_approval',
+  'approved',
+  'in_progress',
+  'blocked',
+  'completed',
+  'cancelled',
+  'failed',
+]);
+
+/**
+ * Phase 7 Base Types - Activity priority.
+ */
+export const activityPriorityEnum = pgEnum('activity_priority_enum', [
+  'low',
+  'medium',
+  'high',
+  'critical',
+]);
+
+/**
+ * Phase 7 Base Types - Activity category (4-category system).
+ */
+export const activityCategoryEnum = pgEnum('activity_category_enum', [
+  'system_to_system',
+  'system_to_person',
+  'person_to_system',
+  'person_to_person',
+]);

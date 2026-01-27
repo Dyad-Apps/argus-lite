@@ -12,3 +12,6 @@ export * from './invitation.schema.js';
 export * from './organization-profile.schema.js';
 export * from './group.schema.js';
 export * from './role.schema.js';
+
+// Phase 7: IoT Meta-Model schemas
+export * from './device.schema.js';
