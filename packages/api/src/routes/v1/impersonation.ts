@@ -10,6 +10,7 @@ import {
   Errors,
   createUserId,
   createOrganizationId,
+  apiErrorResponseSchema,
 } from '@argus/shared';
 import { impersonationService } from '../../services/impersonation.service.js';
 import { getImpersonationRepository } from '../../repositories/index.js';
@@ -43,15 +44,6 @@ const impersonationListResponseSchema = z.object({
     totalPages: z.number(),
     hasNext: z.boolean(),
     hasPrevious: z.boolean(),
-  }),
-});
-
-const apiErrorResponseSchema = z.object({
-  success: z.literal(false),
-  error: z.object({
-    code: z.string(),
-    message: z.string(),
-    timestamp: z.string(),
   }),
 });
 
@@ -158,6 +150,52 @@ export async function impersonationRoutes(app: FastifyInstance): Promise<void> {
           if (error.message.includes('not found') || error.message.includes('No active')) {
             throw Errors.notFound('ImpersonationSession', sessionId ?? 'active');
           }
+          throw Errors.badRequest(error.message);
+        }
+        throw error;
+      }
+    }
+  );
+
+  // POST /admin/impersonate/cleanup - Force cleanup all active sessions for current user
+  app.withTypeProvider<ZodTypeProvider>().post(
+    '/admin/impersonate/cleanup',
+    {
+      schema: {
+        response: {
+          200: z.object({
+            success: z.literal(true),
+            message: z.string(),
+            sessionsEnded: z.number(),
+          }),
+          400: apiErrorResponseSchema,
+        },
+      },
+    },
+    async (request) => {
+      try {
+        // Get all active sessions for this user
+        const activeSessions = await impersonationRepo.findActiveByImpersonator(request.user!.id);
+
+        // End all active sessions
+        let count = 0;
+        for (const session of activeSessions) {
+          try {
+            await impersonationService.endImpersonation(request.user!.id, session.id);
+            count++;
+          } catch (err) {
+            request.log.warn({ sessionId: session.id, err }, 'Failed to end session during cleanup');
+          }
+        }
+
+        return {
+          success: true as const,
+          message: count > 0 ? `Ended ${count} active session(s)` : 'No active sessions found',
+          sessionsEnded: count,
+        };
+      } catch (error) {
+        console.error('Cleanup impersonation error:', error);
+        if (error instanceof Error) {
           throw Errors.badRequest(error.message);
         }
         throw error;

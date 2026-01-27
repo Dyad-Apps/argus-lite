@@ -130,6 +130,25 @@ export class ImpersonationRepository {
   }
 
   /**
+   * Finds all active impersonation sessions for a user (as impersonator)
+   */
+  async findActiveByImpersonator(
+    impersonatorId: UserId,
+    trx?: Transaction
+  ): Promise<ImpersonationSession[]> {
+    const executor = getExecutor(trx);
+    return await executor
+      .select()
+      .from(impersonationSessions)
+      .where(
+        and(
+          eq(impersonationSessions.impersonatorId, impersonatorId),
+          eq(impersonationSessions.status, 'active')
+        )
+      );
+  }
+
+  /**
    * Gets all active impersonation sessions
    */
   async findAllActive(
