@@ -330,7 +330,7 @@ function OrganizationDetailsPage() {
         {isAdminOrAbove && (
           <>
             <TabsContent value="sso">
-              <OrganizationSSOTab />
+              <OrganizationSSOTab organizationId={organization.id} />
             </TabsContent>
             <TabsContent value="api-access">
               <OrganizationAPIAccessTab />
