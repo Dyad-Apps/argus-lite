@@ -22,6 +22,10 @@ import { ssoConnectionRoutes } from './sso-connections.js';
 import { impersonationRoutes } from './impersonation.js';
 import { platformSettingsRoutes } from './platform-settings.js';
 import { deviceRoutes } from './devices.js';
+import { assetRoutes } from './assets.js';
+import { spaceRoutes } from './spaces.js';
+import { personRoutes } from './persons.js';
+import { activityRoutes } from './activities.js';
 
 export async function registerV1Routes(app: FastifyInstance): Promise<void> {
   // Version info endpoint
@@ -86,4 +90,8 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
 
   // Phase 7: IoT Meta-Model routes
   await app.register(deviceRoutes, { prefix: '/devices' });
+  await app.register(assetRoutes, { prefix: '/assets' });
+  await app.register(spaceRoutes, { prefix: '/spaces' });
+  await app.register(personRoutes, { prefix: '/persons' });
+  await app.register(activityRoutes, { prefix: '/activities' });
 }

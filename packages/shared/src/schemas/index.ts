@@ -15,3 +15,7 @@ export * from './role.schema.js';
 
 // Phase 7: IoT Meta-Model schemas
 export * from './device.schema.js';
+export * from './asset.schema.js';
+export * from './space.schema.js';
+export * from './person.schema.js';
+export * from './activity.schema.js';
