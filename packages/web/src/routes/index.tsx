@@ -110,7 +110,7 @@ function DashboardPage() {
       </div>
 
       {/* Middle Row: System Health (Charts) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[260px]" data-tour-id="dashboard-system-health">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" data-tour-id="dashboard-system-health">
         {/* Realtime System Load */}
         <div className="lg:col-span-2 h-full">
           <RealtimeChart data={systemLoad} />
@@ -123,7 +123,7 @@ function DashboardPage() {
       </div>
 
       {/* Bottom Row: Message Throughput & Quick Access */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[220px]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 h-full" data-tour-id="dashboard-message-chart">
           <MessageChart />
         </div>

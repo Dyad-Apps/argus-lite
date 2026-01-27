@@ -11,6 +11,7 @@ import { systemAdminRepository } from '../repositories/system-admin.repository.j
 import { auditService } from './audit.service.js';
 import { signAccessToken } from '../utils/index.js';
 import type { UserId, OrganizationId } from '@argus/shared';
+import { createOrganizationId } from '@argus/shared';
 
 // Default impersonation session duration: 1 hour
 const DEFAULT_SESSION_DURATION_MS = 60 * 60 * 1000;
@@ -188,11 +189,25 @@ class ImpersonationService {
       userAgent: options.userAgent ?? null,
     });
 
+    // Build organization context for the target user (ADR-002)
+    const targetUserId = targetUser.id as UserId;
+    const targetMemberships = await memberRepo.getUserOrganizations(targetUserId);
+    const accessibleOrganizationIds = targetMemberships.map((m) =>
+      createOrganizationId(m.organizationId)
+    );
+
+    const organizationContext = {
+      rootOrganizationId: createOrganizationId(targetUser.rootOrganizationId as string),
+      currentOrganizationId: createOrganizationId((options.organizationId ?? targetUser.primaryOrganizationId) as string),
+      accessibleOrganizationIds,
+    };
+
     // Generate an access token for the target user (with impersonation flag)
     // The token payload includes impersonation metadata
     const accessToken = signAccessToken(
-      targetUser.id as UserId,
+      targetUserId,
       targetUser.email,
+      organizationContext,
       {
         isImpersonation: true,
         impersonatorId: options.impersonatorId as string,
