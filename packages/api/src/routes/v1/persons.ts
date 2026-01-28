@@ -92,7 +92,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
           title: person.title,
           department: person.department,
           geolocation: person.geolocation,
-          customAttributes: person.customAttributes,
+          customAttributes: person.customAttributes as Record<string, unknown>,
           createdBy: person.createdBy,
           createdAt: person.createdAt.toISOString(),
           updatedAt: person.updatedAt.toISOString(),
@@ -144,7 +144,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         title: person.title,
         department: person.department,
         geolocation: person.geolocation,
-        customAttributes: person.customAttributes,
+        customAttributes: person.customAttributes as Record<string, unknown>,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
         updatedAt: person.updatedAt.toISOString(),
@@ -192,7 +192,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
           title: person.title,
           department: person.department,
           geolocation: person.geolocation,
-          customAttributes: person.customAttributes,
+          customAttributes: person.customAttributes as Record<string, unknown>,
           createdBy: person.createdBy,
           createdAt: person.createdAt.toISOString(),
           updatedAt: person.updatedAt.toISOString(),
@@ -243,7 +243,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         title: person.title,
         department: person.department,
         geolocation: person.geolocation,
-        customAttributes: person.customAttributes,
+        customAttributes: person.customAttributes as Record<string, unknown>,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
         updatedAt: person.updatedAt.toISOString(),
@@ -321,11 +321,12 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId: currentUserId,
         action: 'person.created',
         resourceType: 'person',
         resourceId: person.id,
-        metadata: { name: person.name, userId },
+        details: { name: person.name, userId },
       });
 
       return reply.status(201).send({
@@ -339,7 +340,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         title: person.title,
         department: person.department,
         geolocation: person.geolocation,
-        customAttributes: person.customAttributes,
+        customAttributes: person.customAttributes as Record<string, unknown>,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
         updatedAt: person.updatedAt.toISOString(),
@@ -396,11 +397,12 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'person.updated',
         resourceType: 'person',
         resourceId: id,
-        metadata: { changes: Object.keys(request.body) },
+        details: { changes: Object.keys(request.body) },
       });
 
       return {
@@ -414,7 +416,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         title: person!.title,
         department: person!.department,
         geolocation: person!.geolocation,
-        customAttributes: person!.customAttributes,
+        customAttributes: person!.customAttributes as Record<string, unknown>,
         createdBy: person!.createdBy,
         createdAt: person!.createdAt.toISOString(),
         updatedAt: person!.updatedAt.toISOString(),
@@ -464,11 +466,12 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'person.location_updated',
         resourceType: 'person',
         resourceId: id,
-        metadata: { lat, lng },
+        details: { lat, lng },
       });
 
       return {
@@ -482,7 +485,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         title: person!.title,
         department: person!.department,
         geolocation: person!.geolocation,
-        customAttributes: person!.customAttributes,
+        customAttributes: person!.customAttributes as Record<string, unknown>,
         createdBy: person!.createdBy,
         createdAt: person!.createdAt.toISOString(),
         updatedAt: person!.updatedAt.toISOString(),
@@ -527,11 +530,12 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'person.deleted',
         resourceType: 'person',
         resourceId: id,
-        metadata: { name: person.name },
+        details: { name: person.name },
       });
 
       return reply.status(204).send();

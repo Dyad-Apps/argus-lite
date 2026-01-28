@@ -18,6 +18,12 @@ export interface AuthUser {
    * Provides tenant context for all authenticated requests
    */
   organizationContext?: OrganizationContext;
+
+  /**
+   * Convenience accessor for current organization ID
+   * Equivalent to organizationContext?.currentOrganizationId
+   */
+  organizationId?: OrganizationId;
 }
 
 /** Extend FastifyRequest to include user */
@@ -65,6 +71,7 @@ async function authPlugin(app: FastifyInstance): Promise<void> {
         id: decoded.sub,
         email: decoded.email,
         organizationContext: decoded.org,
+        organizationId: decoded.org?.currentOrganizationId,
       };
     }
   );
@@ -84,6 +91,7 @@ async function authPlugin(app: FastifyInstance): Promise<void> {
             id: decoded.sub,
             email: decoded.email,
             organizationContext: decoded.org,
+            organizationId: decoded.org?.currentOrganizationId,
           };
         }
       }

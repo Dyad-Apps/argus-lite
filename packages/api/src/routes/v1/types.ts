@@ -165,7 +165,7 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         telemetrySchema: type.telemetrySchema as Record<string, unknown> | null,
         presentationConfig: type.presentationConfig as Record<string, unknown> | null,
         parentTypeId: type.parentTypeId,
-        isSystem: type.isSystem,
+        isSystem: type.isSystem ?? false,
         createdBy: type.createdBy,
         createdAt: type.createdAt.toISOString(),
         updatedAt: type.updatedAt.toISOString(),
@@ -250,6 +250,7 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: `${kind}_type.created`,
         resourceType: `${kind}_type`,
@@ -264,11 +265,11 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         description: type.description,
         icon: type.icon,
         category: type.category,
-        attributeSchema: type.attributeSchema,
-        telemetrySchema: type.telemetrySchema,
-        presentationConfig: type.presentationConfig,
+        attributeSchema: type.attributeSchema as Record<string, unknown> | null,
+        telemetrySchema: type.telemetrySchema as Record<string, unknown> | null,
+        presentationConfig: type.presentationConfig as Record<string, unknown> | null,
         parentTypeId: type.parentTypeId,
-        isSystem: type.isSystem,
+        isSystem: type.isSystem ?? false,
         createdBy: type.createdBy,
         createdAt: type.createdAt.toISOString(),
         updatedAt: type.updatedAt.toISOString(),
@@ -358,6 +359,7 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: `${kind}_type.updated`,
         resourceType: `${kind}_type`,
@@ -372,11 +374,11 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         description: type!.description,
         icon: type!.icon,
         category: type!.category,
-        attributeSchema: type!.attributeSchema,
-        telemetrySchema: type!.telemetrySchema,
-        presentationConfig: type!.presentationConfig,
+        attributeSchema: type!.attributeSchema as Record<string, unknown> | null,
+        telemetrySchema: type!.telemetrySchema as Record<string, unknown> | null,
+        presentationConfig: type!.presentationConfig as Record<string, unknown> | null,
         parentTypeId: type!.parentTypeId,
-        isSystem: type!.isSystem,
+        isSystem: type!.isSystem ?? false,
         createdBy: type!.createdBy,
         createdAt: type!.createdAt.toISOString(),
         updatedAt: type!.updatedAt.toISOString(),
@@ -431,11 +433,12 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: `${kind}_type.deleted`,
         resourceType: `${kind}_type`,
         resourceId: id,
-        metadata: { name: existing.name },
+        details: { name: existing.name },
       });
 
       return reply.status(204).send();

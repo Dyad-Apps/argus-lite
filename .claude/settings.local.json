@@ -75,7 +75,18 @@
       "Bash(ls:*)",
       "Bash(cat:*)",
       "Bash(DATABASE_URL=\"postgresql://argus:argus_dev@localhost:5433/argus\" pnpm db:migrate:run:*)",
-      "Bash(docker logs:*)"
+      "Bash(docker logs:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose exec:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(DATABASE_URL=postgresql://argus:argus_dev@localhost:5433/argus npm run db:push:*)",
+      "Bash(DATABASE_URL=postgresql://argus:argus_dev@localhost:5433/argus npm run db:migrate:run:*)",
+      "Bash(grep:*)",
+      "Bash(for file in assets.ts spaces.ts persons.ts activities.ts)",
+      "Bash(do sed -i '/await auditService\\\\.log\\({/,/}\\);/{s/organizationId,$/organizationId,\\\\n        category: ''''data_modification'''',/}' \"$file\")",
+      "Bash(done)",
+      "Bash(git reset:*)"
     ]
   }
 }

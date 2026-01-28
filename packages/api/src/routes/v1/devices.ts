@@ -99,7 +99,7 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
                 lng: parseFloat(device.geolocation.split(',')[1]),
               }
             : null,
-          customAttributes: device.customAttributes,
+          customAttributes: device.customAttributes as Record<string, unknown>,
           createdBy: device.createdBy,
           createdAt: device.createdAt.toISOString(),
           updatedAt: device.updatedAt.toISOString(),
@@ -160,7 +160,7 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
               lng: parseFloat(device.geolocation.split(',')[1]),
             }
           : null,
-        customAttributes: device.customAttributes,
+        customAttributes: device.customAttributes as Record<string, unknown>,
         createdBy: device.createdBy,
         createdAt: device.createdAt.toISOString(),
         updatedAt: device.updatedAt.toISOString(),
@@ -250,11 +250,12 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'device.created',
         resourceType: 'device',
         resourceId: device.id,
-        metadata: { name: device.name },
+        details: { name: device.name },
       });
 
       return reply.status(201).send({
@@ -277,7 +278,7 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
               lng: parseFloat(device.geolocation.split(',')[1]),
             }
           : null,
-        customAttributes: device.customAttributes,
+        customAttributes: device.customAttributes as Record<string, unknown>,
         createdBy: device.createdBy,
         createdAt: device.createdAt.toISOString(),
         updatedAt: device.updatedAt.toISOString(),
@@ -331,11 +332,12 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'device.updated',
         resourceType: 'device',
         resourceId: id,
-        metadata: { changes: Object.keys(request.body) },
+        details: { changes: Object.keys(request.body) },
       });
 
       return {
@@ -358,7 +360,7 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
               lng: parseFloat(device!.geolocation.split(',')[1]),
             }
           : null,
-        customAttributes: device!.customAttributes,
+        customAttributes: device!.customAttributes as Record<string, unknown>,
         createdBy: device!.createdBy,
         createdAt: device!.createdAt.toISOString(),
         updatedAt: device!.updatedAt.toISOString(),
@@ -403,11 +405,12 @@ export async function deviceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'device.deleted',
         resourceType: 'device',
         resourceId: id,
-        metadata: { name: device.name },
+        details: { name: device.name },
       });
 
       return reply.status(204).send();

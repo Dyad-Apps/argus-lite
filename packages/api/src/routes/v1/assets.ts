@@ -111,7 +111,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
               }
             : null,
           lastLocationUpdate: asset.lastLocationUpdate?.toISOString() ?? null,
-          customAttributes: asset.customAttributes,
+          customAttributes: asset.customAttributes as Record<string, unknown>,
           createdBy: asset.createdBy,
           createdAt: asset.createdAt.toISOString(),
           updatedAt: asset.updatedAt.toISOString(),
@@ -170,7 +170,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
               }
             : null,
           lastLocationUpdate: asset.lastLocationUpdate?.toISOString() ?? null,
-          customAttributes: asset.customAttributes,
+          customAttributes: asset.customAttributes as Record<string, unknown>,
           createdBy: asset.createdBy,
           createdAt: asset.createdAt.toISOString(),
           updatedAt: asset.updatedAt.toISOString(),
@@ -230,7 +230,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
             }
           : null,
         lastLocationUpdate: asset.lastLocationUpdate?.toISOString() ?? null,
-        customAttributes: asset.customAttributes,
+        customAttributes: asset.customAttributes as Record<string, unknown>,
         createdBy: asset.createdBy,
         createdAt: asset.createdAt.toISOString(),
         updatedAt: asset.updatedAt.toISOString(),
@@ -300,7 +300,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
               }
             : null,
           lastLocationUpdate: asset.lastLocationUpdate?.toISOString() ?? null,
-          customAttributes: asset.customAttributes,
+          customAttributes: asset.customAttributes as Record<string, unknown>,
           createdBy: asset.createdBy,
           createdAt: asset.createdAt.toISOString(),
           updatedAt: asset.updatedAt.toISOString(),
@@ -388,11 +388,12 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'asset.created',
         resourceType: 'asset',
         resourceId: asset.id,
-        metadata: { name: asset.name },
+        details: { name: asset.name },
       });
 
       return reply.status(201).send({
@@ -414,7 +415,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
             }
           : null,
         lastLocationUpdate: asset.lastLocationUpdate?.toISOString() ?? null,
-        customAttributes: asset.customAttributes,
+        customAttributes: asset.customAttributes as Record<string, unknown>,
         createdBy: asset.createdBy,
         createdAt: asset.createdAt.toISOString(),
         updatedAt: asset.updatedAt.toISOString(),
@@ -493,11 +494,12 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'asset.updated',
         resourceType: 'asset',
         resourceId: id,
-        metadata: { changes: Object.keys(request.body) },
+        details: { changes: Object.keys(request.body) },
       });
 
       return {
@@ -519,7 +521,7 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
             }
           : null,
         lastLocationUpdate: asset!.lastLocationUpdate?.toISOString() ?? null,
-        customAttributes: asset!.customAttributes,
+        customAttributes: asset!.customAttributes as Record<string, unknown>,
         createdBy: asset!.createdBy,
         createdAt: asset!.createdAt.toISOString(),
         updatedAt: asset!.updatedAt.toISOString(),
@@ -617,11 +619,12 @@ export async function assetRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'asset.deleted',
         resourceType: 'asset',
         resourceId: id,
-        metadata: { name: asset.name },
+        details: { name: asset.name },
       });
 
       return reply.status(204).send();

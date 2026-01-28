@@ -112,8 +112,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
           geofence: space.geofence
             ? JSON.parse(space.geofence) // Parse GeoJSON from DB
             : null,
-          isActive: space.isActive,
-          customAttributes: space.customAttributes,
+          isActive: space.isActive ?? false,
+          customAttributes: space.customAttributes as Record<string, unknown>,
           createdBy: space.createdBy,
           createdAt: space.createdAt.toISOString(),
           updatedAt: space.updatedAt.toISOString(),
@@ -173,8 +173,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
           geofence: space.geofence
             ? JSON.parse(space.geofence)
             : null,
-          isActive: space.isActive,
-          customAttributes: space.customAttributes,
+          isActive: space.isActive ?? false,
+          customAttributes: space.customAttributes as Record<string, unknown>,
           createdBy: space.createdBy,
           createdAt: space.createdAt.toISOString(),
           updatedAt: space.updatedAt.toISOString(),
@@ -232,8 +232,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
           geofence: space.geofence
             ? JSON.parse(space.geofence)
             : null,
-          isActive: space.isActive,
-          customAttributes: space.customAttributes,
+          isActive: space.isActive ?? false,
+          customAttributes: space.customAttributes as Record<string, unknown>,
           createdBy: space.createdBy,
           createdAt: space.createdAt.toISOString(),
           updatedAt: space.updatedAt.toISOString(),
@@ -294,8 +294,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
         geofence: space.geofence
           ? JSON.parse(space.geofence)
           : null,
-        isActive: space.isActive,
-        customAttributes: space.customAttributes,
+        isActive: space.isActive ?? false,
+        customAttributes: space.customAttributes as Record<string, unknown>,
         createdBy: space.createdBy,
         createdAt: space.createdAt.toISOString(),
         updatedAt: space.updatedAt.toISOString(),
@@ -366,8 +366,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
           geofence: space.geofence
             ? JSON.parse(space.geofence)
             : null,
-          isActive: space.isActive,
-          customAttributes: space.customAttributes,
+          isActive: space.isActive ?? false,
+          customAttributes: space.customAttributes as Record<string, unknown>,
           createdBy: space.createdBy,
           createdAt: space.createdAt.toISOString(),
           updatedAt: space.updatedAt.toISOString(),
@@ -458,11 +458,12 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'space.created',
         resourceType: 'space',
         resourceId: space.id,
-        metadata: { name: space.name },
+        details: { name: space.name },
       });
 
       return reply.status(201).send({
@@ -485,8 +486,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
         geofence: space.geofence
           ? JSON.parse(space.geofence)
           : null,
-        isActive: space.isActive,
-        customAttributes: space.customAttributes,
+        isActive: space.isActive ?? false,
+        customAttributes: space.customAttributes as Record<string, unknown>,
         createdBy: space.createdBy,
         createdAt: space.createdAt.toISOString(),
         updatedAt: space.updatedAt.toISOString(),
@@ -570,11 +571,12 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'space.updated',
         resourceType: 'space',
         resourceId: id,
-        metadata: { changes: Object.keys(request.body) },
+        details: { changes: Object.keys(request.body) },
       });
 
       return {
@@ -597,8 +599,8 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
         geofence: space!.geofence
           ? JSON.parse(space!.geofence)
           : null,
-        isActive: space!.isActive,
-        customAttributes: space!.customAttributes,
+        isActive: space!.isActive ?? false,
+        customAttributes: space!.customAttributes as Record<string, unknown>,
         createdBy: space!.createdBy,
         createdAt: space!.createdAt.toISOString(),
         updatedAt: space!.updatedAt.toISOString(),
@@ -643,11 +645,12 @@ export async function spaceRoutes(app: FastifyInstance): Promise<void> {
       // Audit log
       await auditService.log({
         organizationId,
+        category: 'data_modification',
         userId,
         action: 'space.deleted',
         resourceType: 'space',
         resourceId: id,
-        metadata: { name: space.name },
+        details: { name: space.name },
       });
 
       return reply.status(204).send();
