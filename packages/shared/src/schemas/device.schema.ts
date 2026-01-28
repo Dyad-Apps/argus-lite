@@ -31,7 +31,7 @@ export const createDeviceSchema = z.object({
   manufacturer: z.string().max(255).optional(),
   firmwareVersion: z.string().max(50).optional(),
   status: deviceStatusSchema.default('inactive'),
-  ipAddress: z.string().ip().optional(),
+  ipAddress: z.string().regex(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/, 'Invalid IP address').optional(),
   macAddress: z.string().regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/, 'Invalid MAC address').optional(),
   geolocation: z
     .object({
@@ -39,7 +39,7 @@ export const createDeviceSchema = z.object({
       lng: z.number().min(-180).max(180),
     })
     .optional(),
-  customAttributes: z.record(z.unknown()).default({}),
+  customAttributes: z.record(z.string(), z.unknown()).default({}),
 });
 export type CreateDeviceInput = z.infer<typeof createDeviceSchema>;
 
@@ -53,7 +53,7 @@ export const updateDeviceSchema = z.object({
   manufacturer: z.string().max(255).optional(),
   firmwareVersion: z.string().max(50).optional(),
   status: deviceStatusSchema.optional(),
-  ipAddress: z.string().ip().optional(),
+  ipAddress: z.string().regex(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/, 'Invalid IP address').optional(),
   macAddress: z.string().regex(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/).optional(),
   geolocation: z
     .object({
@@ -61,7 +61,7 @@ export const updateDeviceSchema = z.object({
       lng: z.number().min(-180).max(180),
     })
     .optional(),
-  customAttributes: z.record(z.unknown()).optional(),
+  customAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 export type UpdateDeviceInput = z.infer<typeof updateDeviceSchema>;
 
@@ -86,7 +86,7 @@ export const deviceResponseSchema = z.object({
       lng: z.number(),
     })
     .nullable(),
-  customAttributes: z.record(z.unknown()),
+  customAttributes: z.record(z.string(), z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

@@ -15,7 +15,7 @@ export const activityStatusSchema = z.enum([
   'cancelled',
   'failed',
 ]);
-export type ActivityStatus = z.infer<typeof activityStatusSchema>;
+export type ActivityStatusEnum = z.infer<typeof activityStatusSchema>;
 
 /** Activity priority enum */
 export const activityPrioritySchema = z.enum(['low', 'medium', 'high', 'critical']);
@@ -58,7 +58,7 @@ export const createActivitySchema = z.object({
   scheduledStart: z.string().datetime().optional(),
   scheduledEnd: z.string().datetime().optional(),
   requiresApproval: z.boolean().default(false),
-  customAttributes: z.record(z.unknown()).default({}),
+  customAttributes: z.record(z.string(), z.unknown()).default({}),
 });
 export type CreateActivityInput = z.infer<typeof createActivitySchema>;
 
@@ -76,8 +76,8 @@ export const updateActivitySchema = z.object({
   scheduledStart: z.string().datetime().nullable().optional(),
   scheduledEnd: z.string().datetime().nullable().optional(),
   completionNotes: z.string().optional(),
-  checklistResults: z.record(z.unknown()).optional(),
-  customAttributes: z.record(z.unknown()).optional(),
+  checklistResults: z.record(z.string(), z.unknown()).optional(),
+  customAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 export type UpdateActivityInput = z.infer<typeof updateActivitySchema>;
 
@@ -117,7 +117,7 @@ export const activityResponseSchema = z.object({
   checklistResults: z.record(z.unknown()).nullable(),
   ownerOrganizationId: z.string().uuid(),
   assigneeOrganizationId: z.string().uuid().nullable(),
-  customAttributes: z.record(z.unknown()),
+  customAttributes: z.record(z.string(), z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

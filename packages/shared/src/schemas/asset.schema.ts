@@ -40,7 +40,7 @@ export const createAssetSchema = z.object({
   status: assetStatusSchema.default('active'),
   healthScore: z.number().min(0).max(100).optional(),
   geolocation: geolocationSchema.optional(),
-  customAttributes: z.record(z.unknown()).default({}),
+  customAttributes: z.record(z.string(), z.unknown()).default({}),
 });
 export type CreateAssetInput = z.infer<typeof createAssetSchema>;
 
@@ -56,7 +56,7 @@ export const updateAssetSchema = z.object({
   status: assetStatusSchema.optional(),
   healthScore: z.number().min(0).max(100).optional(),
   geolocation: geolocationSchema.nullable().optional(),
-  customAttributes: z.record(z.unknown()).optional(),
+  customAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 export type UpdateAssetInput = z.infer<typeof updateAssetSchema>;
 
@@ -75,7 +75,7 @@ export const assetResponseSchema = z.object({
   healthScore: z.string().nullable(), // Numeric stored as string
   geolocation: geolocationSchema.nullable(),
   lastLocationUpdate: z.string().datetime().nullable(),
-  customAttributes: z.record(z.unknown()),
+  customAttributes: z.record(z.string(), z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

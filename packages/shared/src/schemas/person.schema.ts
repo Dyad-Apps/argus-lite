@@ -20,7 +20,7 @@ export const createPersonSchema = z.object({
   phone: z.string().max(50).optional(),
   title: z.string().max(255).optional(),
   department: z.string().max(255).optional(),
-  customAttributes: z.record(z.unknown()).default({}),
+  customAttributes: z.record(z.string(), z.unknown()).default({}),
 });
 export type CreatePersonInput = z.infer<typeof createPersonSchema>;
 
@@ -32,7 +32,7 @@ export const updatePersonSchema = z.object({
   phone: z.string().max(50).optional(),
   title: z.string().max(255).optional(),
   department: z.string().max(255).optional(),
-  customAttributes: z.record(z.unknown()).optional(),
+  customAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 export type UpdatePersonInput = z.infer<typeof updatePersonSchema>;
 
@@ -48,7 +48,7 @@ export const personResponseSchema = z.object({
   title: z.string().nullable(),
   department: z.string().nullable(),
   geolocation: z.string().nullable(),
-  customAttributes: z.record(z.unknown()),
+  customAttributes: z.record(z.string(), z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

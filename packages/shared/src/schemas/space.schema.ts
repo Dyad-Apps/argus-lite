@@ -3,6 +3,7 @@
  */
 
 import { z } from 'zod';
+import { geolocationSchema } from './asset.schema.js';
 
 /** Space name validation */
 export const spaceNameSchema = z
@@ -10,12 +11,6 @@ export const spaceNameSchema = z
   .min(1, 'Space name is required')
   .max(255, 'Space name must be at most 255 characters')
   .trim();
-
-/** Geolocation schema */
-export const geolocationSchema = z.object({
-  lat: z.number().min(-90).max(90),
-  lng: z.number().min(-180).max(180),
-});
 
 /** Geofence polygon coordinates schema */
 export const geofenceSchema = z.array(
@@ -38,7 +33,7 @@ export const createSpaceSchema = z.object({
   geolocation: geolocationSchema.optional(),
   geofence: geofenceSchema.optional(),
   isActive: z.boolean().default(true),
-  customAttributes: z.record(z.unknown()).default({}),
+  customAttributes: z.record(z.string(), z.unknown()).default({}),
 });
 export type CreateSpaceInput = z.infer<typeof createSpaceSchema>;
 
@@ -55,7 +50,7 @@ export const updateSpaceSchema = z.object({
   geolocation: geolocationSchema.nullable().optional(),
   geofence: geofenceSchema.nullable().optional(),
   isActive: z.boolean().optional(),
-  customAttributes: z.record(z.unknown()).optional(),
+  customAttributes: z.record(z.string(), z.unknown()).optional(),
 });
 export type UpdateSpaceInput = z.infer<typeof updateSpaceSchema>;
 
@@ -74,7 +69,7 @@ export const spaceResponseSchema = z.object({
   geolocation: geolocationSchema.nullable(),
   geofence: z.array(z.tuple([z.number(), z.number()])).nullable(),
   isActive: z.boolean(),
-  customAttributes: z.record(z.unknown()),
+  customAttributes: z.record(z.string(), z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

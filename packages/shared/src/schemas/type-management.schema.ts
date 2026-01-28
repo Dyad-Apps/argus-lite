@@ -18,9 +18,9 @@ export const createTypeSchema = z.object({
   description: z.string().max(1000).optional(),
   icon: z.string().max(255).optional(),
   category: z.string().max(255).optional(),
-  attributeSchema: z.record(z.unknown()).optional(),
-  telemetrySchema: z.record(z.unknown()).optional(),
-  presentationConfig: z.record(z.unknown()).optional(),
+  attributeSchema: z.record(z.string(), z.unknown()).optional(),
+  telemetrySchema: z.record(z.string(), z.unknown()).optional(),
+  presentationConfig: z.record(z.string(), z.unknown()).optional(),
   parentTypeId: z.string().uuid('Invalid parent type ID').optional(),
 });
 export type CreateTypeInput = z.infer<typeof createTypeSchema>;
@@ -31,9 +31,9 @@ export const updateTypeSchema = z.object({
   description: z.string().max(1000).optional(),
   icon: z.string().max(255).optional(),
   category: z.string().max(255).optional(),
-  attributeSchema: z.record(z.unknown()).optional(),
-  telemetrySchema: z.record(z.unknown()).optional(),
-  presentationConfig: z.record(z.unknown()).optional(),
+  attributeSchema: z.record(z.string(), z.unknown()).optional(),
+  telemetrySchema: z.record(z.string(), z.unknown()).optional(),
+  presentationConfig: z.record(z.string(), z.unknown()).optional(),
   parentTypeId: z.string().uuid().nullable().optional(),
 });
 export type UpdateTypeInput = z.infer<typeof updateTypeSchema>;
@@ -46,9 +46,9 @@ export const typeResponseSchema = z.object({
   description: z.string().nullable(),
   icon: z.string().nullable(),
   category: z.string().nullable(),
-  attributeSchema: z.record(z.unknown()).nullable(),
-  telemetrySchema: z.record(z.unknown()).nullable(),
-  presentationConfig: z.record(z.unknown()).nullable(),
+  attributeSchema: z.record(z.string(), z.unknown()).nullable(),
+  telemetrySchema: z.record(z.string(), z.unknown()).nullable(),
+  presentationConfig: z.record(z.string(), z.unknown()).nullable(),
   parentTypeId: z.string().uuid().nullable(),
   isSystem: z.boolean(),
   createdBy: z.string().uuid().nullable(),
