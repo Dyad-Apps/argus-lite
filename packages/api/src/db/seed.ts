@@ -146,6 +146,18 @@ async function seed() {
     `;
     console.log('   ✅ Admin linked as organization owner');
 
+    // Step 3b: Add admin to system_admins as super_admin
+    console.log('\n👑 Setting up super admin...');
+    try {
+      await client`
+        INSERT INTO system_admins (user_id, role, is_active, created_by)
+        VALUES (${userId}, 'super_admin', true, ${userId})
+      `;
+      console.log('   ✅ Admin granted super_admin privileges');
+    } catch (error) {
+      console.log('   ⚠️  system_admins table not found, skipping (optional)');
+    }
+
     // Step 4: Create identity providers for SSO
     console.log('\n🔐 Creating identity providers...');
 
