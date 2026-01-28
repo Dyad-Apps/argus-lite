@@ -1,0 +1,25 @@
+
+> @argus/api@0.0.1 dev
+> tsx watch src/server.ts
+
+DATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[23:10:23.941] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[23:10:23.943] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[23:10:24.038] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }

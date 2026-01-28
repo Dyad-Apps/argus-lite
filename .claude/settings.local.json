@@ -86,7 +86,10 @@
       "Bash(for file in assets.ts spaces.ts persons.ts activities.ts)",
       "Bash(do sed -i '/await auditService\\\\.log\\({/,/}\\);/{s/organizationId,$/organizationId,\\\\n        category: ''''data_modification'''',/}' \"$file\")",
       "Bash(done)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(npm run db:seed:*)",
+      "Bash(npm run db:migrate:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
