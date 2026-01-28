@@ -9,7 +9,7 @@
 ## Problem Statement
 
 **Current Challenge**:
-- New device type arrives (e.g., LoRaWAN gateway)
+- New device type arrives (e.g., BLE gateway)
 - Has unique message format
 - Requires specific processing logic
 - **Don't want to redeploy workers** every time a new device is added
