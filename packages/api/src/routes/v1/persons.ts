@@ -91,6 +91,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
           phone: person.phone,
           title: person.title,
           department: person.department,
+          geolocation: person.geolocation,
           customAttributes: person.customAttributes,
           createdBy: person.createdBy,
           createdAt: person.createdAt.toISOString(),
@@ -142,10 +143,60 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         phone: person.phone,
         title: person.title,
         department: person.department,
+        geolocation: person.geolocation,
         customAttributes: person.customAttributes,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
         updatedAt: person.updatedAt.toISOString(),
+      };
+    }
+  );
+
+  // GET /persons/nearby - Find persons within radius (geospatial query)
+  app.withTypeProvider<ZodTypeProvider>().get(
+    '/nearby',
+    {
+      schema: {
+        querystring: z.object({
+          lat: z.coerce.number().min(-90).max(90),
+          lng: z.coerce.number().min(-180).max(180),
+          radiusMeters: z.coerce.number().positive().default(1000),
+        }),
+        response: {
+          200: z.object({
+            data: z.array(personResponseSchema),
+          }),
+        },
+      },
+    },
+    async (request) => {
+      const { lat, lng, radiusMeters } = request.query;
+      const organizationId = request.user!.organizationId as OrganizationId;
+
+      const persons = await personRepo.findNearby(
+        organizationId,
+        lat,
+        lng,
+        radiusMeters
+      );
+
+      return {
+        data: persons.map((person) => ({
+          id: person.id,
+          organizationId: person.organizationId,
+          personTypeId: person.personTypeId,
+          userId: person.userId,
+          name: person.name,
+          email: person.email,
+          phone: person.phone,
+          title: person.title,
+          department: person.department,
+          geolocation: person.geolocation,
+          customAttributes: person.customAttributes,
+          createdBy: person.createdBy,
+          createdAt: person.createdAt.toISOString(),
+          updatedAt: person.updatedAt.toISOString(),
+        })),
       };
     }
   );
@@ -191,6 +242,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         phone: person.phone,
         title: person.title,
         department: person.department,
+        geolocation: person.geolocation,
         customAttributes: person.customAttributes,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
@@ -286,6 +338,7 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         phone: person.phone,
         title: person.title,
         department: person.department,
+        geolocation: person.geolocation,
         customAttributes: person.customAttributes,
         createdBy: person.createdBy,
         createdAt: person.createdAt.toISOString(),
@@ -360,6 +413,75 @@ export async function personRoutes(app: FastifyInstance): Promise<void> {
         phone: person!.phone,
         title: person!.title,
         department: person!.department,
+        geolocation: person!.geolocation,
+        customAttributes: person!.customAttributes,
+        createdBy: person!.createdBy,
+        createdAt: person!.createdAt.toISOString(),
+        updatedAt: person!.updatedAt.toISOString(),
+      };
+    }
+  );
+
+  // PATCH /persons/:id/location - Update person location
+  app.withTypeProvider<ZodTypeProvider>().patch(
+    '/:id/location',
+    {
+      schema: {
+        params: z.object({
+          id: z.string().uuid(),
+        }),
+        body: z.object({
+          lat: z.number().min(-90).max(90),
+          lng: z.number().min(-180).max(180),
+        }),
+        response: {
+          200: personResponseSchema,
+          404: z.object({
+            success: z.literal(false),
+            error: z.object({
+              code: z.string(),
+              message: z.string(),
+              timestamp: z.string(),
+            }),
+          }),
+        },
+      },
+    },
+    async (request) => {
+      const { id } = request.params;
+      const { lat, lng } = request.body;
+      const organizationId = request.user!.organizationId as OrganizationId;
+      const userId = request.user!.id;
+
+      // Check if person exists
+      const exists = await personRepo.exists(id, organizationId);
+      if (!exists) {
+        throw Errors.notFound('Person', id);
+      }
+
+      const person = await personRepo.updateLocation(id, organizationId, lat, lng);
+
+      // Audit log
+      await auditService.log({
+        organizationId,
+        userId,
+        action: 'person.location_updated',
+        resourceType: 'person',
+        resourceId: id,
+        metadata: { lat, lng },
+      });
+
+      return {
+        id: person!.id,
+        organizationId: person!.organizationId,
+        personTypeId: person!.personTypeId,
+        userId: person!.userId,
+        name: person!.name,
+        email: person!.email,
+        phone: person!.phone,
+        title: person!.title,
+        department: person!.department,
+        geolocation: person!.geolocation,
         customAttributes: person!.customAttributes,
         createdBy: person!.createdBy,
         createdAt: person!.createdAt.toISOString(),

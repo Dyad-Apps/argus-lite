@@ -6,10 +6,18 @@ import {
   jsonb,
   index,
   uniqueIndex,
+  customType,
 } from 'drizzle-orm/pg-core';
 import { organizations } from './organizations.js';
 import { personTypes } from './person-types.js';
 import { users } from './users.js';
+
+// PostGIS geometry type for geolocation (Point)
+const geometry = customType<{ data: string; notNull?: boolean; default?: boolean }>({
+  dataType() {
+    return 'geometry(Point, 4326)';
+  },
+});
 
 /**
  * Persons - People in the organization context
@@ -43,6 +51,9 @@ export const persons = pgTable(
     title: text('title'),
     department: text('department'),
 
+    // Location (PostGIS Point)
+    geolocation: geometry('geolocation'),
+
     // Custom attributes (JSONB for flexibility)
     customAttributes: jsonb('custom_attributes').notNull().default({}),
 
@@ -64,7 +75,7 @@ export const persons = pgTable(
     index('idx_persons_email').on(table.email),
     index('idx_persons_deleted').on(table.deletedAt),
     uniqueIndex('persons_user_unique').on(table.userId),
-    // Note: GIN index for JSONB is created in migration
+    // Note: GIN index for JSONB and GIST index for geolocation are created in migration
   ]
 );
 

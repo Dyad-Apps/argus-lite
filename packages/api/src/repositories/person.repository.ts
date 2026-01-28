@@ -353,6 +353,61 @@ export class PersonRepository {
   }
 
   /**
+   * Finds persons within a radius of a location (geospatial query)
+   */
+  async findNearby(
+    organizationId: OrganizationId,
+    lat: number,
+    lng: number,
+    radiusMeters: number,
+    trx?: Transaction
+  ): Promise<Person[]> {
+    const executor = getExecutor(trx);
+    return executor
+      .select()
+      .from(persons)
+      .where(
+        and(
+          eq(persons.organizationId, organizationId),
+          isNull(persons.deletedAt),
+          sql`ST_DWithin(
+            ${persons.geolocation}::geography,
+            ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)::geography,
+            ${radiusMeters}
+          )`
+        )
+      );
+  }
+
+  /**
+   * Updates a person's location
+   */
+  async updateLocation(
+    id: string,
+    organizationId: OrganizationId,
+    lat: number,
+    lng: number,
+    trx?: Transaction
+  ): Promise<Person | null> {
+    const executor = getExecutor(trx);
+    const result = await executor
+      .update(persons)
+      .set({
+        geolocation: sql`ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)`,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          eq(persons.id, id),
+          eq(persons.organizationId, organizationId),
+          isNull(persons.deletedAt)
+        )
+      )
+      .returning();
+    return result[0] ?? null;
+  }
+
+  /**
    * Executes operations within a transaction
    */
   async withTransaction<T>(fn: (trx: Transaction) => Promise<T>): Promise<T> {

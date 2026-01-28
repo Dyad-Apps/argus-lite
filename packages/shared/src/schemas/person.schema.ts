@@ -47,6 +47,7 @@ export const personResponseSchema = z.object({
   phone: z.string().nullable(),
   title: z.string().nullable(),
   department: z.string().nullable(),
+  geolocation: z.string().nullable(),
   customAttributes: z.record(z.unknown()),
   createdBy: z.string().uuid().nullable(),
   createdAt: z.string().datetime(),
