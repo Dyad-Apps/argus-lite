@@ -114,7 +114,7 @@ export const activityResponseSchema = z.object({
   approvedByUserId: z.string().uuid().nullable(),
   approvedAt: z.string().datetime().nullable(),
   completionNotes: z.string().nullable(),
-  checklistResults: z.record(z.unknown()).nullable(),
+  checklistResults: z.record(z.string(), z.unknown()).nullable(),
   ownerOrganizationId: z.string().uuid(),
   assigneeOrganizationId: z.string().uuid().nullable(),
   customAttributes: z.record(z.string(), z.unknown()),

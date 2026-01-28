@@ -104,11 +104,11 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
           description: type.description,
           icon: type.icon,
           category: type.category,
-          attributeSchema: type.attributeSchema,
-          telemetrySchema: type.telemetrySchema,
-          presentationConfig: type.presentationConfig,
+          attributeSchema: type.attributeSchema as Record<string, unknown> | null,
+          telemetrySchema: type.telemetrySchema as Record<string, unknown> | null,
+          presentationConfig: type.presentationConfig as Record<string, unknown> | null,
           parentTypeId: type.parentTypeId,
-          isSystem: type.isSystem,
+          isSystem: type.isSystem ?? false,
           createdBy: type.createdBy,
           createdAt: type.createdAt.toISOString(),
           updatedAt: type.updatedAt.toISOString(),
@@ -161,9 +161,9 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         description: type.description,
         icon: type.icon,
         category: type.category,
-        attributeSchema: type.attributeSchema,
-        telemetrySchema: type.telemetrySchema,
-        presentationConfig: type.presentationConfig,
+        attributeSchema: type.attributeSchema as Record<string, unknown> | null,
+        telemetrySchema: type.telemetrySchema as Record<string, unknown> | null,
+        presentationConfig: type.presentationConfig as Record<string, unknown> | null,
         parentTypeId: type.parentTypeId,
         isSystem: type.isSystem,
         createdBy: type.createdBy,
@@ -254,7 +254,7 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         action: `${kind}_type.created`,
         resourceType: `${kind}_type`,
         resourceId: type.id,
-        metadata: { name: type.name },
+        details: { name: type.name },
       });
 
       return reply.status(201).send({
@@ -362,7 +362,7 @@ export async function typeManagementRoutes(app: FastifyInstance): Promise<void> 
         action: `${kind}_type.updated`,
         resourceType: `${kind}_type`,
         resourceId: id,
-        metadata: { changes: Object.keys(request.body) },
+        details: { changes: Object.keys(request.body) },
       });
 
       return {
