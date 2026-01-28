@@ -135,6 +135,42 @@ These tables must exist for the application to work:
 4. **Document migration dependencies** so missing tables are caught early
 5. **Schema changes need migrations** - never update schema without creating a migration
 
+## Common Issues After Database Recreation
+
+### Issue: "Access denied. Super Admin privileges required"
+
+**Symptom**: Platform Settings page shows 403 error even when logged in as admin
+
+**Cause**: Admin user exists but is not in the `system_admins` table
+
+**Solution**:
+```sql
+-- Get admin user ID
+SELECT id FROM users WHERE email = 'admin@viaanix.com';
+
+-- Add to system_admins (replace USER_ID with the actual ID)
+INSERT INTO system_admins (user_id, role, is_active, created_by)
+VALUES ('USER_ID', 'super_admin', true, 'USER_ID');
+```
+
+**Or** re-run the seed script which now includes this step:
+```bash
+npm run db:seed
+```
+
+### Issue: "Failed to fetch groups" on Users page
+
+**Symptom**: Users page shows 500 error when trying to load
+
+**Cause**: Migration 0003 (user_groups and roles) was not applied
+
+**Solution**:
+```bash
+cd packages/api
+npx tsx src/db/migrate-single.ts 0003_user_groups_and_roles.sql
+npx tsx src/db/migrate-single.ts 0004_impersonation_sessions.sql
+```
+
 ## Quick Health Check
 
 After recreating database, verify critical tables:
