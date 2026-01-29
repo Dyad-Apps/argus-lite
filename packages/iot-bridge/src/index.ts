@@ -4,10 +4,19 @@
  * Bridges MQTT telemetry messages from EMQX to NATS JetStream.
  */
 
-import 'dotenv/config';
+// Load environment variables from root .env file
+import { config } from 'dotenv';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// From src/ directory: ../../../.env goes to root .env
+config({ path: resolve(__dirname, '../../../.env') });
 import { loadConfig } from './config.js';
 import { createLogger } from './logger.js';
 import { BridgeService } from './bridge.js';
+import { DeviceMappingService } from './services/device-mapping.js';
+import { createDatabaseLoader } from './services/db-loader.js';
 
 async function main() {
   // Load configuration
@@ -18,8 +27,35 @@ async function main() {
 
   logger.info({ config: { mqtt: config.mqtt.brokerUrl, nats: config.nats.servers } }, 'Starting IoT Bridge');
 
-  // Create bridge service
-  const bridge = new BridgeService(config, logger);
+  // Create device mapping service
+  const deviceMappingService = new DeviceMappingService(
+    {
+      refreshIntervalMs: 300000, // Refresh every 5 minutes
+      enableRedis: false, // In-memory only for now
+    },
+    logger.child({ component: 'device-mapping' })
+  );
+
+  // Create database loader
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    logger.warn('DATABASE_URL not set - device mappings will be empty (ChirpStack integration disabled)');
+  }
+
+  const dbLoader = databaseUrl
+    ? createDatabaseLoader({ databaseUrl }, logger.child({ component: 'db-loader' }))
+    : async () => [];
+
+  // Initialize device mapping service (load mappings from database)
+  await deviceMappingService.initialize(dbLoader);
+  const mappingStats = deviceMappingService.getStats();
+  logger.info(
+    { mappingCount: mappingStats.size, lastRefresh: mappingStats.lastRefresh },
+    'Device mapping service initialized'
+  );
+
+  // Create bridge service with device mapping
+  const bridge = new BridgeService(config, logger, deviceMappingService);
 
   // Handle graceful shutdown
   const shutdown = async (signal: string) => {

@@ -2,6 +2,7 @@
  * IoT Bridge Service
  *
  * Bridges MQTT messages from EMQX to NATS JetStream.
+ * Supports both direct device messages and ChirpStack uplink messages.
  */
 
 import type { Config } from './config.js';
@@ -9,10 +10,17 @@ import type { Logger } from './logger.js';
 import { MqttClient, type MqttMessage } from './mqtt-client.js';
 import { NatsClient, type NatsMessage } from './nats-client.js';
 import { validateMessage, extractDeviceIdFromTopic } from './validator.js';
+import { DeviceMappingService } from './services/device-mapping.js';
+import {
+  transformChirpStackUplink,
+  isChirpStackTopic,
+  type ChirpStackUplink,
+} from './adapters/chirpstack-adapter.js';
 
 export class BridgeService {
   private mqttClient: MqttClient;
   private natsClient: NatsClient;
+  private deviceMappingService: DeviceMappingService;
   private messageQueue: NatsMessage[] = [];
   private flushTimer: NodeJS.Timeout | null = null;
   private isShuttingDown = false;
@@ -24,16 +32,21 @@ export class BridgeService {
     messagesFailed: 0,
     messagesInvalid: 0,
     messagesTooLarge: 0,
+    messagesChirpStack: 0,
+    messagesDirect: 0,
+    chirpStackUnmapped: 0,
     bytesReceived: 0,
     bytesPublished: 0,
   };
 
   constructor(
     private config: Config,
-    private logger: Logger
+    private logger: Logger,
+    deviceMappingService?: DeviceMappingService
   ) {
     this.mqttClient = new MqttClient(config, logger);
     this.natsClient = new NatsClient(config, logger);
+    this.deviceMappingService = deviceMappingService || new DeviceMappingService({}, logger);
   }
 
   /**
@@ -41,6 +54,13 @@ export class BridgeService {
    */
   async start(): Promise<void> {
     this.logger.info('Starting IoT Bridge Service');
+
+    // Device mapping service should already be initialized by the caller
+    const mappingStats = this.deviceMappingService.getStats();
+    this.logger.info(
+      { mappingCount: mappingStats.size, lastRefresh: mappingStats.lastRefresh },
+      'Using device mapping service'
+    );
 
     // Connect to NATS first (required for message publishing)
     await this.natsClient.connect();
@@ -67,12 +87,99 @@ export class BridgeService {
 
   /**
    * Handle incoming MQTT message
+   * Routes to appropriate handler based on topic pattern
    */
   private async handleMqttMessage(message: MqttMessage): Promise<void> {
     this.metrics.messagesReceived++;
     this.metrics.bytesReceived += message.payload.length;
 
-    // Extract device ID from topic
+    // Route based on topic pattern
+    if (isChirpStackTopic(message.topic)) {
+      await this.handleChirpStackMessage(message);
+    } else if (message.topic.startsWith('devices/')) {
+      await this.handleDirectDeviceMessage(message);
+    } else {
+      this.logger.warn({ topic: message.topic }, 'Unknown topic pattern, ignoring message');
+      this.metrics.messagesInvalid++;
+    }
+  }
+
+  /**
+   * Handle ChirpStack uplink message
+   */
+  private async handleChirpStackMessage(message: MqttMessage): Promise<void> {
+    this.metrics.messagesChirpStack++;
+
+    // Parse ChirpStack uplink payload
+    let uplink: ChirpStackUplink;
+    try {
+      uplink = JSON.parse(message.payload.toString('utf-8')) as ChirpStackUplink;
+    } catch (error) {
+      this.logger.warn(
+        { topic: message.topic, error: error instanceof Error ? error.message : String(error) },
+        'Failed to parse ChirpStack uplink payload as JSON'
+      );
+      this.metrics.messagesInvalid++;
+      return;
+    }
+
+    // Transform to canonical format
+    const mappingCache = this.deviceMappingService.getMappingCache();
+    const canonical = transformChirpStackUplink(uplink, mappingCache, this.logger);
+
+    if (!canonical) {
+      // Device mapping not found (DevEUI not provisioned in ArgusIQ)
+      this.metrics.chirpStackUnmapped++;
+      return;
+    }
+
+    // Create NATS message with canonical format
+    const natsMessage: NatsMessage = {
+      subject: `${this.config.nats.subjectPrefix}.raw.${canonical.deviceId}`,
+      data: new TextEncoder().encode(JSON.stringify(canonical)),
+      headers: {
+        'mqtt-topic': message.topic,
+        'mqtt-qos': message.qos.toString(),
+        'device-id': canonical.deviceId,
+        'source': 'chirpstack',
+        'dev-eui': canonical.metadata.devEui || '',
+        'f-port': canonical.metadata.fPort?.toString() || '',
+        'received-at': new Date().toISOString(),
+      },
+    };
+
+    // Check message size
+    if (natsMessage.data.length > this.config.processing.maxMessageSize) {
+      this.logger.warn(
+        {
+          deviceId: canonical.deviceId,
+          devEui: canonical.metadata.devEui,
+          size: natsMessage.data.length,
+          maxSize: this.config.processing.maxMessageSize,
+        },
+        'ChirpStack message exceeds maximum size, dropping'
+      );
+      this.metrics.messagesTooLarge++;
+      return;
+    }
+
+    // Add to queue for batch processing
+    this.messageQueue.push(natsMessage);
+    this.metrics.bytesPublished += natsMessage.data.length;
+
+    // Flush if batch size reached
+    if (this.messageQueue.length >= this.config.processing.batchSize) {
+      await this.flushQueue();
+    }
+  }
+
+  /**
+   * Handle direct device message (cellular devices, BLE gateways, etc.)
+   */
+  private async handleDirectDeviceMessage(message: MqttMessage): Promise<void> {
+    this.metrics.messagesDirect++;
+
+    // Extract device ID from topic (devices/{uuid}/telemetry)
     const deviceId = extractDeviceIdFromTopic(message.topic);
     if (!deviceId) {
       this.logger.warn({ topic: message.topic }, 'Could not extract device ID from topic');
@@ -115,6 +222,7 @@ export class BridgeService {
         'mqtt-topic': message.topic,
         'mqtt-qos': message.qos.toString(),
         'device-id': deviceId,
+        'source': 'direct',
         'received-at': new Date().toISOString(),
       },
     };
@@ -129,7 +237,7 @@ export class BridgeService {
         },
         'Message exceeds maximum size, dropping'
       );
-      this.metrics.messagesTooLarge = (this.metrics.messagesTooLarge ?? 0) + 1;
+      this.metrics.messagesTooLarge++;
       return;
     }
 
@@ -219,6 +327,9 @@ export class BridgeService {
 
     // Flush remaining messages
     await this.flushQueue();
+
+    // Close device mapping service
+    await this.deviceMappingService.close();
 
     // Disconnect clients
     await this.mqttClient.disconnect();

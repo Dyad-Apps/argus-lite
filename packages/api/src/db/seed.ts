@@ -505,6 +505,20 @@ async function seed() {
         RETURNING id
       `;
       console.log(`   ✅ Created sample device: Location Hub 001 (${device2.id})`);
+
+      // LoRa device for ChirpStack integration testing
+      const [device3] = await client`
+        INSERT INTO devices (
+          organization_id, device_type_id, name, description, serial_number,
+          device_role, protocol, logical_identifier, status, created_by
+        ) SELECT
+          ${orgId}, id, 'Location Hub 001', 'LoRa-based location tracking hub (ChirpStack)',
+          'LH-LORA-001-2024', 'gateway', 'lorawan', '0004a30b00ebd19f', 'active', ${userId}
+        FROM device_types WHERE name = 'Location Hub' AND organization_id = ${orgId}
+        RETURNING id
+      `;
+      console.log(`   ✅ Created sample LoRa device: Location Hub 001 (LoRa) (${device3.id})`);
+      console.log(`      DevEUI: 0004a30b00ebd19f (for ChirpStack integration testing)`);
     } catch (error) {
       console.log('   ⚠️  Error creating devices:', (error as Error).message);
     }
@@ -560,8 +574,12 @@ async function seed() {
     console.log('🚀 IoT Platform Seed Data:');
     console.log('   Device Types: Temperature Sensor, Location Hub, BLE Gateway');
     console.log('   Asset Types:  HVAC System, Cold Storage');
-    console.log('   Devices:      Temp Sensor 001, Location Hub 001');
+    console.log('   Devices:      Temp Sensor 001, Location Hub 001, Location Hub 001 (LoRa)');
     console.log('   Assets:       HVAC Unit A1, Cold Storage Room 1');
+    console.log('');
+    console.log('📡 ChirpStack Integration:');
+    console.log('   LoRa Device:  Location Hub 001 (LoRa)');
+    console.log('   DevEUI:       0004a30b00ebd19f');
     console.log('');
     console.log('⚠️  Note: SSO providers use placeholder credentials.');
     console.log('   Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, etc. in .env');

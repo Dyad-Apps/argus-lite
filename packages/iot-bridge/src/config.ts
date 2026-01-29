@@ -18,7 +18,9 @@ const configSchema = z.object({
     username: z.string().optional(),
     password: z.string().optional(),
     // Topics to subscribe to (supports wildcards)
-    topics: z.array(z.string()).default(['devices/+/telemetry']),
+    // - devices/+/telemetry: Direct device messages (cellular, BLE gateways)
+    // - chirpstack/+/devices/+/up: ChirpStack uplink messages (LoRa devices)
+    topics: z.array(z.string()).default(['devices/+/telemetry', 'chirpstack/+/devices/+/up']),
     qos: z.union([z.literal(0), z.literal(1), z.literal(2)]).default(1),
     // Connection options
     keepalive: z.number().default(60),
