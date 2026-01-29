@@ -65,13 +65,19 @@ export type Config = z.infer<typeof configSchema>;
  * Load configuration from environment variables
  */
 export function loadConfig(): Config {
+  // In development, add random suffix to client ID to avoid conflicts
+  const clientId = process.env.MQTT_CLIENT_ID || 'argus-iot-bridge';
+  const finalClientId = process.env.NODE_ENV === 'development'
+    ? `${clientId}-${Math.random().toString(36).substring(7)}`
+    : clientId;
+
   const config = configSchema.parse({
     serviceName: process.env.SERVICE_NAME,
     nodeEnv: process.env.NODE_ENV,
 
     mqtt: {
       brokerUrl: process.env.MQTT_BROKER_URL,
-      clientId: process.env.MQTT_CLIENT_ID,
+      clientId: finalClientId,
       username: process.env.MQTT_USERNAME,
       password: process.env.MQTT_PASSWORD,
       topics: process.env.MQTT_TOPICS?.split(','),
