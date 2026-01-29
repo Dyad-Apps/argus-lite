@@ -55,6 +55,11 @@ export const assets = pgTable(
     // Status
     status: assetStatusEnum('status').notNull().default('active'),
     healthScore: numeric('health_score', { precision: 5, scale: 2 }),
+    healthScoreUpdatedAt: timestamp('health_score_updated_at', {
+      withTimezone: true,
+    }),
+    healthScoreComputedBy: text('health_score_computed_by'),
+    lastTelemetryAt: timestamp('last_telemetry_at', { withTimezone: true }),
 
     // Geospatial
     geolocation: geometry('geolocation'),
@@ -85,6 +90,7 @@ export const assets = pgTable(
     index('idx_assets_serial').on(table.serialNumber),
     index('idx_assets_health').on(table.healthScore),
     index('idx_assets_deleted').on(table.deletedAt),
+    index('idx_assets_last_telemetry').on(table.lastTelemetryAt),
     // Note: GIN index for JSONB and GIST for geometry are created in migration
   ]
 );

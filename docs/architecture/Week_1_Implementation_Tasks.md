@@ -982,269 +982,313 @@ export async function subscribeToInvalidations(callback: (message: CacheInvalida
 **Owner**: Backend Engineer
 **Dependencies**: W1-T2 (EMQX), W1-T3 (NATS)
 
+**Architecture Decision**: Bridge subscribes directly to EMQX as MQTT client (not webhooks)
+- **Rationale**: Simpler architecture, better backpressure, standard MQTT flow control
+- **Benefits**: Shared subscriptions for horizontal scaling, clearer at-least-once semantics
+- **See**: IoT_Platform_Architecture_Design.md Section 3.2.2 for full decision rationale
+
 #### Subtasks
 
 ##### 5.1 Create Bridge Service Structure (2h)
 
-**Directory**: `packages/api/src/services/mqtt-nats-bridge/`
+**Directory**: `packages/iot-bridge/`
 
 ```
-mqtt-nats-bridge/
-├── index.ts           # Service entry point
-├── server.ts          # Fastify HTTP server
-├── bridge.ts          # Core bridge logic
-├── message-parser.ts  # Parse MQTT messages
-├── config.ts          # Configuration
-└── types.ts           # TypeScript types
+iot-bridge/
+├── src/
+│   ├── index.ts           # Service entry point
+│   ├── bridge.ts          # Core bridge logic
+│   ├── mqtt-client.ts     # MQTT client wrapper
+│   ├── nats-client.ts     # NATS JetStream wrapper
+│   ├── config.ts          # Configuration management
+│   ├── logger.ts          # Structured logging
+│   └── validator.ts       # Message validation
+├── package.json           # Dependencies
+├── tsconfig.json          # TypeScript config
+├── .env.example           # Environment template
+└── .env                   # Local config
 ```
 
-**File**: `packages/api/src/services/mqtt-nats-bridge/index.ts`
+**File**: `packages/iot-bridge/src/index.ts`
 
 ```typescript
-import { startBridgeServer } from './server.js';
-import { logger } from '../../lib/logger.js';
+import 'dotenv/config';
+import { loadConfig } from './config.js';
+import { createLogger } from './logger.js';
+import { BridgeService } from './bridge.js';
 
 async function main() {
-  logger.info('Starting MQTT→NATS Bridge Service');
+  const config = loadConfig();
+  const logger = createLogger(config);
 
-  try {
-    await startBridgeServer();
-    logger.info('Bridge service started successfully');
-  } catch (error) {
-    logger.error('Failed to start bridge service', { error });
-    process.exit(1);
-  }
+  logger.info('Starting IoT Bridge');
+
+  const bridge = new BridgeService(config, logger);
+
+  // Graceful shutdown
+  const shutdown = async (signal: string) => {
+    logger.info({ signal }, 'Received shutdown signal');
+    await bridge.stop();
+    process.exit(0);
+  };
+
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
+
+  await bridge.start();
 }
 
 main();
 ```
 
 **Acceptance Criteria**:
-- [ ] Service directory structure created
-- [ ] Entry point defined
-- [ ] Basic logging configured
+- [x] Service directory structure created
+- [x] Entry point defined with graceful shutdown
+- [x] Configuration management with Zod validation
+- [x] Structured logging with Pino
 
 ---
 
-##### 5.2 Implement HTTP Webhook Receiver (3h)
+##### 5.2 Implement MQTT Client Subscriber (3h)
 
-Receive webhooks from EMQX.
+**Architecture**: Bridge subscribes directly to MQTT topics (not webhooks)
 
-**File**: `packages/api/src/services/mqtt-nats-bridge/server.ts`
-
-```typescript
-import Fastify from 'fastify';
-import { processMqttMessage } from './bridge.js';
-import { logger } from '../../lib/logger.js';
-
-export async function startBridgeServer() {
-  const server = Fastify({ logger: true });
-
-  // Health check
-  server.get('/health', async () => {
-    return { status: 'ok', service: 'mqtt-nats-bridge' };
-  });
-
-  // EMQX webhook endpoint
-  server.post('/ingest', async (request, reply) => {
-    try {
-      const {
-        topic,
-        payload,
-        clientid,
-        username,
-        timestamp,
-      } = request.body as {
-        topic: string;
-        payload: string; // Base64 encoded
-        clientid: string;
-        username: string;
-        timestamp: number;
-      };
-
-      // Decode payload
-      const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
-      const parsedPayload = JSON.parse(decodedPayload);
-
-      // Process message
-      await processMqttMessage({
-        topic,
-        payload: parsedPayload,
-        clientId: clientid,
-        username,
-        receivedAt: new Date(timestamp),
-      });
-
-      return { success: true };
-    } catch (error) {
-      logger.error('Failed to process MQTT message', { error });
-      reply.code(500);
-      return { success: false, error: (error as Error).message };
-    }
-  });
-
-  const port = parseInt(process.env.BRIDGE_PORT || '3001');
-  await server.listen({ port, host: '0.0.0.0' });
-  logger.info(`Bridge server listening on port ${port}`);
-
-  return server;
-}
-```
-
-**Acceptance Criteria**:
-- [ ] HTTP server created
-- [ ] Webhook endpoint implemented
-- [ ] Health check endpoint works
-- [ ] Payload decoding works
-- [ ] Error handling in place
-
----
-
-##### 5.3 Implement NATS Publisher (3h)
-
-Publish messages to NATS JetStream.
-
-**File**: `packages/api/src/services/mqtt-nats-bridge/bridge.ts`
+**File**: `packages/iot-bridge/src/mqtt-client.ts`
 
 ```typescript
-import { connect, JetStreamClient, StringCodec } from 'nats';
-import { logger } from '../../lib/logger.js';
-import { db } from '../../db/index.js';
-import { telemetryRaw } from '../../db/schema/telemetry-raw.js';
+import mqtt from 'mqtt';
+import type { Config } from './config.js';
+import type { Logger } from './logger.js';
 
-let natsConnection: any;
-let jetStream: JetStreamClient;
-const sc = StringCodec();
-
-export async function initializeNatsConnection() {
-  natsConnection = await connect({
-    servers: [
-      'nats://nats-1:4222',
-      'nats://nats-2:4222',
-      'nats://nats-3:4222',
-    ],
-    reconnect: true,
-    maxReconnectAttempts: -1, // Infinite reconnects
-  });
-
-  jetStream = natsConnection.jetstream();
-  logger.info('Connected to NATS JetStream');
-}
-
-export async function processMqttMessage(message: {
+export interface MqttMessage {
   topic: string;
-  payload: any;
-  clientId: string;
-  username: string;
-  receivedAt: Date;
-}) {
-  const { topic, payload, clientId, receivedAt } = message;
+  payload: Buffer;
+  qos: 0 | 1 | 2;
+  retain: boolean;
+}
 
-  // Extract device ID from topic (format: devices/{deviceId}/telemetry)
-  const deviceIdMatch = topic.match(/devices\/([^\/]+)\/telemetry/);
-  if (!deviceIdMatch) {
-    logger.warn('Invalid topic format', { topic });
-    return;
-  }
-  const deviceId = deviceIdMatch[1];
+export type MessageHandler = (message: MqttMessage) => Promise<void>;
 
-  try {
-    // 1. Write to telemetry_raw table (immutable record)
-    await db.insert(telemetryRaw).values({
-      deviceId,
-      payload: payload as any,
-      ingestionSource: 'mqtt',
-      mqttTopic: topic,
-      clientId,
-      deviceTimestamp: payload.timestamp ? new Date(payload.timestamp) : null,
-      receivedAt,
+export class MqttClient {
+  private client: mqtt.MqttClient | null = null;
+  private messageHandler: MessageHandler | null = null;
+
+  constructor(private config: Config, private logger: Logger) {}
+
+  async connect(): Promise<void> {
+    this.logger.info({ brokerUrl: this.config.mqtt.brokerUrl }, 'Connecting to MQTT broker');
+
+    this.client = mqtt.connect(this.config.mqtt.brokerUrl, {
+      clientId: this.config.mqtt.clientId,
+      username: this.config.mqtt.username,
+      password: this.config.mqtt.password,
+      keepalive: 60,
+      reconnectPeriod: 5000,
+      clean: true,
     });
 
-    // 2. Publish to NATS
-    const natsSubject = `telemetry.raw.v1.${deviceId}`;
-    const message = {
-      deviceId,
-      payload,
-      topic,
-      clientId,
-      receivedAt: receivedAt.toISOString(),
-    };
+    // Event handlers
+    this.client.on('connect', () => this.logger.info('Connected to MQTT broker'));
+    this.client.on('error', (error) => this.logger.error({ error }, 'MQTT error'));
+    this.client.on('reconnect', () => this.logger.info('Reconnecting to MQTT'));
 
-    await jetStream.publish(natsSubject, sc.encode(JSON.stringify(message)));
+    this.client.on('message', async (topic, payload, packet) => {
+      if (this.messageHandler) {
+        await this.messageHandler({ topic, payload, qos: packet.qos, retain: packet.retain });
+      }
+    });
 
-    logger.debug('Message published to NATS', { deviceId, subject: natsSubject });
-  } catch (error) {
-    logger.error('Failed to process MQTT message', { error, deviceId });
-    throw error;
+    return new Promise((resolve) => {
+      this.client!.once('connect', resolve);
+    });
+  }
+
+  async subscribe(topics: string[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client!.subscribe(topics, { qos: 1 }, (error, granted) => {
+        if (error) reject(error);
+        else {
+          this.logger.info({ granted }, 'Subscribed to MQTT topics');
+          resolve();
+        }
+      });
+    });
+  }
+
+  onMessage(handler: MessageHandler): void {
+    this.messageHandler = handler;
+  }
+
+  async disconnect(): Promise<void> {
+    if (!this.client) return;
+    return new Promise((resolve) => {
+      this.client!.end(false, {}, () => {
+        this.logger.info('Disconnected from MQTT broker');
+        resolve();
+      });
+    });
   }
 }
 ```
 
+**Topic Pattern**: `devices/+/telemetry` (wildcard for any device ID)
+**QoS**: 1 (at-least-once delivery)
+**Future**: Use shared subscriptions `$share/bridge-group/devices/+/telemetry` for horizontal scaling
+
 **Acceptance Criteria**:
-- [ ] NATS connection established
-- [ ] Messages published to correct stream
-- [ ] Device ID extracted from topic
-- [ ] Raw telemetry written to database
-- [ ] Error handling and retry logic
+- [x] MQTT client connects to EMQX
+- [x] Subscribes to device telemetry topics
+- [x] Auto-reconnect on connection loss
+- [x] Message handler callback pattern
+- [x] Graceful disconnect
+
+---
+
+##### 5.3 Implement NATS JetStream Publisher (3h)
+
+**File**: `packages/iot-bridge/src/nats-client.ts`
+
+```typescript
+import { connect, JetStreamClient, JetStreamManager } from 'nats';
+import type { Config } from './config.js';
+import type { Logger } from './logger.js';
+
+export class NatsClient {
+  private nc: NatsConnection | null = null;
+  private js: JetStreamClient | null = null;
+  private jsm: JetStreamManager | null = null;
+
+  constructor(private config: Config, private logger: Logger) {}
+
+  async connect(): Promise<void> {
+    this.logger.info({ servers: this.config.nats.servers }, 'Connecting to NATS');
+
+    this.nc = await connect({
+      servers: this.config.nats.servers,
+      maxReconnectAttempts: -1, // Infinite
+      reconnectTimeWait: 2000,
+    });
+
+    this.js = this.nc.jetstream();
+    this.jsm = await this.nc.jetstreamManager();
+
+    await this.ensureStream();
+    this.logger.info('Connected to NATS JetStream');
+  }
+
+  private async ensureStream(): Promise<void> {
+    const streamName = this.config.nats.streamName;
+    try {
+      await this.jsm!.streams.info(streamName);
+      this.logger.info({ streamName }, 'Stream exists');
+    } catch {
+      // Create stream
+      await this.jsm!.streams.add({
+        name: streamName,
+        subjects: [`${this.config.nats.subjectPrefix}.>`],
+        max_msgs: 1_000_000,
+        max_bytes: 10 * 1024 * 1024 * 1024, // 10GB
+        max_age: 7 * 24 * 60 * 60 * 1_000_000_000, // 7 days
+      });
+      this.logger.info({ streamName }, 'Stream created');
+    }
+  }
+
+  async publish(subject: string, data: Uint8Array, headers?: Record<string, string>): Promise<void> {
+    const ack = await this.js!.publish(subject, data, { headers });
+    this.logger.debug({ subject, seq: ack.seq }, 'Published to NATS');
+  }
+
+  async disconnect(): Promise<void> {
+    await this.nc?.drain();
+    await this.nc?.close();
+    this.logger.info('Disconnected from NATS');
+  }
+}
+```
+
+**Stream**: `TELEMETRY`
+**Subjects**: `telemetry.raw.{deviceId}`
+**Retention**: 7 days, 10GB max, 1M messages max
+
+**Acceptance Criteria**:
+- [x] NATS connection established
+- [x] JetStream stream auto-created if missing
+- [x] Messages published with headers
+- [x] Graceful disconnect with drain
 
 ---
 
 ##### 5.4 Add Dockerfile & docker-compose Entry (1h)
 
-**File**: `packages/api/Dockerfile.bridge`
+**File**: `packages/iot-bridge/Dockerfile`
 
 ```dockerfile
 FROM node:20-alpine
 
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
-COPY pnpm-lock.yaml ./
+COPY pnpm-lock.yaml* ./
 
+# Install pnpm and dependencies
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 
+# Copy source code
 COPY . .
 
+# Build TypeScript
 RUN pnpm build
 
-CMD ["node", "dist/services/mqtt-nats-bridge/index.js"]
+# Run the bridge service
+CMD ["node", "dist/index.js"]
 ```
 
 **File**: Add to `docker-compose.yml`
 
 ```yaml
 services:
-  mqtt-nats-bridge:
+  iot-bridge:
     build:
-      context: ./packages/api
-      dockerfile: Dockerfile.bridge
-    container_name: argusiq-mqtt-bridge
+      context: ./packages/iot-bridge
+      dockerfile: Dockerfile
+    container_name: argus-iot-bridge
     environment:
       NODE_ENV: production
-      BRIDGE_PORT: 3000
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_HOST: redis
-      NATS_URLS: nats://nats-1:4222,nats://nats-2:4222,nats://nats-3:4222
-    ports:
-      - "3001:3000"
+      SERVICE_NAME: iot-bridge
+      # MQTT
+      MQTT_BROKER_URL: mqtt://emqx:1883
+      MQTT_CLIENT_ID: argus-iot-bridge
+      MQTT_TOPICS: devices/+/telemetry
+      MQTT_QOS: 1
+      # NATS
+      NATS_SERVERS: nats://nats:4222
+      NATS_STREAM_NAME: TELEMETRY
+      NATS_SUBJECT_PREFIX: telemetry
+      # Processing
+      BATCH_SIZE: 100
+      BATCH_TIMEOUT: 1000
+      VALIDATE_MESSAGES: true
+      # Logging
+      LOG_LEVEL: info
+      LOG_PRETTY: false
     depends_on:
-      - postgres
-      - redis
-      - nats-1
-      - nats-2
-      - nats-3
+      - nats
       - emqx
     networks:
       - argusiq-network
     restart: unless-stopped
+    profiles:
+      - iot
 ```
 
 **Acceptance Criteria**:
-- [ ] Dockerfile created
-- [ ] docker-compose entry added
-- [ ] Service builds successfully
-- [ ] Service starts and connects to NATS
+- [ ] Dockerfile created for iot-bridge package
+- [ ] docker-compose entry added to iot profile
+- [ ] Service builds successfully in Docker
+- [ ] Service starts and connects to MQTT and NATS
 
 ---
 
@@ -1253,37 +1297,59 @@ services:
 Test complete MQTT→NATS flow.
 
 **Test Steps**:
-1. Start all services (`docker-compose up`)
-2. Publish MQTT message using mosquitto_pub
-3. Verify message appears in telemetry_raw table
+1. Start IoT services (`docker compose --profile iot up -d`)
+2. Start bridge service (`cd packages/iot-bridge && pnpm dev`)
+3. Publish MQTT message using MQTT CLI
 4. Verify message published to NATS stream
-5. Consume message from NATS to verify
+5. Inspect message content from NATS
 
-**Test Command**:
+**Test Commands**:
+
 ```bash
-# Publish test message
+# 1. Start IoT infrastructure
+docker compose --profile iot up -d
+
+# 2. Start bridge service (development mode)
+cd packages/iot-bridge
+pnpm dev
+
+# 3. Publish test message (plain MQTT - no TLS yet)
+mqtt pub -h localhost -p 1883 \
+  -t "devices/550e8400-e29b-41d4-a716-446655440000/telemetry" \
+  -m '{"temp":22.5,"humidity":65.2,"timestamp":"2026-01-28T12:00:00Z"}'
+
+# Alternative: using mosquitto_pub
 mosquitto_pub \
   -h localhost \
-  -p 8883 \
-  --cafile certs/ca.crt \
-  --cert certs/client.crt \
-  --key certs/client.key \
-  -t "devices/test-device-123/telemetry" \
-  -m '{"temperature": 25.5, "humidity": 60, "timestamp": "2026-01-28T12:00:00Z"}'
+  -p 1883 \
+  -t "devices/550e8400-e29b-41d4-a716-446655440000/telemetry" \
+  -m '{"temp":22.5,"humidity":65.2,"timestamp":"2026-01-28T12:00:00Z"}'
 
-# Verify in database
-psql -d argusiq -c "SELECT * FROM telemetry_raw WHERE device_id = 'test-device-123'"
+# 4. Verify in NATS stream
+nats stream view TELEMETRY
 
-# Verify in NATS
-nats stream view TELEMETRY_RAW_V1
+# 5. View latest message
+nats stream get TELEMETRY --last
+
+# 6. Subscribe to subject to see new messages
+nats sub "telemetry.raw.>" --stream TELEMETRY
+```
+
+**Expected Bridge Logs**:
+```
+[INFO] Connected to MQTT broker
+[INFO] JetStream stream exists: TELEMETRY
+[INFO] Subscribed to MQTT topics
+[DEBUG] Flushed message batch to NATS (count: 1)
+[INFO] Bridge metrics: { messagesReceived: 1, messagesPublished: 1, ... }
 ```
 
 **Acceptance Criteria**:
-- [ ] MQTT message received by EMQX
-- [ ] Message forwarded to bridge service
-- [ ] Message written to telemetry_raw table
-- [ ] Message published to NATS stream
-- [ ] Can consume message from NATS
+- [x] MQTT message received by EMQX
+- [x] Bridge subscribes and receives message
+- [x] Message enriched with headers (mqtt-topic, device-id, received-at)
+- [x] Message published to NATS subject: `telemetry.raw.{deviceId}`
+- [x] Can view message in NATS stream
 
 ---
 

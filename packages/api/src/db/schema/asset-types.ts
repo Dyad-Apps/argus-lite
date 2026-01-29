@@ -37,6 +37,23 @@ export const assetTypes = pgTable(
     telemetrySchema: jsonb('telemetry_schema'),
     presentationConfig: jsonb('presentation_config'),
 
+    // IoT Telemetry Configuration (Asset Type Profiles)
+    metricDefinitions: jsonb('metric_definitions'),
+    transformationEngine: jsonb('transformation_engine'),
+    healthAlgorithm: jsonb('health_algorithm'),
+    thresholdRules: jsonb('threshold_rules'),
+    eventRules: jsonb('event_rules'),
+    aggregationRules: jsonb('aggregation_rules'),
+    validationRules: jsonb('validation_rules'),
+    telemetryConfigVersion: text('telemetry_config_version').default('1.0.0'),
+    telemetryConfigUpdatedAt: timestamp('telemetry_config_updated_at', {
+      withTimezone: true,
+    }).defaultNow(),
+    telemetryConfigUpdatedBy: uuid('telemetry_config_updated_by').references(
+      () => users.id,
+      { onDelete: 'set null' }
+    ),
+
     // Hierarchical support
     parentTypeId: uuid('parent_type_id').references((): any => assetTypes.id, {
       onDelete: 'set null',

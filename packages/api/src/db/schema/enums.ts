@@ -74,6 +74,14 @@ export const telemetryQualityEnum = pgEnum('telemetry_quality', [
 ]);
 
 /**
+ * Entity type for telemetry (Device or Asset).
+ */
+export const entityTypeEnum = pgEnum('entity_type_enum', [
+  'device',
+  'asset',
+]);
+
+/**
  * Organization membership roles.
  */
 export const organizationRoleEnum = pgEnum('organization_role', [

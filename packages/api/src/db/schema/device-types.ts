@@ -37,6 +37,15 @@ export const deviceTypes = pgTable(
     telemetrySchema: jsonb('telemetry_schema'),
     presentationConfig: jsonb('presentation_config'),
 
+    // IoT Processing Configuration (Device Type Profiles)
+    processingMode: text('processing_mode').notNull().default('endpoint'),
+    protocolAdapter: text('protocol_adapter').notNull().default('json'),
+    messageSchema: jsonb('message_schema'),
+    extractionRules: jsonb('extraction_rules'),
+    demuxStrategy: jsonb('demux_strategy'),
+    chunkingConfig: jsonb('chunking_config'),
+    transformationRules: jsonb('transformation_rules'),
+
     // Hierarchical support
     parentTypeId: uuid('parent_type_id').references((): any => deviceTypes.id, {
       onDelete: 'set null',

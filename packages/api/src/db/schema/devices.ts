@@ -53,9 +53,20 @@ export const devices = pgTable(
     status: deviceStatusEnum('status').notNull().default('inactive'),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
 
+    // IoT Device Hierarchy & Role
+    deviceRole: text('device_role').notNull().default('endpoint'),
+    parentDeviceId: uuid('parent_device_id').references((): any => devices.id, {
+      onDelete: 'set null',
+    }),
+    logicalIdentifier: text('logical_identifier'),
+
     // Network
     ipAddress: inet('ip_address'),
     macAddress: macaddr('mac_address'),
+    networkMetadata: jsonb('network_metadata').notNull().default({}),
+
+    // Protocol
+    protocol: text('protocol').notNull().default('mqtt'),
 
     // Geospatial
     geolocation: geometry('geolocation'),
@@ -83,6 +94,9 @@ export const devices = pgTable(
     index('idx_devices_mac').on(table.macAddress),
     index('idx_devices_last_seen').on(table.lastSeenAt),
     index('idx_devices_deleted').on(table.deletedAt),
+    index('idx_devices_parent').on(table.parentDeviceId),
+    index('idx_devices_role').on(table.deviceRole),
+    index('idx_devices_protocol').on(table.protocol),
     // Note: GIN index for JSONB and GIST for geometry are created in migration
   ]
 );

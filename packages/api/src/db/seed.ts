@@ -65,21 +65,31 @@ async function seed() {
       SELECT id FROM organizations WHERE slug = ${SEED_CONFIG.organization.slug}
     `;
 
+    let orgId: string;
+    let userId: string;
+    let googleProvider: { id: string } | null = null;
+    let githubProvider: { id: string } | null = null;
+
     if (existingOrg.length > 0) {
-      console.log('⚠️  Database already seeded. Skipping...');
-      console.log(`   Organization "${SEED_CONFIG.organization.name}" exists with ID: ${existingOrg[0].id}`);
+      console.log('⚠️  Organization already exists. Using existing data and adding IoT seed data...');
+      orgId = existingOrg[0].id;
+      console.log(`   Organization "${SEED_CONFIG.organization.name}" exists with ID: ${orgId}`);
 
       // Check for admin user
       const existingAdmin = await client`
         SELECT id, email FROM users WHERE email = ${SEED_CONFIG.admin.email}
       `;
       if (existingAdmin.length > 0) {
-        console.log(`   Admin user "${SEED_CONFIG.admin.email}" exists`);
+        userId = existingAdmin[0].id;
+        console.log(`   Admin user "${SEED_CONFIG.admin.email}" exists with ID: ${userId}`);
+      } else {
+        console.error('❌ Admin user not found. Cannot proceed with IoT seed.');
+        return;
       }
 
-      console.log('\n✅ Seed check complete. Use existing data or reset database to re-seed.');
-      return;
-    }
+      // Skip to IoT seeding (jump to Step 7)
+      console.log('\n📡 Adding IoT seed data...');
+    } else {
 
     // Step 1: Create root organization
     console.log('📁 Creating root organization...');
@@ -97,7 +107,7 @@ async function seed() {
       )
       RETURNING id
     `;
-    const orgId = org.id;
+    orgId = org.id;
     console.log(`   ✅ Created organization: ${SEED_CONFIG.organization.name} (${orgId})`);
 
     // Update root_organization_id to point to itself (required for root orgs)
@@ -129,7 +139,7 @@ async function seed() {
       )
       RETURNING id
     `;
-    const userId = user.id;
+    userId = user.id;
     console.log(`   ✅ Created admin: ${SEED_CONFIG.admin.email} (${userId})`);
 
     // Step 3: Add user to organization as owner
@@ -162,7 +172,7 @@ async function seed() {
     console.log('\n🔐 Creating identity providers...');
 
     // Google provider
-    const [googleProvider] = await client`
+    const googleProviderResult = await client`
       INSERT INTO identity_providers (
         organization_id, type, name, display_name, enabled, auto_create_users, auto_link_users, config
       ) VALUES (
@@ -182,10 +192,11 @@ async function seed() {
       )
       RETURNING id
     `;
+    googleProvider = googleProviderResult[0] as { id: string };
     console.log(`   ✅ Created Google provider (${googleProvider.id})`);
 
     // GitHub provider
-    const [githubProvider] = await client`
+    const githubProviderResult = await client`
       INSERT INTO identity_providers (
         organization_id, type, name, display_name, enabled, auto_create_users, auto_link_users, config
       ) VALUES (
@@ -205,6 +216,7 @@ async function seed() {
       )
       RETURNING id
     `;
+    githubProvider = githubProviderResult[0] as { id: string };
     console.log(`   ✅ Created GitHub provider (${githubProvider.id})`);
 
     // Step 5: Create default organization profiles
@@ -324,6 +336,208 @@ async function seed() {
     } catch {
       console.log('   ⚠️  Branding table not found, skipping (optional)');
     }
+    } // End of else block (new organization creation)
+
+    // Step 7: Create IoT Device Types
+    console.log('\n📡 Creating IoT device types...');
+    try {
+      // Endpoint Device Type (simple temperature sensor)
+      const [tempSensorType] = await client`
+        INSERT INTO device_types (
+          organization_id, name, description, category, icon,
+          processing_mode, protocol_adapter, message_schema, extraction_rules, created_by
+        ) VALUES (
+          ${orgId}, 'Temperature Sensor', 'Simple endpoint device that reports temperature',
+          'Sensors', 'thermometer',
+          'endpoint', 'json',
+          ${JSON.stringify({
+            type: 'object',
+            properties: { temp: { type: 'number', unit: 'celsius' }, humidity: { type: 'number', unit: 'percent' } }
+          })},
+          ${JSON.stringify({
+            temperature: { path: '$.temp', type: 'numeric', unit: 'celsius' },
+            humidity: { path: '$.humidity', type: 'numeric', unit: 'percent' }
+          })},
+          ${userId}
+        ) RETURNING id
+      `;
+      console.log(`   ✅ Created Temperature Sensor device type (${tempSensorType.id})`);
+
+      // Gateway Device Type (location hub)
+      const [locationHubType] = await client`
+        INSERT INTO device_types (
+          organization_id, name, description, category, icon,
+          processing_mode, protocol_adapter, message_schema, demux_strategy, created_by
+        ) VALUES (
+          ${orgId}, 'Location Hub', 'Gateway that reports 50 location beacons',
+          'Gateways', 'router',
+          'gateway', 'json',
+          ${JSON.stringify({
+            type: 'object',
+            properties: { beacons: { type: 'array', items: { type: 'object' } } }
+          })},
+          ${JSON.stringify({
+            strategy: 'iterate_array',
+            arrayPath: '$.beacons',
+            idPath: '$.beaconId',
+            nameTemplate: 'Beacon {{beaconId}}'
+          })},
+          ${userId}
+        ) RETURNING id
+      `;
+      console.log(`   ✅ Created Location Hub device type (${locationHubType.id})`);
+
+      // Gateway Chunked Device Type (BLE gateway)
+      const [bleGatewayType] = await client`
+        INSERT INTO device_types (
+          organization_id, name, description, category, icon,
+          processing_mode, protocol_adapter, chunking_config, demux_strategy, created_by
+        ) VALUES (
+          ${orgId}, 'BLE Gateway', 'Gateway with chunked messages (2000 beacons, 67 chunks)',
+          'Gateways', 'bluetooth',
+          'gateway_chunked', 'json',
+          ${JSON.stringify({
+            enabled: true,
+            maxChunkSize: 8192,
+            ttl: 60,
+            correlationIdPath: '$.correlationId',
+            sequencePath: '$.seq',
+            totalPath: '$.total'
+          })},
+          ${JSON.stringify({
+            strategy: 'iterate_array',
+            arrayPath: '$.devices',
+            idPath: '$.deviceId',
+            nameTemplate: 'BLE Device {{deviceId}}'
+          })},
+          ${userId}
+        ) RETURNING id
+      `;
+      console.log(`   ✅ Created BLE Gateway device type (${bleGatewayType.id})`);
+    } catch (error) {
+      console.log('   ⚠️  Error creating device types:', (error as Error).message);
+    }
+
+    // Step 8: Create IoT Asset Types
+    console.log('\n🏭 Creating IoT asset types...');
+    try {
+      // HVAC Asset Type
+      const [hvacType] = await client`
+        INSERT INTO asset_types (
+          organization_id, name, description, category, icon,
+          metric_definitions, health_algorithm, threshold_rules, created_by
+        ) VALUES (
+          ${orgId}, 'HVAC System', 'Heating, Ventilation, and Air Conditioning unit',
+          'Equipment', 'wind',
+          ${JSON.stringify({
+            temperature: { unit: 'celsius', type: 'gauge', displayName: 'Temperature' },
+            setpoint: { unit: 'celsius', type: 'gauge', displayName: 'Setpoint' },
+            fanSpeed: { unit: 'rpm', type: 'gauge', displayName: 'Fan Speed' },
+            powerConsumption: { unit: 'kw', type: 'gauge', displayName: 'Power' }
+          })},
+          ${JSON.stringify({
+            algorithm: 'weighted_average',
+            weights: { temperature: 0.3, fanSpeed: 0.3, powerConsumption: 0.4 },
+            normalization: { temperature: { min: 15, max: 30 }, fanSpeed: { min: 0, max: 3000 }, powerConsumption: { min: 0, max: 10 } }
+          })},
+          ${JSON.stringify([
+            { metric: 'temperature', warning: 28, critical: 32, message: 'Temperature too high' },
+            { metric: 'powerConsumption', warning: 8, critical: 10, message: 'Power consumption excessive' }
+          ])},
+          ${userId}
+        ) RETURNING id
+      `;
+      console.log(`   ✅ Created HVAC System asset type (${hvacType.id})`);
+
+      // Cold Storage Asset Type
+      const [coldStorageType] = await client`
+        INSERT INTO asset_types (
+          organization_id, name, description, category, icon,
+          metric_definitions, health_algorithm, threshold_rules, created_by
+        ) VALUES (
+          ${orgId}, 'Cold Storage', 'Refrigerated storage unit',
+          'Equipment', 'snowflake',
+          ${JSON.stringify({
+            temperature: { unit: 'celsius', type: 'gauge', displayName: 'Temperature' },
+            humidity: { unit: 'percent', type: 'gauge', displayName: 'Humidity' },
+            doorStatus: { unit: 'boolean', type: 'state', displayName: 'Door Status' }
+          })},
+          ${JSON.stringify({
+            algorithm: 'threshold_based',
+            critical_if: 'temperature > -15',
+            warning_if: 'temperature > -18',
+            healthy_if: 'temperature <= -20'
+          })},
+          ${JSON.stringify([
+            { metric: 'temperature', warning: -15, critical: -10, message: 'Storage temperature too high - food safety risk' }
+          ])},
+          ${userId}
+        ) RETURNING id
+      `;
+      console.log(`   ✅ Created Cold Storage asset type (${coldStorageType.id})`);
+    } catch (error) {
+      console.log('   ⚠️  Error creating asset types:', (error as Error).message);
+    }
+
+    // Step 9: Create sample devices
+    console.log('\n🔌 Creating sample devices...');
+    try {
+      const [device1] = await client`
+        INSERT INTO devices (
+          organization_id, device_type_id, name, description, serial_number,
+          device_role, protocol, status, created_by
+        ) SELECT
+          ${orgId}, id, 'Temp Sensor 001', 'Temperature sensor in warehouse',
+          'TS-001-2024', 'endpoint', 'mqtt', 'active', ${userId}
+        FROM device_types WHERE name = 'Temperature Sensor' AND organization_id = ${orgId}
+        RETURNING id
+      `;
+      console.log(`   ✅ Created sample device: Temp Sensor 001 (${device1.id})`);
+
+      const [device2] = await client`
+        INSERT INTO devices (
+          organization_id, device_type_id, name, description, serial_number,
+          device_role, protocol, status, created_by
+        ) SELECT
+          ${orgId}, id, 'Location Hub 001', 'Location tracking hub in facility A',
+          'LH-001-2024', 'gateway', 'mqtt', 'active', ${userId}
+        FROM device_types WHERE name = 'Location Hub' AND organization_id = ${orgId}
+        RETURNING id
+      `;
+      console.log(`   ✅ Created sample device: Location Hub 001 (${device2.id})`);
+    } catch (error) {
+      console.log('   ⚠️  Error creating devices:', (error as Error).message);
+    }
+
+    // Step 10: Create sample assets
+    console.log('\n🏗️  Creating sample assets...');
+    try {
+      const [asset1] = await client`
+        INSERT INTO assets (
+          organization_id, asset_type_id, name, description,
+          status, health_score, created_by
+        ) SELECT
+          ${orgId}, id, 'HVAC Unit A1', 'Main HVAC unit in Building A',
+          'active', 95.5, ${userId}
+        FROM asset_types WHERE name = 'HVAC System' AND organization_id = ${orgId}
+        RETURNING id
+      `;
+      console.log(`   ✅ Created sample asset: HVAC Unit A1 (${asset1.id})`);
+
+      const [asset2] = await client`
+        INSERT INTO assets (
+          organization_id, asset_type_id, name, description,
+          status, health_score, created_by
+        ) SELECT
+          ${orgId}, id, 'Cold Storage Room 1', 'Main refrigerated storage room',
+          'active', 98.0, ${userId}
+        FROM asset_types WHERE name = 'Cold Storage' AND organization_id = ${orgId}
+        RETURNING id
+      `;
+      console.log(`   ✅ Created sample asset: Cold Storage Room 1 (${asset2.id})`);
+    } catch (error) {
+      console.log('   ⚠️  Error creating assets:', (error as Error).message);
+    }
 
     // Summary
     console.log('\n' + '='.repeat(60));
@@ -338,8 +552,16 @@ async function seed() {
     console.log('   Admin Password: ' + SEED_CONFIG.admin.password);
     console.log('   Admin ID:       ' + userId);
     console.log('');
-    console.log('   Google Provider ID: ' + googleProvider.id);
-    console.log('   GitHub Provider ID: ' + githubProvider.id);
+    if (googleProvider && githubProvider) {
+      console.log('   Google Provider ID: ' + googleProvider.id);
+      console.log('   GitHub Provider ID: ' + githubProvider.id);
+      console.log('');
+    }
+    console.log('🚀 IoT Platform Seed Data:');
+    console.log('   Device Types: Temperature Sensor, Location Hub, BLE Gateway');
+    console.log('   Asset Types:  HVAC System, Cold Storage');
+    console.log('   Devices:      Temp Sensor 001, Location Hub 001');
+    console.log('   Assets:       HVAC Unit A1, Cold Storage Room 1');
     console.log('');
     console.log('⚠️  Note: SSO providers use placeholder credentials.');
     console.log('   Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, etc. in .env');

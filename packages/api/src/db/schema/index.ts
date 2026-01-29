@@ -47,5 +47,12 @@ export * from './persons.js';
 export * from './activities.js';
 export * from './spaces.js';
 
+// Phase 7: IoT Platform - Telemetry Tables
+export * from './telemetry-history.js';
+export * from './telemetry-raw.js';
+export * from './telemetry-chunks.js';
+export * from './telemetry-transactions.js';
+export * from './threshold-rules.js';
+
 // Relations (must be last to avoid circular deps)
 export * from './relations.js';
