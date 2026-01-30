@@ -33,6 +33,9 @@ export * from './roles.js';
 // Security features
 export * from './impersonation-sessions.js';
 
+// System configuration
+export * from './system-settings.js';
+
 // Phase 7: IoT Meta-Model - Type Definitions
 export * from './device-types.js';
 export * from './asset-types.js';

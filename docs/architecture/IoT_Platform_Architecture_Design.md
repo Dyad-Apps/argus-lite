@@ -36,7 +36,7 @@ graph TB
     end
 
     subgraph IngestionLayer["INGESTION LAYER"]
-        Bridge["MQTT Bridge Service<br/>(Validates cert)"]
+        Bridge["MQTT Bridge Service<br/>(MQTT subscriber → NATS publisher)"]
         NATS["Message Bus<br/>(NATS JetStream)<br/>30K/sec capable"]
         RawStream["Stream: telemetry.raw.v1<br/>(Immutable, Replay Source)"]
         Bridge --> NATS
@@ -70,7 +70,7 @@ graph TB
         UI["React Frontend<br/>• IoT Hub<br/>• Asset Hub<br/>• Real-time charts<br/>• Device simulator UI"]
     end
 
-    MQTT --> Bridge
+    MQTT -.->|"Bridge subscribes to topics"| Bridge
     RawStream --> Norm
     TSDB --> PG
     Asset --> PG
@@ -139,6 +139,29 @@ graph TB
 
 **Alternative**: Mosquitto (simpler, sufficient if EMQX overkill)
 
+### 3.2.1 EMQX → Bridge Integration Pattern
+
+**Decision: Bridge subscribes to EMQX as MQTT client (Option 2)**
+
+| Approach | Pros | Cons | Decision |
+|----------|------|------|----------|
+| **Option 1: EMQX Rule Engine → HTTP Webhook** | Simple mental model (broker pushes) | HTTP retry/backpressure complexity, webhook delivery guarantees, extra HTTP layer | ❌ Not chosen |
+| **Option 2: Bridge subscribes to EMQX topics** | Standard MQTT flow control, shared subscriptions for scaling, clearer at-least-once semantics, fewer moving parts | Bridge must maintain MQTT connection | ✅ **Chosen for MVP** |
+
+**Why Option 2:**
+- **Simpler architecture**: Bridge is just another MQTT client with QoS 1
+- **Better backpressure**: MQTT has built-in flow control (PUBACK acknowledgments)
+- **Easier horizontal scaling**: Use EMQX shared subscriptions (`$share/bridge-group/v1/telemetry/#`) so multiple Bridge replicas automatically split the load
+- **Clearer semantics**: Standard MQTT at-least-once delivery guarantees
+- **No HTTP layer**: Removes webhook retry complexity and HTTP-specific failure modes
+- **Easier to test**: Standard MQTT client testing tools work out of the box
+
+**Implementation Details:**
+- Bridge subscribes to topic pattern: `$share/bridge-group/v1/telemetry/{orgId}/{deviceId}`
+- Shared subscription group: `bridge-group` (multiple Bridge instances auto-balance)
+- QoS 1: At-least-once delivery (Bridge must handle duplicate messages idempotently)
+- Connection: Bridge uses service account credentials (not mTLS, just username/password or token)
+
 ### 3.3 Time-Series Database: **TimescaleDB**
 
 **Decision: TimescaleDB (Postgres extension)**
@@ -188,12 +211,19 @@ EMQX Broker (validates cert CN=abc-123)
 ### 4.2 EMQX → NATS Bridge
 
 ```
-EMQX Rule Engine (on message.publish)
+MQTT Bridge Service (runs as MQTT client)
+  ↓ Subscribes to: $share/bridge-group/v1/telemetry/{orgId}/{deviceId}
+  ↓ Receives message with QoS 1 (at-least-once)
+  ↓ Validates: deviceId exists in DB, orgId matches, payload schema valid
   ↓ Extract orgId, deviceId from topic
   ↓ Enrich: { "deviceId", "orgId", "ts", "metrics", "receivedAt" }
 NATS JetStream: telemetry.raw.v1
   ↓ Persisted to disk (durable)
-  ↓ Ack back to EMQX
+  ↓ Ack back to NATS
+  ↓ MQTT Ack back to EMQX (message processed)
+
+Note: EMQX shared subscriptions ($share/bridge-group/...) enable horizontal scaling
+Multiple Bridge replicas share the message load automatically
 ```
 
 ### 4.3 Normalization Worker
@@ -333,7 +363,21 @@ Device publishes:
   - Topic: v1/telemetry/{orgId}/{deviceId}
   - QoS 1 (at least once delivery)
   - Payload: JSON with timestamp and metrics
+
+Bridge subscribes:
+  - Bridge runs as MQTT client (separate process)
+  - Subscribes to: $share/bridge-group/v1/telemetry/#
+  - Bridge does NOT validate TLS certificates (already done by EMQX)
+  - Bridge validates business logic:
+      1. deviceId exists in database
+      2. orgId matches device's organization
+      3. Payload schema is valid (Zod validation)
+      4. Device is not in decommissioned state
 ```
+
+**Important: Separation of Concerns**
+- **EMQX responsibility**: TLS/mTLS certificate validation (authentication layer)
+- **Bridge responsibility**: Business logic validation (authorization + data quality layer)
 
 ### 5.3 Certificate Lifecycle
 
@@ -1363,7 +1407,7 @@ volumes:
 #### Week 1: Infrastructure Setup
 - [ ] Set up EMQX broker in docker-compose
 - [ ] Set up NATS JetStream cluster (3 nodes)
-- [ ] Configure EMQX → NATS bridge (custom service)
+- [ ] Create MQTT Bridge service (subscribes to EMQX, publishes to NATS)
 - [ ] Create database migrations for new tables
 - [ ] Set up Redis cache layer
 - [ ] Generate CA certificate for device certs
@@ -1371,7 +1415,7 @@ volumes:
 #### Week 2: Backend Services
 - [ ] Implement device onboarding API (CRUD + cert generation)
 - [ ] Implement device-asset link API (uses entity_edges)
-- [ ] Build MQTT bridge service (EMQX → NATS)
+- [ ] Implement MQTT Bridge service (subscribes to EMQX with shared subscriptions, publishes to NATS)
 - [ ] Build normalization worker (NATS consumer)
 - [ ] Build TSDB writer worker
 - [ ] Build real-time broadcaster worker

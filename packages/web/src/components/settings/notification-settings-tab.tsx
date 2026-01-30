@@ -112,17 +112,35 @@ export function NotificationSettingsTab() {
     try {
       setIsLoading(true);
       setError(null);
-      const response = await apiClient
-        .get<{ data: NotificationSettings }>('/platform/settings/notifications')
-        .catch(() => ({ data: DEFAULT_SETTINGS }));
-      setSettings(response.data || DEFAULT_SETTINGS);
-      setOriginalSettings(response.data || DEFAULT_SETTINGS);
-    } catch (err: any) {
-      if (err?.status === 403) {
-        setError('Access denied. Super Admin privileges required.');
-      } else {
-        setError('Failed to load settings');
+
+      // Try to fetch notification settings from platform settings
+      try {
+        const response = await apiClient.get<{
+          id: string;
+          key: string;
+          value: unknown;
+          description: string | null;
+          isSecret: boolean;
+          updatedBy: string | null;
+          updatedAt: string;
+        }>('/platform/settings/notifications');
+
+        const notificationSettings = response.value as NotificationSettings;
+        setSettings(notificationSettings || DEFAULT_SETTINGS);
+        setOriginalSettings(notificationSettings || DEFAULT_SETTINGS);
+      } catch (err: any) {
+        // If setting doesn't exist (404), use defaults
+        if (err?.status === 404) {
+          setSettings(DEFAULT_SETTINGS);
+          setOriginalSettings(DEFAULT_SETTINGS);
+        } else if (err?.status === 403) {
+          setError('Access denied. Super Admin privileges required.');
+        } else {
+          throw err;
+        }
       }
+    } catch (err: any) {
+      setError('Failed to load settings');
     } finally {
       setIsLoading(false);
     }
@@ -136,10 +154,23 @@ export function NotificationSettingsTab() {
     try {
       setIsSaving(true);
       setError(null);
-      await apiClient.put('/platform/settings/notifications', settings);
+
+      // Platform settings API expects key, value, description format
+      await apiClient.put('/platform/settings', {
+        key: 'notifications',
+        value: settings,
+        description: 'Platform notification provider configuration',
+        isSecret: false,
+      });
+
       setOriginalSettings(settings);
-    } catch (err) {
-      setError('Failed to save settings');
+      await fetchSettings(); // Refresh to confirm save
+    } catch (err: any) {
+      if (err?.status === 403) {
+        setError('Access denied. Super Admin privileges required.');
+      } else {
+        setError('Failed to save settings');
+      }
     } finally {
       setIsSaving(false);
     }

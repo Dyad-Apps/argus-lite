@@ -94,7 +94,7 @@ export class BridgeService {
     this.metrics.bytesReceived += message.payload.length;
 
     // Route based on topic pattern
-    if (isChirpStackTopic(message.topic)) {
+    if (this.config.chirpstack.enabled && isChirpStackTopic(message.topic, this.config.chirpstack.topicPattern)) {
       await this.handleChirpStackMessage(message);
     } else if (message.topic.startsWith('devices/')) {
       await this.handleDirectDeviceMessage(message);

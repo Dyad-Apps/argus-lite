@@ -54,6 +54,19 @@ const configSchema = z.object({
     validateMessages: z.boolean().default(true),
   }),
 
+  // ChirpStack Integration Configuration
+  chirpstack: z.object({
+    // Enable ChirpStack integration
+    enabled: z.boolean().default(true),
+    // MQTT topic pattern for ChirpStack uplinks
+    // Supports MQTT wildcards: + (single level), # (multi level)
+    // Examples:
+    //   - 'application/+/device/+/event/up' (ChirpStack v3 style)
+    //   - 'chirpstack/+/devices/+/up' (custom)
+    //   - 'v3/+/devices/+/rx' (custom)
+    topicPattern: z.string().default('application/+/device/+/event/up'),
+  }),
+
   // Logging
   logging: z.object({
     level: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
@@ -73,6 +86,16 @@ export function loadConfig(): Config {
     ? `${clientId}-${Math.random().toString(36).substring(7)}`
     : clientId;
 
+  // ChirpStack configuration
+  const chirpstackEnabled = process.env.CHIRPSTACK_ENABLED !== 'false'; // Enabled by default
+  const chirpstackTopicPattern = process.env.CHIRPSTACK_TOPIC_PATTERN || 'application/+/device/+/event/up';
+
+  // Build default MQTT topics
+  const defaultTopics = ['devices/+/telemetry'];
+  if (chirpstackEnabled) {
+    defaultTopics.push(chirpstackTopicPattern);
+  }
+
   const config = configSchema.parse({
     serviceName: process.env.SERVICE_NAME,
     nodeEnv: process.env.NODE_ENV,
@@ -82,12 +105,12 @@ export function loadConfig(): Config {
       clientId: finalClientId,
       username: process.env.MQTT_USERNAME,
       password: process.env.MQTT_PASSWORD,
-      topics: process.env.MQTT_TOPICS?.split(','),
+      topics: process.env.MQTT_TOPICS?.split(',').map(t => t.trim()) || defaultTopics,
       qos: process.env.MQTT_QOS ? parseInt(process.env.MQTT_QOS) : undefined,
     },
 
     nats: {
-      servers: process.env.NATS_SERVERS?.split(','),
+      servers: process.env.NATS_SERVERS?.split(',').map(s => s.trim()),
       streamName: process.env.NATS_STREAM_NAME,
       subjectPrefix: process.env.NATS_SUBJECT_PREFIX,
     },
@@ -97,6 +120,11 @@ export function loadConfig(): Config {
       batchSize: process.env.BATCH_SIZE ? parseInt(process.env.BATCH_SIZE) : undefined,
       batchTimeout: process.env.BATCH_TIMEOUT ? parseInt(process.env.BATCH_TIMEOUT) : undefined,
       validateMessages: process.env.VALIDATE_MESSAGES === 'true',
+    },
+
+    chirpstack: {
+      enabled: chirpstackEnabled,
+      topicPattern: chirpstackTopicPattern,
     },
 
     logging: {

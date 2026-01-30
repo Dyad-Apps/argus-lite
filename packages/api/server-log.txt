@@ -23,3 +23,3708 @@ Sentry DSN not configured, error tracking disabled
       "address": "0.0.0.0",
       "port": 3040
     }
+4:57:41 PM [tsx] change in ./src\db\schema\devices.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[16:57:48.707] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:57:48.708] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:57:48.807] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[16:57:48.807] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[16:57:48.807] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[16:57:48.807] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[16:57:48.807] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+4:57:52 PM [tsx] change in ./src\db\schema\devices.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Sentry DSN not configured, error tracking disabled
+[16:57:55.573] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:57:55.574] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:57:55.657] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+4:58:00 PM [tsx] change in ./src\db\schema\assets.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[16:58:04.384] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:58:04.386] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:58:04.506] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+4:58:11 PM [tsx] change in ./src\db\schema\assets.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Sentry DSN not configured, error tracking disabled
+[16:58:15.345] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:58:15.346] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:58:15.479] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+4:58:22 PM [tsx] change in ./src\db\schema\asset-types.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[16:58:26.182] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:58:26.183] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:58:26.302] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+4:58:32 PM [tsx] change in ./src\db\schema\device-types.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[16:58:36.131] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:58:36.132] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:58:36.249] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+4:58:50 PM [tsx] change in ./src\db\schema\enums.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Sentry DSN not configured, error tracking disabled
+[16:58:53.553] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[16:58:53.554] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[16:58:53.639] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[16:58:53.639] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[16:58:53.639] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[16:58:53.639] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[16:58:53.639] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+[16:59:05.459] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "8c93c97d-0242-4f27-a32f-d3a7ad8f0aaf"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[16:59:05.465] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "8c93c97d-0242-4f27-a32f-d3a7ad8f0aaf"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5.025300025939941
+[16:59:19.080] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "228b5153-519f-46b8-b4e1-31d6d8739e09"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[16:59:19.081] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "228b5153-519f-46b8-b4e1-31d6d8739e09"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3991999626159668
+[16:59:32.699] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "1b4ee933-6cd2-4d95-a87b-1aea1372a476"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[16:59:32.701] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "1b4ee933-6cd2-4d95-a87b-1aea1372a476"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.989300012588501
+[16:59:46.364] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d44342d8-f354-49b5-b004-24b9bae6b9cb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[16:59:46.365] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d44342d8-f354-49b5-b004-24b9bae6b9cb"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.1832001209259033
+[16:59:59.990] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "cada8db1-8c15-4fcc-b553-6a9dcb0436ff"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[16:59:59.991] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "cada8db1-8c15-4fcc-b553-6a9dcb0436ff"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.0343000888824463
+[17:00:13.606] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "52435bab-281a-4ac5-832f-e3c24c13d007"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[17:00:13.609] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "52435bab-281a-4ac5-832f-e3c24c13d007"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.8100998401641846
+[17:00:27.246] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "de041315-9045-44fa-9ae2-4795905b0b75"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[17:00:27.248] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "de041315-9045-44fa-9ae2-4795905b0b75"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.538599967956543
+[17:00:40.895] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "0e2ef44b-94e3-49d3-8f82-b5377a14c6d5"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58722
+    }
+[17:00:40.896] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "0e2ef44b-94e3-49d3-8f82-b5377a14c6d5"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.4467999935150146
+5:00:41 PM [tsx] change in ./src\db\schema\index.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[17:00:44.484] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[17:00:44.485] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[17:00:44.572] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+10:33:28 AM [tsx] change in ./src\db\schema\index.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[10:33:35.414] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[10:33:35.415] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[10:33:35.545] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+10:35:20 AM [tsx] change in ./src\routes\v1\index.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Sentry DSN not configured, error tracking disabled
+[10:35:23.998] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[10:35:24.000] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[10:35:24.116] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+10:37:24 AM [tsx] change in ./src\routes\v1\index.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  override existing env vars with { override: true }
+Sentry DSN not configured, error tracking disabled
+[10:37:28.593] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[10:37:28.595] [32mINFO[39m: [36mRate limiting plugin registered[39m
+
+C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\route.js:302
+                throw new FST_ERR_HOOK_INVALID_HANDLER(hook, Object.prototype.toString.call(func))
+                      ^
+FastifyError: onRequest hook should be a function, instead got [object Undefined]
+    at Object.addNewRoute (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\route.js:302:23)
+    at Object.route (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\route.js:257:23)
+    at Object.prepareRoute (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\route.js:167:18)
+    at Object._get [as get] (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\fastify.js:179:34)
+    at systemSettingsRoutes (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:22:10)
+    at Plugin.exec (C:\source\argusiq-lite\node_modules\.pnpm\avvio@9.1.0\node_modules\avvio\lib\plugin.js:125:28)
+    at Boot._loadPlugin (C:\source\argusiq-lite\node_modules\.pnpm\avvio@9.1.0\node_modules\avvio\boot.js:432:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  code: 'FST_ERR_HOOK_INVALID_HANDLER',
+  statusCode: 500
+}
+
+Node.js v24.12.0
+11:33:02 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707983124:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707983124:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707983124:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:33:13 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707993548:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707993548:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769707993548:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:33:34 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708014147:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708014147:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708014147:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:33:53 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708033174:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708033174:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708033174:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:34:11 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708051901:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708051901:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708051901:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:34:31 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708071201:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708071201:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708071201:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:34:50 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708090136:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708090136:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708090136:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:35:09 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+c
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\source\argusiq-lite\packages\api\src\db\schema\system-admins.js' imported from C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at nextResolve (node:internal/modules/esm/hooks:785:28)
+    at resolveBase (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708109530:2:3744)
+    at async resolveDirectory (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708109530:2:4237)
+    at async resolve (file:///C:/source/argusiq-lite/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx/dist/esm/index.mjs?1769708109530:2:5355)
+    at async nextResolve (node:internal/modules/esm/hooks:785:22)
+    at async AsyncLoaderHooksOnLoaderHookWorker.resolve (node:internal/modules/esm/hooks:269:24)
+    at async handleMessage (node:internal/modules/esm/worker:251:18) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///C:/source/argusiq-lite/packages/api/src/db/schema/system-admins.js'
+}
+
+Node.js v24.12.0
+11:37:00 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[11:37:05.790] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[11:37:05.791] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[11:37:05.915] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:24:57 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[13:25:02.101] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:25:02.102] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:25:02.198] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[13:25:02.199] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[13:25:02.199] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[13:25:02.199] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[13:25:02.199] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+[13:25:10.108] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "931d14c5-489a-46c2-8863-3af4f6f5e907"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:25:10.113] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "931d14c5-489a-46c2-8863-3af4f6f5e907"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4.710999965667725
+[13:25:23.807] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "23bbbfc6-5a8d-4c91-9a4f-ae0744ff1bee"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:25:23.808] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "23bbbfc6-5a8d-4c91-9a4f-ae0744ff1bee"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.4999001026153564
+[13:25:31.487] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "41da8828-8008-47f1-8fb5-0946deabce49"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+[13:25:31.519] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "41da8828-8008-47f1-8fb5-0946deabce49"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:25:31.524] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "41da8828-8008-47f1-8fb5-0946deabce49"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 35.706000089645386
+[13:25:31.528] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "4810dfc6-e5c7-4058-9c2d-f60661a9b9d3"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64538
+    }
+[13:25:31.536] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "4810dfc6-e5c7-4058-9c2d-f60661a9b9d3"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64538
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:25:31.537] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "4810dfc6-e5c7-4058-9c2d-f60661a9b9d3"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 8.06469988822937
+[13:25:37.767] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "445a7195-7e53-4d31-8130-401214bc0a7e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:25:37.770] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "445a7195-7e53-4d31-8130-401214bc0a7e"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.3256001472473145
+[13:25:51.589] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "20a386be-13d0-4b3d-9a98-b93e44e4f467"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:25:51.592] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "20a386be-13d0-4b3d-9a98-b93e44e4f467"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.9179999828338623
+[13:25:52.885] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "fcb3dbe3-24a6-4b00-83ea-8bef23734955"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 51200
+    }
+[13:25:52.906] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "fcb3dbe3-24a6-4b00-83ea-8bef23734955"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 51200
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:25:52.908] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "fcb3dbe3-24a6-4b00-83ea-8bef23734955"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 22.82100009918213
+[13:25:52.914] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "f8c4eb48-fa1c-4ccf-91c0-a4249a5ee07c"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 51204
+    }
+[13:25:52.920] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "f8c4eb48-fa1c-4ccf-91c0-a4249a5ee07c"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 51204
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:25:52.921] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "f8c4eb48-fa1c-4ccf-91c0-a4249a5ee07c"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 5.9430999755859375
+[13:25:54.654] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "b0f69835-0ca9-44f5-8430-6b9f2c64f27e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 53447
+    }
+[13:25:54.657] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e7f2d477-0eff-47c0-8adc-aca1c44f50c9"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 62468
+    }
+[13:25:54.662] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "41ba8955-6061-443e-9ff6-0caebab42986"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 62471
+    }
+[13:25:54.665] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "41ba8955-6061-443e-9ff6-0caebab42986"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.774199962615967
+[13:25:54.666] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "66baf82e-867c-439f-b272-8b540a743382"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 62472
+    }
+[13:25:54.668] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "66baf82e-867c-439f-b272-8b540a743382"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.0276999473571777
+[13:25:54.673] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "97c86e96-2a0d-4992-a73c-96cd62f8e860"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 49312
+    }
+[13:25:54.674] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "97c86e96-2a0d-4992-a73c-96cd62f8e860"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.8589000701904297
+[13:25:54.674] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"users\" where \"users\".\"deleted_at\" is null",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:54.675] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "b0f69835-0ca9-44f5-8430-6b9f2c64f27e"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 20.985599994659424
+[13:25:54.677] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c029fd6d-b2cb-4630-b9eb-17828b368655"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 49318
+    }
+[13:25:54.679] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c029fd6d-b2cb-4630-b9eb-17828b368655"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3382999897003174
+[13:25:54.679] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:54.680] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e7f2d477-0eff-47c0-8adc-aca1c44f50c9"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 22.424099922180176
+[13:25:54.681] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c6432579-11cd-4a62-99ec-f349256ed99f"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57010
+    }
+[13:25:54.684] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "5dc6e9af-56bc-41aa-a961-2277c4fa71a9"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 60535
+    }
+[13:25:54.688] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"organizations\"",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:54.688] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c6432579-11cd-4a62-99ec-f349256ed99f"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 7.4860999584198
+[13:25:54.689] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:54.689] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "5dc6e9af-56bc-41aa-a961-2277c4fa71a9"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4.636600017547607
+[13:25:56.331] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "51c642a4-3a49-4aad-b906-9ec4a6e53877"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61896
+    }
+[13:25:56.333] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e859248c-c2ec-43f2-b1e3-71c411823991"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61898
+    }
+[13:25:56.335] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "54ef0bba-0ee9-4f95-9c69-209da067ec13"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61901
+    }
+[13:25:56.336] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "54ef0bba-0ee9-4f95-9c69-209da067ec13"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9162001609802246
+[13:25:56.336] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c41f83f7-43f8-4c43-9e82-c61e36232835"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61902
+    }
+[13:25:56.338] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c41f83f7-43f8-4c43-9e82-c61e36232835"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9102001190185547
+[13:25:56.340] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"organizations\"",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:56.341] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "51c642a4-3a49-4aad-b906-9ec4a6e53877"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 9.1875
+[13:25:56.342] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:56.342] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e859248c-c2ec-43f2-b1e3-71c411823991"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 8.857500076293945
+[13:25:56.345] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e50c088e-d2fc-4266-a746-6cdc0bd48011"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 60546
+    }
+[13:25:56.347] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e50c088e-d2fc-4266-a746-6cdc0bd48011"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9714000225067139
+[13:25:56.347] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "dc924485-ddc9-4eb6-8d6a-0ee242679fa8"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 51477
+    }
+[13:25:56.348] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "dc924485-ddc9-4eb6-8d6a-0ee242679fa8"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.09660005569458
+[13:25:56.349] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "4ae12c92-f3ee-4e48-845e-612c245b5401"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61946
+    }
+[13:25:56.352] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c63b2410-ea5e-4ff4-bdfb-bf9f1c82ca46"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 62294
+    }
+[13:25:56.354] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"organizations\"",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:25:56.354] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "4ae12c92-f3ee-4e48-845e-612c245b5401"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4.980599880218506
+[13:25:57.912] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "dc1a4962-b203-41c7-80bb-92c00deda38b"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61719
+    }
+[13:26:01.956] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[13:26:01.956] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c63b2410-ea5e-4ff4-bdfb-bf9f1c82ca46"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5604.104099988937
+[13:26:04.945] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "dc1a4962-b203-41c7-80bb-92c00deda38b"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61719
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:04.946] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "dc1a4962-b203-41c7-80bb-92c00deda38b"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 7034.110599994659
+[13:26:04.950] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "4591d1c1-ce04-4ee4-a358-c50a04d34afb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 54758
+    }
+[13:26:05.457] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "6112ad59-5d76-4a50-bbea-8700f9a326aa"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:26:05.460] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "6112ad59-5d76-4a50-bbea-8700f9a326aa"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3.021099805831909
+[13:26:07.575] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "1d71a2d2-2097-4df7-9eb9-955aa5c046e2"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/auth/organizations",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 55436
+    }
+[13:26:08.578] [31mERROR[39m: [36mFailed query: select "user_organizations"."user_id", "user_organizations"."organization_id", "user_organizations"."role", "user_organizations"."is_primary", "user_organizations"."expires_at", "user_organizations"."joined_at", "user_organizations"."invited_by", "organizations"."id", "organizations"."name", "organizations"."slug", "organizations"."is_active" from "user_organizations" inner join "organizations" on "user_organizations"."organization_id" = "organizations"."id" where "user_organizations"."user_id" = $1 order by "organizations"."name"
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca[39m
+    [35mreqId[39m: "1d71a2d2-2097-4df7-9eb9-955aa5c046e2"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/auth/organizations",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 55436
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"user_organizations\".\"user_id\", \"user_organizations\".\"organization_id\", \"user_organizations\".\"role\", \"user_organizations\".\"is_primary\", \"user_organizations\".\"expires_at\", \"user_organizations\".\"joined_at\", \"user_organizations\".\"invited_by\", \"organizations\".\"id\", \"organizations\".\"name\", \"organizations\".\"slug\", \"organizations\".\"is_active\" from \"user_organizations\" inner join \"organizations\" on \"user_organizations\".\"organization_id\" = \"organizations\".\"id\" where \"user_organizations\".\"user_id\" = $1 order by \"organizations\".\"name\"\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca: ",
+      "stack":
+          Error: Failed query: select "user_organizations"."user_id", "user_organizations"."organization_id", "user_organizations"."role", "user_organizations"."is_primary", "user_organizations"."expires_at", "user_organizations"."joined_at", "user_organizations"."invited_by", "organizations"."id", "organizations"."name", "organizations"."slug", "organizations"."is_active" from "user_organizations" inner join "organizations" on "user_organizations"."organization_id" = "organizations"."id" where "user_organizations"."user_id" = $1 order by "organizations"."name"
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:497:27)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"user_organizations\".\"user_id\", \"user_organizations\".\"organization_id\", \"user_organizations\".\"role\", \"user_organizations\".\"is_primary\", \"user_organizations\".\"expires_at\", \"user_organizations\".\"joined_at\", \"user_organizations\".\"invited_by\", \"organizations\".\"id\", \"organizations\".\"name\", \"organizations\".\"slug\", \"organizations\".\"is_active\" from \"user_organizations\" inner join \"organizations\" on \"user_organizations\".\"organization_id\" = \"organizations\".\"id\" where \"user_organizations\".\"user_id\" = $1 order by \"organizations\".\"name\"",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca"
+      ]
+    }
+[13:26:08.579] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "1d71a2d2-2097-4df7-9eb9-955aa5c046e2"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 1004.1293001174927
+[13:26:08.583] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "2903332d-4684-42fe-a8d7-c25bed85f50e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/auth/organizations",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 60003
+    }
+[13:26:08.945] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "4591d1c1-ce04-4ee4-a358-c50a04d34afb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 54758
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:08.945] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "4591d1c1-ce04-4ee4-a358-c50a04d34afb"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 3994.8015999794006
+[13:26:08.949] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "6a093ace-058e-4f79-aaa7-9e9ff487d1a8"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+[13:26:10.700] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "6a093ace-058e-4f79-aaa7-9e9ff487d1a8"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:10.701] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "6a093ace-058e-4f79-aaa7-9e9ff487d1a8"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 1751.9842998981476
+[13:26:10.704] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "36c8d85d-05e7-4697-958e-e8fc4cd234a0"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58119
+    }
+[13:26:10.718] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "36c8d85d-05e7-4697-958e-e8fc4cd234a0"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58119
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:10.719] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "36c8d85d-05e7-4697-958e-e8fc4cd234a0"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 14.2639000415802
+[13:26:13.293] [31mERROR[39m: [36mFailed query: select "user_organizations"."user_id", "user_organizations"."organization_id", "user_organizations"."role", "user_organizations"."is_primary", "user_organizations"."expires_at", "user_organizations"."joined_at", "user_organizations"."invited_by", "organizations"."id", "organizations"."name", "organizations"."slug", "organizations"."is_active" from "user_organizations" inner join "organizations" on "user_organizations"."organization_id" = "organizations"."id" where "user_organizations"."user_id" = $1 order by "organizations"."name"
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca[39m
+    [35mreqId[39m: "2903332d-4684-42fe-a8d7-c25bed85f50e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/auth/organizations",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 60003
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"user_organizations\".\"user_id\", \"user_organizations\".\"organization_id\", \"user_organizations\".\"role\", \"user_organizations\".\"is_primary\", \"user_organizations\".\"expires_at\", \"user_organizations\".\"joined_at\", \"user_organizations\".\"invited_by\", \"organizations\".\"id\", \"organizations\".\"name\", \"organizations\".\"slug\", \"organizations\".\"is_active\" from \"user_organizations\" inner join \"organizations\" on \"user_organizations\".\"organization_id\" = \"organizations\".\"id\" where \"user_organizations\".\"user_id\" = $1 order by \"organizations\".\"name\"\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca: ",
+      "stack":
+          Error: Failed query: select "user_organizations"."user_id", "user_organizations"."organization_id", "user_organizations"."role", "user_organizations"."is_primary", "user_organizations"."expires_at", "user_organizations"."joined_at", "user_organizations"."invited_by", "organizations"."id", "organizations"."name", "organizations"."slug", "organizations"."is_active" from "user_organizations" inner join "organizations" on "user_organizations"."organization_id" = "organizations"."id" where "user_organizations"."user_id" = $1 order by "organizations"."name"
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:497:27)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"user_organizations\".\"user_id\", \"user_organizations\".\"organization_id\", \"user_organizations\".\"role\", \"user_organizations\".\"is_primary\", \"user_organizations\".\"expires_at\", \"user_organizations\".\"joined_at\", \"user_organizations\".\"invited_by\", \"organizations\".\"id\", \"organizations\".\"name\", \"organizations\".\"slug\", \"organizations\".\"is_active\" from \"user_organizations\" inner join \"organizations\" on \"user_organizations\".\"organization_id\" = \"organizations\".\"id\" where \"user_organizations\".\"user_id\" = $1 order by \"organizations\".\"name\"",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca"
+      ]
+    }
+[13:26:13.294] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "2903332d-4684-42fe-a8d7-c25bed85f50e"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 4711.079999923706
+[13:26:13.952] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d0a92dd3-4ca3-4bfa-835a-9375737ca241"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61060
+    }
+[13:26:13.956] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "d0a92dd3-4ca3-4bfa-835a-9375737ca241"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61060
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:13.957] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d0a92dd3-4ca3-4bfa-835a-9375737ca241"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 4.427999973297119
+[13:26:13.961] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d1ffa3fd-e439-4c67-aac2-11de7fffb83a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 49755
+    }
+[13:26:13.969] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "d1ffa3fd-e439-4c67-aac2-11de7fffb83a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 49755
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:112:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[13:26:13.970] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d1ffa3fd-e439-4c67-aac2-11de7fffb83a"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 9.04419994354248
+[13:26:19.184] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "a08fefc5-0875-4fb0-b74d-b33809b6eb58"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:26:19.187] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "a08fefc5-0875-4fb0-b74d-b33809b6eb58"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.940999984741211
+[13:26:21.649] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "019adcde-1c5f-4975-922a-8b7b7fbfce07"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 49910
+    }
+[13:26:21.649] [32mINFO[39m: [36mMissing access token[39m
+    [35mreqId[39m: "019adcde-1c5f-4975-922a-8b7b7fbfce07"
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    err: {
+      "type": "AppError",
+      "message": "Missing access token",
+      "stack":
+          AppError: Missing access token
+              at Object.unauthorized (C:\source\argusiq-lite\packages\shared\src\errors\index.ts:109:5)
+              at Object.authenticate (C:\source\argusiq-lite\packages\api\src\plugins\auth.ts:61:22)
+              at hookIterator (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:408:10)
+              at next (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:242:18)
+              at handleResolve (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:253:7)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      "code": "UNAUTHORIZED",
+      "statusCode": 401,
+      "isOperational": true,
+      "name": "AppError"
+    }
+[13:26:21.650] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "019adcde-1c5f-4975-922a-8b7b7fbfce07"
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1.2483000755310059
+[13:26:21.661] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "601a1901-a8df-4824-9e9a-d937719ef876"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64525
+    }
+[13:26:21.661] [32mINFO[39m: [36mMissing access token[39m
+    [35mreqId[39m: "601a1901-a8df-4824-9e9a-d937719ef876"
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    err: {
+      "type": "AppError",
+      "message": "Missing access token",
+      "stack":
+          AppError: Missing access token
+              at Object.unauthorized (C:\source\argusiq-lite\packages\shared\src\errors\index.ts:109:5)
+              at Object.authenticate (C:\source\argusiq-lite\packages\api\src\plugins\auth.ts:61:22)
+              at hookIterator (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:408:10)
+              at next (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:242:18)
+              at handleResolve (C:\source\argusiq-lite\node_modules\.pnpm\fastify@5.7.1\node_modules\fastify\lib\hooks.js:253:7)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+      "code": "UNAUTHORIZED",
+      "statusCode": 401,
+      "isOperational": true,
+      "name": "AppError"
+    }
+[13:26:21.661] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "601a1901-a8df-4824-9e9a-d937719ef876"
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 0.635200023651123
+[13:26:33.097] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "9648108d-5b3e-4642-9e95-1d724374a505"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:26:33.099] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "9648108d-5b3e-4642-9e95-1d724374a505"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.8619999885559082
+[13:26:43.351] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "b8fcb0d7-3236-4f63-b7b5-c889d8c66a68"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57531
+    }
+[13:26:43.354] [31mERROR[39m: [36mFailed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+params: admin@viaanix.com,1[39m
+    [35mreqId[39m: "b8fcb0d7-3236-4f63-b7b5-c889d8c66a68"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57531
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2\nparams: admin@viaanix.com,1: ",
+      "stack":
+          Error: Failed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+          params: admin@viaanix.com,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async UserRepository.findByEmail (C:\source\argusiq-lite\packages\api\src\repositories\user.repository.ts:54:20)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:148:20)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2",
+      "params": [
+        "admin@viaanix.com",
+        1
+      ]
+    }
+[13:26:43.355] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "b8fcb0d7-3236-4f63-b7b5-c889d8c66a68"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 4.143599987030029
+[13:26:46.833] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e23abcec-15cc-455f-b783-43dfaf2ea656"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:26:46.837] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e23abcec-15cc-455f-b783-43dfaf2ea656"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3.839200019836426
+[13:26:48.580] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "20676757-648d-4fff-a4f4-9d6b87133fa1"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61139
+    }
+[13:26:48.587] [31mERROR[39m: [36mFailed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+params: admin@viaanix.com,1[39m
+    [35mreqId[39m: "20676757-648d-4fff-a4f4-9d6b87133fa1"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61139
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2\nparams: admin@viaanix.com,1: ",
+      "stack":
+          Error: Failed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+          params: admin@viaanix.com,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async UserRepository.findByEmail (C:\source\argusiq-lite\packages\api\src\repositories\user.repository.ts:54:20)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:148:20)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2",
+      "params": [
+        "admin@viaanix.com",
+        1
+      ]
+    }
+[13:26:48.588] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "20676757-648d-4fff-a4f4-9d6b87133fa1"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 7.346099853515625
+[13:27:00.707] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "4a716690-aba3-49e3-9551-c182de124c46"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:27:00.709] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "4a716690-aba3-49e3-9551-c182de124c46"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.835399866104126
+[13:27:14.491] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "69e03da3-eef0-4b8a-b431-fa85e60ee7a1"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:27:14.494] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "69e03da3-eef0-4b8a-b431-fa85e60ee7a1"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.2768001556396484
+[13:27:26.356] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "36e3823b-36c7-49b7-afbb-221171e1a279"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61590
+    }
+[13:27:26.366] [31mERROR[39m: [36mFailed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+params: admin@viaanix.com,1[39m
+    [35mreqId[39m: "36e3823b-36c7-49b7-afbb-221171e1a279"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61590
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2\nparams: admin@viaanix.com,1: ",
+      "stack":
+          Error: Failed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+          params: admin@viaanix.com,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async UserRepository.findByEmail (C:\source\argusiq-lite\packages\api\src\repositories\user.repository.ts:54:20)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:148:20)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2",
+      "params": [
+        "admin@viaanix.com",
+        1
+      ]
+    }
+[13:27:26.366] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "36e3823b-36c7-49b7-afbb-221171e1a279"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 10.031000137329102
+[13:27:28.214] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "058f048a-0e7b-457a-a864-753c69b82418"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64650
+    }
+[13:27:28.231] [31mERROR[39m: [36mFailed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+params: admin@viaanix.com,1[39m
+    [35mreqId[39m: "058f048a-0e7b-457a-a864-753c69b82418"
+    [35mreq[39m: {
+      "method": "POST",
+      "url": "/api/v1/auth/login",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64650
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2\nparams: admin@viaanix.com,1: ",
+      "stack":
+          Error: Failed query: select "id", "email", "password_hash", "first_name", "last_name", "avatar_url", "root_organization_id", "primary_organization_id", "status", "email_verified_at", "last_login_at", "deleted_at", "mfa_enabled", "mfa_secret", "created_at", "updated_at" from "users" where ("users"."email" = $1 and "users"."deleted_at" is null) limit $2
+          params: admin@viaanix.com,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async UserRepository.findByEmail (C:\source\argusiq-lite\packages\api\src\repositories\user.repository.ts:54:20)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\auth.ts:148:20)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"email\", \"password_hash\", \"first_name\", \"last_name\", \"avatar_url\", \"root_organization_id\", \"primary_organization_id\", \"status\", \"email_verified_at\", \"last_login_at\", \"deleted_at\", \"mfa_enabled\", \"mfa_secret\", \"created_at\", \"updated_at\" from \"users\" where (\"users\".\"email\" = $1 and \"users\".\"deleted_at\" is null) limit $2",
+      "params": [
+        "admin@viaanix.com",
+        1
+      ]
+    }
+[13:27:28.231] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "058f048a-0e7b-457a-a864-753c69b82418"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 16.77209997177124
+[13:27:28.368] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "85a6c3f9-9ac0-4c26-a676-6ce42b12de3f"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:27:28.369] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "85a6c3f9-9ac0-4c26-a676-6ce42b12de3f"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3715999126434326
+[13:27:42.151] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "71cac40a-d661-41f3-aa3e-a86bb602219e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:27:42.152] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "71cac40a-d661-41f3-aa3e-a86bb602219e"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3750998973846436
+[13:27:56.091] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "7416c257-ee00-42dd-9069-b673ba6489fb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:27:56.093] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "7416c257-ee00-42dd-9069-b673ba6489fb"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.4484000205993652
+[13:28:09.841] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "61fdec41-56d1-4da9-9653-2c098806da1a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:28:09.842] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "61fdec41-56d1-4da9-9653-2c098806da1a"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.2342000007629395
+[13:28:23.728] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "83e864cd-debb-41fa-8430-4e9b0628ae1d"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 57370
+    }
+[13:28:23.730] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "83e864cd-debb-41fa-8430-4e9b0628ae1d"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.0726001262664795
+1:32:57 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[13:33:02.430] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:33:02.431] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:33:02.514] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[13:33:02.514] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[13:33:02.514] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[13:33:02.514] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[13:33:02.514] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+[13:33:13.634] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "40c13af7-0614-4414-a505-36ea07ba03bb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64519
+    }
+[13:33:13.640] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "40c13af7-0614-4414-a505-36ea07ba03bb"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5.419800043106079
+1:33:22 PM [tsx] change in ./src\routes\admin\system-settings.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[13:33:25.962] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:33:25.963] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:33:26.095] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:49:56 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+Sentry DSN not configured, error tracking disabled
+[13:49:59.894] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:49:59.895] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:49:59.969] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:50:27 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  enable debug logging with { debug: true }
+Sentry DSN not configured, error tracking disabled
+[13:50:31.023] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:50:31.025] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:50:31.141] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:50:37 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  enable debug logging with { debug: true }
+Sentry DSN not configured, error tracking disabled
+[13:50:41.872] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:50:41.874] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:50:41.994] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:50:48 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Sentry DSN not configured, error tracking disabled
+[13:50:52.342] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:50:52.343] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:50:52.462] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:50:59 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[13:51:02.862] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:51:02.863] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:51:02.967] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+2:23:37 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+Sentry DSN not configured, error tracking disabled
+[14:23:41.026] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[14:23:41.027] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[14:23:41.115] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+2:23:50 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Sentry DSN not configured, error tracking disabled
+[14:23:53.179] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[14:23:53.180] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[14:23:53.262] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[14:23:53.262] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[14:23:53.262] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[14:23:53.262] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[14:23:53.262] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+2:24:00 PM [tsx] change in ./src\routes\admin\system-settings.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+Sentry DSN not configured, error tracking disabled
+[14:24:03.429] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[14:24:03.430] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[14:24:03.516] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+2:24:11 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[14:24:14.134] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[14:24:14.135] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[14:24:14.222] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[14:24:14.222] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[14:24:14.222] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[14:24:14.222] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[14:24:14.222] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+[14:24:16.547] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e137eb83-c31d-48f5-a5b1-5f55745b94d3"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:24:16.554] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e137eb83-c31d-48f5-a5b1-5f55745b94d3"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6.959100008010864
+[14:24:30.436] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "13d7b974-cf49-4870-88a4-3c8c144a32bb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:24:30.438] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "13d7b974-cf49-4870-88a4-3c8c144a32bb"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3212001323699951
+[14:24:44.178] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "93f42222-35fb-4994-b019-e0e253c990a9"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:24:44.180] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "93f42222-35fb-4994-b019-e0e253c990a9"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.355600118637085
+[14:24:57.980] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "12c9ae91-ea1b-46fb-8bd0-3a96fafa14ae"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:24:57.982] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "12c9ae91-ea1b-46fb-8bd0-3a96fafa14ae"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.7869999408721924
+[14:25:11.659] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c8dc7a63-250b-406e-9b9c-0ba989499cb9"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:25:11.661] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c8dc7a63-250b-406e-9b9c-0ba989499cb9"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.2403998374938965
+[14:25:25.471] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d86ecd2e-ceaf-4fc7-a40c-b974ce5c8b79"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:25:25.472] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d86ecd2e-ceaf-4fc7-a40c-b974ce5c8b79"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.1751999855041504
+[14:25:39.111] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "a573118a-baaa-4e8c-8b58-07b1d6e6ed52"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:25:39.113] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "a573118a-baaa-4e8c-8b58-07b1d6e6ed52"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2.1273000240325928
+[14:25:51.426] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "784486cc-1e97-4d8e-95a0-d37bbdea3669"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64519
+    }
+[14:25:51.433] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "63368c32-baa8-4447-88a7-a994c4bdd84b"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64525
+    }
+[14:25:51.436] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "1e618949-5515-4efc-ba0e-04bf78395a58"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64531
+    }
+[14:25:51.439] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "1e618949-5515-4efc-ba0e-04bf78395a58"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.8330998420715332
+[14:25:51.439] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "5d88bf73-67c4-4d9f-aedb-620e838a5c93"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+[14:25:51.441] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "5d88bf73-67c4-4d9f-aedb-620e838a5c93"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.602799892425537
+[14:25:51.449] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"organizations\"",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:51.449] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "784486cc-1e97-4d8e-95a0-d37bbdea3669"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 23.31730008125305
+[14:25:51.450] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "7d3ea151-7b7f-4d8e-8ff7-ca2d86123431"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 53745
+    }
+[14:25:51.450] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "7d3ea151-7b7f-4d8e-8ff7-ca2d86123431"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.6409997940063477
+[14:25:51.450] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "f3d0171f-40d8-467f-8430-f1922b02d3cd"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 53748
+    }
+[14:25:51.451] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "f3d0171f-40d8-467f-8430-f1922b02d3cd"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.7958002090454102
+[14:25:51.453] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:51.453] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "63368c32-baa8-4447-88a7-a994c4bdd84b"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 20.663300037384033
+[14:25:51.455] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "8fbe8f13-7452-44af-81f1-0028da493d5d"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64518
+    }
+[14:25:51.456] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "aa5d65ce-c021-4fb0-bc55-0c3de9ab6a91"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 53906
+    }
+[14:25:51.458] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"users\" where \"users\".\"deleted_at\" is null",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:51.458] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "8fbe8f13-7452-44af-81f1-0028da493d5d"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3.678299903869629
+[14:25:51.459] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:51.460] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "aa5d65ce-c021-4fb0-bc55-0c3de9ab6a91"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3.8587000370025635
+[14:25:53.040] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "28fe2067-c6c2-45c0-a457-d7cf84f068f0"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:25:53.043] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "28fe2067-c6c2-45c0-a457-d7cf84f068f0"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.9874000549316406
+[14:25:53.196] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "fd1b54e5-dfb3-48a1-b413-e6b5c0ee6dbe"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64532
+    }
+[14:25:53.199] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "da84473d-eb5e-49f2-b84a-6b7aaa4d3d62"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64533
+    }
+[14:25:53.201] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "b1707a72-93d9-44df-81dd-5a160b176985"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64536
+    }
+[14:25:53.202] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "b1707a72-93d9-44df-81dd-5a160b176985"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.2706999778747559
+[14:25:53.202] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "258756aa-d2d6-476c-8fcd-ce987ff18f94"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64537
+    }
+[14:25:53.203] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "258756aa-d2d6-476c-8fcd-ce987ff18f94"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9757001399993896
+[14:25:53.206] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"users\" where \"users\".\"deleted_at\" is null",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:53.206] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "fd1b54e5-dfb3-48a1-b413-e6b5c0ee6dbe"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 10.06690001487732
+[14:25:53.207] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:53.207] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "da84473d-eb5e-49f2-b84a-6b7aaa4d3d62"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 8.299700021743774
+[14:25:53.228] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "59d523e8-6738-46fc-8736-5e448178af1d"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-load?range=60&step=60",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64548
+    }
+[14:25:53.229] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "59d523e8-6738-46fc-8736-5e448178af1d"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.7511999607086182
+[14:25:53.229] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e123edb3-4a00-4264-92bc-5483fce0370a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/system-metrics",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 64547
+    }
+[14:25:53.229] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e123edb3-4a00-4264-92bc-5483fce0370a"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.5859999656677246
+[14:25:53.259] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "9e186369-9423-42f9-9a25-e5e0ad930069"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/stats",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61150
+    }
+[14:25:53.261] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "1acd19c7-01af-4491-a779-874c7045be35"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/dashboard/recent-activity?limit=10",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61152
+    }
+[14:25:53.263] [33mWARN[39m: [36mFailed to fetch dashboard stats from database[39m
+    error: {
+      "query": "select count(*) from \"organizations\"",
+      "params": [],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:53.263] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "9e186369-9423-42f9-9a25-e5e0ad930069"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4.331400156021118
+[14:25:53.265] [33mWARN[39m: [36mFailed to fetch recent activity from database[39m
+    error: {
+      "query": "select \"id\", \"category\", \"action\", \"user_email\", \"resource_type\", \"resource_id\", \"outcome\", \"created_at\" from \"audit_logs\" order by \"audit_logs\".\"created_at\" desc limit $1",
+      "params": [
+        10
+      ],
+      "cause": {
+        "code": "ECONNREFUSED"
+      }
+    }
+[14:25:53.265] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "1acd19c7-01af-4491-a779-874c7045be35"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3.8489999771118164
+[14:25:54.323] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "10535322-cea1-4a56-a3bb-7c53620b4e09"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 55639
+    }
+[14:25:54.330] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "10535322-cea1-4a56-a3bb-7c53620b4e09"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 55639
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:25:54.334] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "10535322-cea1-4a56-a3bb-7c53620b4e09"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 11.130399942398071
+[14:25:54.337] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "475ebae6-5e2f-4ea2-b31e-2e2bb5437536"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 56931
+    }
+[14:25:54.345] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "475ebae6-5e2f-4ea2-b31e-2e2bb5437536"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 56931
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:25:54.346] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "475ebae6-5e2f-4ea2-b31e-2e2bb5437536"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 8.523599863052368
+[14:25:57.103] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "edc9a1e7-86cb-4a14-b6a3-6dccecdc619e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52838
+    }
+[14:25:57.114] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "edc9a1e7-86cb-4a14-b6a3-6dccecdc619e"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52838
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:25:57.114] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "edc9a1e7-86cb-4a14-b6a3-6dccecdc619e"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 11.797399997711182
+[14:25:57.133] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "5b7806ff-70b1-408c-b95d-8e475b8ba8c5"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52842
+    }
+[14:25:57.160] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "5b7806ff-70b1-408c-b95d-8e475b8ba8c5"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52842
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:25:57.161] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "5b7806ff-70b1-408c-b95d-8e475b8ba8c5"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 27.713899850845337
+[14:25:58.485] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "dce76be1-77e3-4a27-baaa-273f3f28125c"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52863
+    }
+[14:26:04.492] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "dce76be1-77e3-4a27-baaa-273f3f28125c"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 52863
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:04.492] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "dce76be1-77e3-4a27-baaa-273f3f28125c"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 6007.188800096512
+[14:26:04.495] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "74c01458-f0ad-4d5e-8b70-42501483b0d6"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50744
+    }
+[14:26:06.145] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "01f194c6-d208-4d28-ad27-bc7c2b42819a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50549
+    }
+[14:26:06.777] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "cb34c2b6-cc12-4555-840f-4b9ec9c0002b"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:26:06.779] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "cb34c2b6-cc12-4555-840f-4b9ec9c0002b"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.716399908065796
+[14:26:08.866] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "01f194c6-d208-4d28-ad27-bc7c2b42819a"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50549
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:121:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:08.867] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "01f194c6-d208-4d28-ad27-bc7c2b42819a"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 2722.7269999980927
+[14:26:08.870] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "84135c21-b23e-4b5c-977d-0f0d72d92eb3"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61425
+    }
+[14:26:08.881] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "84135c21-b23e-4b5c-977d-0f0d72d92eb3"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/admin/system-settings/iot/chirpstack_integration",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 61425
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSystemAdmin (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:18:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\admin\system-settings.ts:121:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:08.882] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "84135c21-b23e-4b5c-977d-0f0d72d92eb3"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 11.239500045776367
+[14:26:09.318] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "74c01458-f0ad-4d5e-8b70-42501483b0d6"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50744
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:09.319] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "74c01458-f0ad-4d5e-8b70-42501483b0d6"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 4823.444600105286
+[14:26:09.321] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d45be5f3-1e18-467a-8683-2907209ad5c6"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58397
+    }
+[14:26:12.953] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "d45be5f3-1e18-467a-8683-2907209ad5c6"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 58397
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:12.954] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d45be5f3-1e18-467a-8683-2907209ad5c6"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 3634.0685000419617
+[14:26:12.957] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "fb53e04c-aa3c-4309-863b-8c992413d686"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 54680
+    }
+[14:26:12.968] [31mERROR[39m: [36mFailed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1[39m
+    [35mreqId[39m: "fb53e04c-aa3c-4309-863b-8c992413d686"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/api/v1/platform/settings",
+      "hostname": "localhost",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 54680
+    }
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    err: {
+      "type": "DrizzleQueryError",
+      "message": "Failed query: select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2\nparams: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1: ",
+      "stack":
+          Error: Failed query: select "id", "user_id", "role", "is_active", "created_at", "created_by" from "system_admins" where "system_admins"."user_id" = $1 limit $2
+          params: 8fbdcbd3-f2bd-4126-8588-347d78d72dca,1
+              at PostgresJsPreparedQuery.queryWithCache (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\pg-core\session.ts:73:11)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async <anonymous> (C:\source\argusiq-lite\node_modules\.pnpm\drizzle-orm@0.45.1_@opentelemetry+api@1.9.0_@types+pg@8.15.6_postgres@3.4.8\node_modules\src\postgres-js\session.ts:58:17)
+              at async Object.getByUserId (C:\source\argusiq-lite\packages\api\src\repositories\system-admin.repository.ts:47:22)
+              at async requireSuperAdmin (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:67:17)
+              at async Object.<anonymous> (C:\source\argusiq-lite\packages\api\src\routes\v1\platform-settings.ts:94:7)
+          caused by: AggregateError [ECONNREFUSED]: 
+              at internalConnectMultiple (node:net:1134:18)
+              at afterConnectMultiple (node:net:1715:7)
+      "query": "select \"id\", \"user_id\", \"role\", \"is_active\", \"created_at\", \"created_by\" from \"system_admins\" where \"system_admins\".\"user_id\" = $1 limit $2",
+      "params": [
+        "8fbdcbd3-f2bd-4126-8588-347d78d72dca",
+        1
+      ]
+    }
+[14:26:12.969] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "fb53e04c-aa3c-4309-863b-8c992413d686"
+    [35mres[39m: {
+      "statusCode": 500
+    }
+    [35mresponseTime[39m: 11.321099996566772
+[14:26:20.572] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "d09cb9b6-14b9-4329-83a2-307b70888202"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:26:20.573] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "d09cb9b6-14b9-4329-83a2-307b70888202"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.471099853515625
+[14:26:34.290] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "c7f62e68-1bf6-4806-9647-be7f509cee32"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:26:34.291] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "c7f62e68-1bf6-4806-9647-be7f509cee32"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9939999580383301
+[14:26:48.216] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "86461213-c005-43e4-b298-08a029143c90"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:26:48.218] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "86461213-c005-43e4-b298-08a029143c90"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.802300214767456
+[14:27:01.865] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "cc32d128-e9a3-4f4d-a063-ff443ce92a2f"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:27:01.866] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "cc32d128-e9a3-4f4d-a063-ff443ce92a2f"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.3941001892089844
+[14:27:15.748] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "e1b9ee0f-2858-448b-9fb2-e288a1d71edb"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:27:15.750] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "e1b9ee0f-2858-448b-9fb2-e288a1d71edb"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.6967999935150146
+[14:27:29.477] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "730cbf84-d482-41ea-835f-e5272e924856"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:27:29.478] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "730cbf84-d482-41ea-835f-e5272e924856"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.2455999851226807
+[14:27:43.264] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "7da3d3cb-9d46-42ec-be78-b522ad977395"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:27:43.266] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "7da3d3cb-9d46-42ec-be78-b522ad977395"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.465400218963623
+[14:27:56.979] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "0fc8b7ad-83a3-4f82-8695-f47c152aef5c"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:27:56.981] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "0fc8b7ad-83a3-4f82-8695-f47c152aef5c"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.7239999771118164
+[14:28:10.840] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "a1481c2b-8a7f-4cdf-8815-f98f1e67f48b"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:28:10.841] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "a1481c2b-8a7f-4cdf-8815-f98f1e67f48b"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 0.9440000057220459
+[14:28:24.485] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "4f9be346-8087-407c-9485-a2de2c540ade"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50657
+    }
+[14:28:24.487] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "4f9be346-8087-407c-9485-a2de2c540ade"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1.0759000778198242
+2:28:36 PM [tsx] change in ./src\server.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[14:28:40.021] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[14:28:40.022] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[14:28:40.155] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[14:28:41.164] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[14:28:42.170] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[14:28:43.171] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[14:28:44.176] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+3:42:35 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[15:42:39.471] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[15:42:39.472] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[15:42:39.586] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[15:42:40.601] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[15:42:41.607] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[15:42:42.612] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[15:42:43.619] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+3:42:48 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[15:42:52.516] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[15:42:52.517] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[15:42:52.638] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[15:42:53.643] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[15:42:54.658] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[15:42:55.658] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[15:42:56.674] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+3:43:00 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[15:43:03.918] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[15:43:03.919] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[15:43:04.037] [32mINFO[39m: [36mServer listening at http://127.0.0.1:3040[39m
+[15:43:04.037] [32mINFO[39m: [36mServer listening at http://172.21.32.1:3040[39m
+[15:43:04.037] [32mINFO[39m: [36mServer listening at http://192.168.137.1:3040[39m
+[15:43:04.037] [32mINFO[39m: [36mServer listening at http://192.168.50.103:3040[39m
+[15:43:04.037] [32mINFO[39m: [36mServer listening on http://0.0.0.0:3040[39m
+[15:43:10.123] [32mINFO[39m: [36mincoming request[39m
+    [35mreqId[39m: "cba50b71-5073-4aa1-9fce-c471f846efd0"
+    [35mreq[39m: {
+      "method": "GET",
+      "url": "/metrics",
+      "hostname": "host.docker.internal",
+      "remoteAddress": "127.0.0.1",
+      "remotePort": 50677
+    }
+[15:43:10.130] [32mINFO[39m: [36mrequest completed[39m
+    [35mreqId[39m: "cba50b71-5073-4aa1-9fce-c471f846efd0"
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 6.369099855422974
+3:43:12 PM [tsx] change in ./src\routes\admin\system-settings.ts Restarting...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+Sentry DSN not configured, error tracking disabled
+[15:43:16.295] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[15:43:16.296] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[15:43:16.418] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[15:43:17.433] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[15:43:18.437] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[15:43:19.441] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[15:43:20.455] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:17:30 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[09:17:37.869] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:17:37.871] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:17:38.001] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:17:39.003] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:17:40.006] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:17:41.007] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:17:42.019] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:17:45 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Sentry DSN not configured, error tracking disabled
+[09:17:49.258] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:17:49.259] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:17:49.407] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:17:50.416] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:17:51.428] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:17:52.443] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:17:53.452] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:19:14 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Sentry DSN not configured, error tracking disabled
+[09:19:18.515] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:19:18.516] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:19:18.644] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:19:19.659] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:19:20.660] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:19:21.664] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:19:22.676] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:19:38 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[09:19:41.979] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:19:41.981] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:19:42.140] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:19:43.149] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:19:44.163] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:19:45.170] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:19:46.175] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:20:12 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  enable debug logging with { debug: true }
+Sentry DSN not configured, error tracking disabled
+[09:20:16.327] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:20:16.328] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:20:16.455] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:20:17.466] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:20:18.475] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:20:19.479] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:20:20.485] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+9:20:25 AM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+Sentry DSN not configured, error tracking disabled
+[09:20:29.541] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[09:20:29.543] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[09:20:29.650] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[09:20:30.661] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[09:20:31.665] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[09:20:32.680] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[09:20:33.695] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+12:51:36 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+Sentry DSN not configured, error tracking disabled
+[12:51:40.582] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[12:51:40.583] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[12:51:40.701] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[12:51:41.710] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[12:51:42.723] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[12:51:43.730] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[12:51:44.742] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+12:51:52 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[12:51:56.153] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[12:51:56.155] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[12:51:56.269] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[12:51:57.283] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[12:51:58.285] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[12:51:59.299] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[12:52:00.304] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+12:52:05 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[12:52:09.615] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[12:52:09.616] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[12:52:09.736] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[12:52:10.744] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[12:52:11.749] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[12:52:12.751] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[12:52:13.767] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+12:52:19 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ⚙️  override existing env vars with { override: true }
+Sentry DSN not configured, error tracking disabled
+[12:52:23.155] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[12:52:23.156] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[12:52:23.277] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[12:52:24.291] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[12:52:25.304] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[12:52:26.305] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[12:52:27.309] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:05:18 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+Sentry DSN not configured, error tracking disabled
+[13:05:22.308] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:05:22.309] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:05:22.407] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[13:05:23.412] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[13:05:24.420] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[13:05:25.434] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[13:05:26.448] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:05:39 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[13:05:42.737] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:05:42.738] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:05:42.834] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[13:05:43.846] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[13:05:44.858] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[13:05:45.874] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[13:05:46.887] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }
+1:12:18 PM [tsx] change in ./src\routes\admin\system-settings.ts Rerunning...
+cDATABASE_URL not set, database operations will fail
+[dotenv@17.2.3] injecting env (18) from ..\..\.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+Sentry DSN not configured, error tracking disabled
+[13:12:21.932] [32mINFO[39m: [36mMetrics endpoint registered at /metrics[39m
+[13:12:21.933] [32mINFO[39m: [36mRate limiting plugin registered[39m
+[13:12:22.015] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 1/5)...[39m
+[13:12:23.020] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 2/5)...[39m
+[13:12:24.029] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 3/5)...[39m
+[13:12:25.038] [33mWARN[39m: [36mPort 3040 in use, retrying in 1000ms (attempt 4/5)...[39m
+[13:12:26.053] [31mERROR[39m: [36mlisten EADDRINUSE: address already in use 0.0.0.0:3040[39m
+    err: {
+      "type": "Error",
+      "message": "listen EADDRINUSE: address already in use 0.0.0.0:3040",
+      "stack":
+          Error: listen EADDRINUSE: address already in use 0.0.0.0:3040
+              at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+              at listenInCluster (node:net:1997:12)
+              at node:net:2206:7
+              at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+      "code": "EADDRINUSE",
+      "errno": -4091,
+      "syscall": "listen",
+      "address": "0.0.0.0",
+      "port": 3040
+    }

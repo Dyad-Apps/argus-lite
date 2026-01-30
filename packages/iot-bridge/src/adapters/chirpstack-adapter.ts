@@ -191,35 +191,71 @@ export function transformChirpStackUplink(
 }
 
 /**
- * Extracts DevEUI from ChirpStack MQTT topic
+ * Converts MQTT wildcard pattern to RegExp
  *
- * Topic format: chirpstack/{applicationId}/devices/{devEui}/up
+ * MQTT wildcards:
+ * - + matches single level (e.g., "application/+/device" matches "application/abc/device")
+ * - # matches multiple levels (e.g., "application/#" matches "application/abc/device/xyz")
  *
- * @param topic - MQTT topic
- * @returns DevEUI (16 hex chars) or null if not a valid ChirpStack topic
+ * @param pattern - MQTT topic pattern with wildcards
+ * @returns RegExp that matches the pattern
  */
-export function extractDevEuiFromTopic(topic: string): string | null {
-  const match = topic.match(/^chirpstack\/[^/]+\/devices\/([0-9a-fA-F]{16})\/up$/);
-  return match ? match[1].toLowerCase() : null;
+export function mqttPatternToRegex(pattern: string): RegExp {
+  // Escape special regex chars except + and #
+  let regexPattern = pattern
+    .replace(/[.?*()[\]{}|\\^$]/g, '\\$&')
+    // Replace + with single-level match (anything except /)
+    .replace(/\+/g, '[^/]+')
+    // Replace # with multi-level match (anything including /)
+    .replace(/#/g, '.+');
+
+  return new RegExp(`^${regexPattern}$`);
 }
 
 /**
- * Validates if a topic is a ChirpStack uplink topic
+ * Validates if a topic matches a ChirpStack uplink pattern
  *
- * @param topic - MQTT topic
- * @returns true if topic matches ChirpStack uplink pattern
+ * @param topic - MQTT topic to check
+ * @param topicPattern - ChirpStack MQTT topic pattern (with wildcards)
+ * @returns true if topic matches the pattern
  */
-export function isChirpStackTopic(topic: string): boolean {
-  return topic.startsWith('chirpstack/') && topic.endsWith('/up');
+export function isChirpStackTopic(topic: string, topicPattern?: string): boolean {
+  if (!topicPattern) {
+    // Fallback: check common patterns
+    return (
+      topic.includes('chirpstack') ||
+      topic.includes('application') ||
+      (topic.includes('device') && topic.includes('event'))
+    );
+  }
+
+  const regex = mqttPatternToRegex(topicPattern);
+  return regex.test(topic);
 }
 
 /**
- * Extracts application ID from ChirpStack MQTT topic
+ * Extracts application ID from ChirpStack MQTT topic (flexible)
+ *
+ * Tries to extract application ID from various common patterns:
+ * - application/{appId}/device/{devEui}/event/up
+ * - chirpstack/{appId}/devices/{devEui}/up
+ * - v3/{appId}/devices/{devEui}/rx
  *
  * @param topic - MQTT topic
  * @returns Application ID or null
  */
 export function extractApplicationIdFromTopic(topic: string): string | null {
-  const match = topic.match(/^chirpstack\/([^/]+)\/devices\//);
-  return match ? match[1] : null;
+  // Try various patterns
+  const patterns = [
+    /^application\/([^/]+)\/device\//,     // application/{appId}/device/...
+    /^chirpstack\/([^/]+)\/devices\//,     // chirpstack/{appId}/devices/...
+    /^v3\/([^/]+)\/devices\//,             // v3/{appId}/devices/...
+  ];
+
+  for (const pattern of patterns) {
+    const match = topic.match(pattern);
+    if (match) return match[1];
+  }
+
+  return null;
 }

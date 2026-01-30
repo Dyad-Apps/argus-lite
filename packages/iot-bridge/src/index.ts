@@ -17,15 +17,60 @@ import { createLogger } from './logger.js';
 import { BridgeService } from './bridge.js';
 import { DeviceMappingService } from './services/device-mapping.js';
 import { createDatabaseLoader } from './services/db-loader.js';
+import { createSystemSettingsLoader } from './services/system-settings-loader.js';
 
 async function main() {
-  // Load configuration
+  // Load base configuration from environment
   const config = loadConfig();
 
   // Create logger
   const logger = createLogger(config);
 
   logger.info({ config: { mqtt: config.mqtt.brokerUrl, nats: config.nats.servers } }, 'Starting IoT Bridge');
+
+  // Get database URL
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    logger.warn('DATABASE_URL not set - using environment variables for configuration');
+  }
+
+  // Load system settings from database (if DATABASE_URL is available)
+  if (databaseUrl) {
+    try {
+      const settingsLoader = createSystemSettingsLoader(
+        { databaseUrl },
+        logger.child({ component: 'settings-loader' })
+      );
+      const systemSettings = await settingsLoader();
+
+      // Apply ChirpStack settings from database
+      config.chirpstack.enabled = systemSettings.chirpStackIntegration.enabled;
+      config.chirpstack.topicPattern = systemSettings.chirpStackIntegration.topicPattern;
+
+      // Update MQTT topics to include ChirpStack pattern if enabled
+      if (config.chirpstack.enabled) {
+        const defaultTopics = ['devices/+/telemetry'];
+        if (!defaultTopics.includes(config.chirpstack.topicPattern)) {
+          defaultTopics.push(config.chirpstack.topicPattern);
+        }
+        config.mqtt.topics = defaultTopics;
+      }
+
+      logger.info(
+        {
+          chirpStackEnabled: config.chirpstack.enabled,
+          topicPattern: config.chirpstack.topicPattern,
+          mqttTopics: config.mqtt.topics,
+        },
+        'Applied system settings from database'
+      );
+    } catch (error) {
+      logger.warn(
+        { error: error instanceof Error ? error.message : String(error) },
+        'Failed to load system settings from database, using environment defaults'
+      );
+    }
+  }
 
   // Create device mapping service
   const deviceMappingService = new DeviceMappingService(
@@ -36,8 +81,7 @@ async function main() {
     logger.child({ component: 'device-mapping' })
   );
 
-  // Create database loader
-  const databaseUrl = process.env.DATABASE_URL;
+  // Create database loader for device mappings
   if (!databaseUrl) {
     logger.warn('DATABASE_URL not set - device mappings will be empty (ChirpStack integration disabled)');
   }

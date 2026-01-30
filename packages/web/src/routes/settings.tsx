@@ -1,9 +1,9 @@
 import { createFileRoute, useSearch, useNavigate } from '@tanstack/react-router';
-import { Shield, Mail, Bell } from 'lucide-react';
+import { Shield, Mail, Bell, Radio } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GeneralSettingsTab, MailServerTab, NotificationSettingsTab } from '@/components/settings';
+import { GeneralSettingsTab, MailServerTab, NotificationSettingsTab, IotSettingsTab } from '@/components/settings';
 
-type SettingsTab = 'general' | 'mail' | 'notifications';
+type SettingsTab = 'general' | 'mail' | 'notifications' | 'iot';
 
 export const Route = createFileRoute('/settings')({
   component: SettingsPage,
@@ -35,7 +35,7 @@ function SettingsPage() {
       </div>
 
       <Tabs value={tab} onValueChange={handleTabChange}>
-        <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+        <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
           <TabsTrigger value="general" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             General
@@ -47,6 +47,10 @@ function SettingsPage() {
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
             Notifications
+          </TabsTrigger>
+          <TabsTrigger value="iot" className="flex items-center gap-2">
+            <Radio className="h-4 w-4" />
+            IoT
           </TabsTrigger>
         </TabsList>
 
@@ -60,6 +64,10 @@ function SettingsPage() {
 
         <TabsContent value="notifications" className="mt-6">
           <NotificationSettingsTab />
+        </TabsContent>
+
+        <TabsContent value="iot" className="mt-6">
+          <IotSettingsTab />
         </TabsContent>
       </Tabs>
     </div>

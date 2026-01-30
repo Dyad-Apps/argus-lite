@@ -21,6 +21,7 @@ import { roleRoutes } from './roles.js';
 import { ssoConnectionRoutes } from './sso-connections.js';
 import { impersonationRoutes } from './impersonation.js';
 import { platformSettingsRoutes } from './platform-settings.js';
+import { systemSettingsRoutes } from '../admin/system-settings.js';
 import { deviceRoutes } from './devices.js';
 import { assetRoutes } from './assets.js';
 import { spaceRoutes } from './spaces.js';
@@ -88,6 +89,9 @@ export async function registerV1Routes(app: FastifyInstance): Promise<void> {
 
   // Platform settings routes (super admin only)
   await app.register(platformSettingsRoutes);
+
+  // System settings routes (system admin only)
+  await app.register(systemSettingsRoutes, { prefix: '/admin/system-settings' });
 
   // Phase 7: IoT Meta-Model routes
   await app.register(deviceRoutes, { prefix: '/devices' });

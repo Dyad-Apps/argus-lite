@@ -83,9 +83,25 @@ async function start() {
   try {
     const port = parseInt(process.env.PORT ?? '3040', 10);
     const host = process.env.HOST ?? '0.0.0.0';
+    const maxRetries = 5;
+    const retryDelay = 1000; // 1 second
 
-    await app.listen({ port, host });
-    app.log.info(`Server listening on http://${host}:${port}`);
+    let retries = 0;
+    while (retries < maxRetries) {
+      try {
+        await app.listen({ port, host });
+        app.log.info(`Server listening on http://${host}:${port}`);
+        break;
+      } catch (err: any) {
+        if (err.code === 'EADDRINUSE' && retries < maxRetries - 1) {
+          retries++;
+          app.log.warn(`Port ${port} in use, retrying in ${retryDelay}ms (attempt ${retries}/${maxRetries})...`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay));
+        } else {
+          throw err;
+        }
+      }
+    }
   } catch (err) {
     app.log.error(err);
     process.exit(1);
